@@ -3,9 +3,9 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { envConfig } from './config/env.config';
-import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
-import { CacheModule } from '@nestjs/cache-manager';
-import { RedisClientOptions } from 'redis';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { CacheModule, CacheStore } from '@nestjs/cache-manager';
+import { redisStore } from 'cache-manager-redis-yet';
 import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConnectionOptions';
 
 @Module({
@@ -16,23 +16,30 @@ import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConne
     }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
-      useFactory: (configService: ConfigService): TypeOrmModuleOptions & PostgresConnectionOptions => ({
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService): PostgresConnectionOptions => ({
         type: 'postgres',
         ...configService.get('database'),
-        autoLoadEntities: true,
-        synchronize: process.env.NODE_ENV !== 'production',
-      }),
-      inject: [ConfigService],
+        synchronize: false,
+      })
     }),
-    CacheModule.registerAsync<RedisClientOptions>({
-      isGlobal: true,
+    CacheModule.registerAsync({
       imports: [ConfigModule],
-      useFactory: (configService: ConfigService) => ({
-        store: 'redis',
-        ...configService.get('redis'),
-      }),
       inject: [ConfigService],
-    }),
+      isGlobal: true,
+      useFactory: async (configService: ConfigService) => {
+        const store = await redisStore({
+          socket: {
+            ...configService.get('redis')
+          },
+        })
+        return {
+          store: store as unknown as CacheStore,
+          ttl: 60000,
+          max: 100
+        }
+      }
+    })
   ],
   controllers: [AppController],
   providers: [AppService],
