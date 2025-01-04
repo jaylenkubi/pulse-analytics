@@ -6,8 +6,12 @@ export const envConfig = () => ({
     password: process.env.TIMESCALE_PASSWORD,
     database: process.env.TIMESCALE_DB
   },
-  redis: {
+  dragonfly: {
     host: process.env.DRAGONFLY_HOST || 'localhost',
     port: parseInt(process.env.DRAGONFLY_PORT || '6379', 10),
+  },
+  queue: {
+    host: process.env.DRAGONFLY_HOST || 'localhost',
+    port: parseInt(process.env.DRAGONFLY_PORT || '6379'),
   }
 }); 

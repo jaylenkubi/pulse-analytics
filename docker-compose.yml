@@ -10,12 +10,16 @@ services:
       - TIMESCALE_PORT=5432
       - DRAGONFLY_HOST=dragonfly
       - DRAGONFLY_PORT=6379
+      - QUEUE_REDIS_HOST=queue-redis
+      - QUEUE_REDIS_PORT=6380
     ports:
       - "3000:3000"
     depends_on:
       timescaledb:
         condition: service_healthy
       dragonfly:
+        condition: service_healthy
+      queue-redis:
         condition: service_healthy
 
   timescaledb:
@@ -48,6 +52,19 @@ services:
       timeout: 5s
       retries: 5
 
+  queue-redis:
+    image: redis:alpine
+    ports:
+      - "${QUEUE_REDIS_PORT}:6380"
+    volumes:
+      - queue_redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
 volumes:
   timescaledb_data:
   dragonfly_data:
+  queue_redis_data:
