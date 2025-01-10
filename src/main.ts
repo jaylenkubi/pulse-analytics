@@ -14,10 +14,9 @@ async function bootstrap() {
     .setTitle('Pulse Analytics')
     .setDescription('Pulse Analytics API')
     .setVersion('1.0')
-    .addTag('pulse-analytics')
     .build();
   const documentFactory = () => SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, documentFactory);
-  await app.listen(process.env.PORT ?? 3000);
+  await app.listen(process.env.PORT ?? 3000, '0.0.0.0');
 }
 bootstrap();
