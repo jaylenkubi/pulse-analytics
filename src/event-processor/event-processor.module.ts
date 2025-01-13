@@ -6,7 +6,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 @Module({
   imports: [
     BullModule.registerQueue({
-      name: 'events',
+      name: 'event',
     }),
     TypeOrmModule.forFeature([Event]),
   ],

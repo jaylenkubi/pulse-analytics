@@ -7,8 +7,7 @@ export class DataCollectorController {
   constructor(private readonly dataCollectorService: DataCollectorService) {}
 
   @Post('event')
-  @UsePipes(new ValidationPipe({ transform: true }))
-  async collectEvent(@Body() eventData: CreateEventDto) {
+  async collectEvent(@Body() eventData: any) {
     return this.dataCollectorService.collectEvent(eventData);
   }
 }

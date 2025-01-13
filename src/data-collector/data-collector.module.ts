@@ -7,7 +7,7 @@ import { DataCollectorGateway } from './data-collector.gateway';
 @Module({
   imports: [
     BullModule.registerQueue({
-      name: 'events',
+      name: 'event',
     }),
   ],
   providers: [DataCollectorService, DataCollectorGateway],

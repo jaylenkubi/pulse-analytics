@@ -4,11 +4,10 @@ import { Queue } from 'bullmq';
 
 @Injectable()
 export class DataCollectorService {
-  constructor(
-    @InjectQueue('events') private readonly eventQueue: Queue,
-  ) {}
+  constructor(@InjectQueue('event') private eventQueue: Queue) {}
 
   async collectEvent(event: any) {
+    console.log('Adding event to queue:', event);
     // Add validation here later
     await this.eventQueue.add('process-event', event, {
       attempts: 3,

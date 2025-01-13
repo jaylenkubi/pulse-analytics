@@ -11,7 +11,7 @@ export const envConfig = () => ({
     port: parseInt(process.env.DRAGONFLY_PORT || '6379', 10),
   },
   queue: {
-    host: process.env.DRAGONFLY_HOST || 'localhost',
-    port: parseInt(process.env.DRAGONFLY_PORT || '6379'),
+    host: process.env.QUEUE_REDIS_HOST || 'localhost',
+    port: parseInt(process.env.QUEUE_REDIS_PORT || '6380', 10),
   }
 }); 

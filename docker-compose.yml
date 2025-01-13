@@ -11,9 +11,12 @@ services:
       - DRAGONFLY_HOST=dragonfly
       - DRAGONFLY_PORT=6379
       - QUEUE_REDIS_HOST=queue-redis
-      - QUEUE_REDIS_PORT=6380
+      - QUEUE_REDIS_PORT=6379
     ports:
       - "3000:3000"
+    volumes:
+      - ./src:/app/src
+      - ./test:/app/test
     depends_on:
       timescaledb:
         condition: service_healthy
@@ -21,6 +24,8 @@ services:
         condition: service_healthy
       queue-redis:
         condition: service_healthy
+    networks:
+      - app-network
 
   timescaledb:
     image: timescale/timescaledb:latest-pg15
@@ -37,6 +42,8 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+    networks:
+      - app-network
 
   dragonfly:
     image: 'docker.dragonflydb.io/dragonflydb/dragonfly'
@@ -51,18 +58,27 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+    networks:
+      - app-network
 
   queue-redis:
     image: redis:alpine
+    command: redis-server --port 6379
     ports:
-      - "${QUEUE_REDIS_PORT}:6380"
+      - "${QUEUE_REDIS_PORT}:6379"
     volumes:
       - queue_redis_data:/data
     healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
+      test: ["CMD", "redis-cli", "-p", "6379", "ping"]
       interval: 10s
       timeout: 5s
       retries: 5
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
 
 volumes:
   timescaledb_data:

@@ -19,11 +19,13 @@ import { BullModule } from '@nestjs/bullmq';
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
-      useFactory: (configService: ConfigService): PostgresConnectionOptions => ({
+      useFactory: (
+        configService: ConfigService,
+      ): PostgresConnectionOptions => ({
         type: 'postgres',
         ...configService.get('database'),
         synchronize: false,
-      })
+      }),
     }),
     CacheModule.registerAsync({
       imports: [ConfigModule],
@@ -32,15 +34,15 @@ import { BullModule } from '@nestjs/bullmq';
       useFactory: async (configService: ConfigService) => {
         const store = await redisStore({
           socket: {
-            ...configService.get('dragonfly')
+            ...configService.get('dragonfly'),
           },
-        })
+        });
         return {
           store: store as unknown as CacheStore,
           ttl: 60000,
-          max: 100
-        }
-      }
+          max: 100,
+        };
+      },
     }),
     BullModule.forRootAsync({
       imports: [ConfigModule],
@@ -49,12 +51,12 @@ import { BullModule } from '@nestjs/bullmq';
         connection: {
           host: configService.get('queue.host'),
           port: configService.get('queue.port'),
-        }
+        },
       }),
     }),
     DataCollectorModule,
     EventProcessorModule,
-    AnalyticsModule
-  ]
+    AnalyticsModule,
+  ],
 })
 export class AppModule {}

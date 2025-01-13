@@ -1,20 +1,25 @@
-import {  MessageBody, SubscribeMessage, WebSocketGateway } from '@nestjs/websockets';
+import {
+  ConnectedSocket,
+  MessageBody,
+  SubscribeMessage,
+  WebSocketGateway,
+} from '@nestjs/websockets';
 import { DataCollectorService } from './data-collector.service';
-import { ValidationPipe } from '@nestjs/common';
-import { CreateEventDto } from '@shared/dto';
+import { Socket } from 'socket.io';
 
 @WebSocketGateway({
   cors: true,
-  namespace: 'events',
+  namespace: 'event',
 })
 export class DataCollectorGateway {
-  constructor(private readonly dataCollectorService: DataCollectorService) {}
+  constructor(private dataCollectorService: DataCollectorService) {}
 
   @SubscribeMessage('collectEvent')
   async handleEvent(
-    @MessageBody(new ValidationPipe()) eventData: CreateEventDto,
+    @MessageBody() eventData: any,
+    @ConnectedSocket() client: Socket,
   ) {
-    return this.dataCollectorService.collectEvent(eventData);
+    await this.dataCollectorService.collectEvent(eventData);
+    client.emit('eventCollected', { event: 'collectEvent', data: eventData });
   }
 }
-
