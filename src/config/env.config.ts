@@ -4,7 +4,8 @@ export const envConfig = () => ({
     port: parseInt(process.env.TIMESCALE_PORT || '5432', 10),
     username: process.env.TIMESCALE_USER,
     password: process.env.TIMESCALE_PASSWORD,
-    database: process.env.TIMESCALE_DB
+    database: process.env.TIMESCALE_DB,
+    ssl: process.env.DB_SSL === 'true'
   },
   dragonfly: {
     host: process.env.DRAGONFLY_HOST || 'localhost',
