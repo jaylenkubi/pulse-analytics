@@ -70,21 +70,21 @@ importers:
         version: 8.13.1
       pulse-analytics:
         specifier: 'file:'
-        version: file:(ioredis@5.4.2)(ts-node@10.9.2(@types/node@20.17.12)(typescript@5.7.3))
+        version: file:(bull@4.16.5)(ioredis@5.4.2)(ts-node@10.9.2(@types/node@20.17.12)(typescript@5.7.3))
       redis:
-        specifier: ^4.7.0
+        specifier: 4.7.0
         version: 4.7.0
       reflect-metadata:
-        specifier: ^0.2.2
+        specifier: 0.2.2
         version: 0.2.2
       rxjs:
-        specifier: ^7.8.1
+        specifier: 7.8.1
         version: 7.8.1
       socket.io:
-        specifier: ^4.8.1
+        specifier: 4.8.1
         version: 4.8.1
       typeorm:
-        specifier: ^0.3.20
+        specifier: 0.3.20
         version: 0.3.20(ioredis@5.4.2)(mysql2@3.12.0)(pg@8.13.1)(redis@4.7.0)(ts-node@10.9.2(@types/node@20.17.12)(typescript@5.7.3))
     devDependencies:
       '@nestjs/cli':
@@ -6445,7 +6445,7 @@ snapshots:
       forwarded: 0.2.0
       ipaddr.js: 1.9.1
 
-  pulse-analytics@file:(ioredis@5.4.2)(ts-node@10.9.2(@types/node@20.17.12)(typescript@5.7.3)):
+  pulse-analytics@file:(bull@4.16.5)(ioredis@5.4.2)(ts-node@10.9.2(@types/node@20.17.12)(typescript@5.7.3)):
     dependencies:
       '@fastify/static': 7.0.0
       '@nestjs/bull': 10.2.3(@nestjs/common@10.4.15(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))(@nestjs/core@10.4.15)(bull@4.16.5)
@@ -6459,7 +6459,6 @@ snapshots:
       '@nestjs/swagger': 8.1.1(@fastify/static@7.0.0)(@nestjs/common@10.4.15(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))(@nestjs/core@10.4.15)(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)
       '@nestjs/typeorm': 10.0.2(@nestjs/common@10.4.15(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))(@nestjs/core@10.4.15)(reflect-metadata@0.2.2)(rxjs@7.8.1)(typeorm@0.3.20(ioredis@5.4.2)(mysql2@3.12.0)(pg@8.13.1)(redis@4.7.0)(ts-node@10.9.2(@types/node@20.17.12)(typescript@5.7.3)))
       '@nestjs/websockets': 10.4.15(@nestjs/common@10.4.15(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))(@nestjs/core@10.4.15)(@nestjs/platform-socket.io@10.4.15)(reflect-metadata@0.2.2)(rxjs@7.8.1)
-      bull: 4.16.5
       bullmq: 5.34.9
       cache-manager: 5.7.6
       cache-manager-redis-store: 2.0.0
@@ -6481,6 +6480,7 @@ snapshots:
       - '@sap/hana-client'
       - better-sqlite3
       - bufferutil
+      - bull
       - encoding
       - hdb-pool
       - ioredis

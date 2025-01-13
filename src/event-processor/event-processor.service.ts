@@ -3,6 +3,7 @@ import { Repository } from 'typeorm';
 import { Event } from './entities/event.entity';
 import { Processor, WorkerHost } from '@nestjs/bullmq';
 import { Logger } from '@nestjs/common';
+import { CreateEventDto } from '@shared/dto';
 
 @Processor('event')
 export class EventProcessorService extends WorkerHost {
@@ -16,29 +17,29 @@ export class EventProcessorService extends WorkerHost {
   }
 
   async process(job: any): Promise<any> {
-    // const eventData = job.data as CreateEventDto;
+    const eventData = job.data as CreateEventDto;
     console.log(`Processing event: ${job}`);
     this.logger.log(`Processing event: ${job}`);
 
-    // try {
-    //   const event = this.eventRepository.create({
-    //     eventType: eventData.eventType,
-    //     payload: eventData.payload,
-    //     timestamp: eventData.timestamp ? new Date(eventData.timestamp) : new Date(),
-    //     processingStatus: 'pending',
-    //     metadata: {}
-    //   });
+    try {
+      const event = this.eventRepository.create({
+        eventType: eventData.eventType,
+        payload: eventData.payload,
+        timestamp: eventData.timestamp ? new Date(eventData.timestamp) : new Date(),
+        processingStatus: 'pending',
+        metadata: {}
+      });
 
-    //   await this.processEventByType(event);
+      await this.processEventByType(event);
 
-    //   event.processingStatus = 'processed';
-    //   await this.eventRepository.save(event);
+      event.processingStatus = 'processed';
+      await this.eventRepository.save(event);
 
-    //   return { success: true, eventId: event.id };
-    // } catch (error) {
-    //   this.logger.error(`Error processing event: ${error.message}`, error.stack);
-    //   throw error;
-    // }
+      return { success: true, eventId: event.id };
+    } catch (error) {
+      this.logger.error(`Error processing event: ${error.message}`, error.stack);
+      throw error;
+    }
   }
 
   private async processEventByType(event: Event): Promise<void> {

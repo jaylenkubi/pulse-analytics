@@ -6,8 +6,9 @@ RUN apk add --no-cache redis
 
 WORKDIR /app
 
-COPY pnpm-lock.yaml package.json ./
-RUN pnpm install --frozen-lockfile  # Install all dependencies including dev
+COPY package.json ./
+
+RUN pnpm install --no-frozen-lockfile
 
 COPY . .
 RUN pnpm build
