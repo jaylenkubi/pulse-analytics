@@ -9,6 +9,9 @@ import { EventProcessorModule } from './event-processor/event-processor.module';
 import { AnalyticsModule } from './analytics/analytics.module';
 import { BullModule } from '@nestjs/bullmq';
 import { Event } from './entities/event.entity';
+import { UserModule } from './user/user.module';
+import { AuthModule } from './auth/auth.module';
+import { EventModule } from './event/event.module';
 
 @Module({
   imports: [
@@ -72,6 +75,9 @@ import { Event } from './entities/event.entity';
     DataCollectorModule,
     EventProcessorModule,
     AnalyticsModule,
+    UserModule,
+    AuthModule,
+    EventModule,
   ],
 })
 export class AppModule {}

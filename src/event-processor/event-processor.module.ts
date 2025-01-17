@@ -1,15 +1,16 @@
 import { Module } from '@nestjs/common';
-import { EventProcessorService } from './event-processor.service';
 import { BullModule } from '@nestjs/bullmq';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { Event } from '../entities/event.entity';
+import { EventProcessorService } from './event-processor.service';
+import { UserModule } from '../user/user.module';
+import { EventModule } from '../event/event.module';
 
 @Module({
   imports: [
     BullModule.registerQueue({
       name: 'event',
     }),
-    TypeOrmModule.forFeature([Event]),
+    UserModule,
+    EventModule
   ],
   providers: [EventProcessorService],
 })

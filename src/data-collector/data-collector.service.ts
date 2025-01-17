@@ -7,9 +7,9 @@ export class DataCollectorService {
   constructor(@InjectQueue('event') private eventQueue: Queue) {}
 
   async collectEvent(event: any) {
-    console.log('Adding event to queue:', event);
-    // Add validation here later
-    await this.eventQueue.add('process-event', event, {
+    const eventData = typeof event === 'string' ? JSON.parse(event) : event;
+    const actualEventData = eventData.data || eventData;
+    await this.eventQueue.add('process-event', actualEventData, {
       attempts: 3,
       backoff: {
         type: 'exponential',
