@@ -2,8 +2,8 @@ import { Controller, Get, Query, ParseIntPipe, UseInterceptors } from '@nestjs/c
 import { CacheInterceptor } from '@nestjs/cache-manager';
 import { AnalyticsService } from './analytics.service';
 import { ApiTags, ApiOperation } from '@nestjs/swagger';
-import { TimeRangeDto } from '@shared/dto/events/timeRange.dto';
-import { EventTimelineDto } from '@shared/dto/events/eventTime.dto';
+import { TimeRangeDto } from '@shared/dto/event/timeRange.dto';
+import { EventTimelineDto } from '@shared/dto/event/eventTime.dto';
 
 
 @ApiTags('Analytics')

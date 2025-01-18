@@ -14,9 +14,6 @@ export class User {
     @Column('email')
     email: string;
 
-    @Column('date')
-    dob: Date;
-
     @Column()
     userType: string;
 

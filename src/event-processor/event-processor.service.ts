@@ -1,17 +1,16 @@
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
 import { Event } from '../entities/event.entity';
 import { Processor, WorkerHost } from '@nestjs/bullmq';
-import { Logger } from '@nestjs/common';
+import { Inject, Logger } from '@nestjs/common';
 import { CreateEventDto } from '@shared/dto';
+import { GenericCrudService } from '@shared/services/generic-crud.service';
 
 @Processor('event')
 export class EventProcessorService extends WorkerHost {
   private readonly logger = new Logger(EventProcessorService.name);
 
   constructor(
-    @InjectRepository(Event)
-    private readonly eventRepository: Repository<Event>,
+    @Inject('EVENT_SERVICE')
+    private readonly eventService: GenericCrudService<Event>,
   ) {
     super();
   }
@@ -22,7 +21,7 @@ export class EventProcessorService extends WorkerHost {
     this.logger.log(`Processing event: ${job}`);
 
     try {
-      const event = this.eventRepository.create({
+      const event = await this.eventService.create({
         eventType: eventData.eventType,
         payload: eventData.payload,
         timestamp: eventData.timestamp ? new Date(eventData.timestamp) : new Date(),
@@ -33,7 +32,9 @@ export class EventProcessorService extends WorkerHost {
       await this.processEventByType(event);
 
       event.processingStatus = 'processed';
-      await this.eventRepository.save(event);
+      await this.eventService.update(event.id, {
+        processingStatus: event.processingStatus
+      });
 
       return { success: true, eventId: event.id };
     } catch (error) {

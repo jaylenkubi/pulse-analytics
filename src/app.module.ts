@@ -12,12 +12,22 @@ import { Event } from './entities/event.entity';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
 import { EventModule } from './event/event.module';
+import { JwtModule } from '@nestjs/jwt';
+import { SessionModule } from './session/session.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
       load: [envConfig],
+    }),
+    JwtModule.registerAsync({
+      imports: [ConfigModule],
+      useFactory: async (configService: ConfigService) => ({
+        secret: configService.get<string>('SECRET'),
+        global: true // This makes the module global
+      }),
+      inject: [ConfigService],
     }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
@@ -78,6 +88,7 @@ import { EventModule } from './event/event.module';
     UserModule,
     AuthModule,
     EventModule,
+    SessionModule,
   ],
 })
 export class AppModule {}
