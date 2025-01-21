@@ -3,9 +3,13 @@ import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
 import { UserModule } from '../user/user.module';
 import { SessionModule } from '../session/session.module';
+import { JwtModule } from '@nestjs/jwt';
 
 @Module({
-  imports: [UserModule, SessionModule],
+  imports: [
+    UserModule, 
+    SessionModule
+  ],
   providers: [AuthService],
   controllers: [AuthController],
   exports: [AuthService],

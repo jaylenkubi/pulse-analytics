@@ -4,16 +4,17 @@ import { envConfig } from './config/env.config';
 import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { CacheModule, CacheStore } from '@nestjs/cache-manager';
 import { redisStore } from 'cache-manager-redis-yet';
-import { DataCollectorModule } from './data-collector/data-collector.module';
-import { EventProcessorModule } from './event-processor/event-processor.module';
-import { AnalyticsModule } from './analytics/analytics.module';
-import { BullModule } from '@nestjs/bullmq';
-import { Event } from './entities/event.entity';
-import { UserModule } from './user/user.module';
-import { AuthModule } from './auth/auth.module';
-import { EventModule } from './event/event.module';
 import { JwtModule } from '@nestjs/jwt';
+import { UserModule } from './user/user.module';
 import { SessionModule } from './session/session.module';
+import { AuthModule } from './auth/auth.module';
+import { DataCollectorModule } from './data-collector/data-collector.module';
+import { AnalyticsModule } from './analytics/analytics.module';
+import { APP_GUARD } from '@nestjs/core';
+import { RolesGuard } from './auth/guards/roles.guard';
+import { RateLimitGuard } from '@shared/guards/rate-limit.guard';
+import { AuditLogModule } from './audit-log/audit-log.module';
+import { BullModule } from '@nestjs/bullmq';
 
 @Module({
   imports: [
@@ -22,10 +23,11 @@ import { SessionModule } from './session/session.module';
       load: [envConfig],
     }),
     JwtModule.registerAsync({
+      global: true,
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => ({
-        secret: configService.get<string>('SECRET'),
-        global: true // This makes the module global
+        secret: configService.get('jwt.secret'),
+        secretRefresh: configService.get('jwt.refreshSecret'),
       }),
       inject: [ConfigService],
     }),
@@ -43,7 +45,6 @@ import { SessionModule } from './session/session.module';
           username: dbConfig.username,
           password: dbConfig.password,
           database: dbConfig.database,
-          entities: [Event],
           autoLoadEntities: true,
           synchronize: false,
           ssl: dbConfig.ssl,
@@ -55,7 +56,7 @@ import { SessionModule } from './session/session.module';
         };
       }
     }),
-    CacheModule.registerAsync({
+      CacheModule.registerAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
       isGlobal: true,
@@ -82,13 +83,23 @@ import { SessionModule } from './session/session.module';
         },
       }),
     }),
-    DataCollectorModule,
-    EventProcessorModule,
-    AnalyticsModule,
     UserModule,
-    AuthModule,
-    EventModule,
     SessionModule,
+    AuthModule,
+    AnalyticsModule,
+    DataCollectorModule,
+    AuditLogModule,
   ],
+  providers: [
+    {
+      provide: APP_GUARD,
+      useClass: RolesGuard,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: RateLimitGuard,
+    },
+  ],
+  exports: [],
 })
-export class AppModule {}
+export class AppModule { }

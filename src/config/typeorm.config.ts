@@ -1,7 +1,7 @@
 import { DataSource } from 'typeorm';
-import { Event } from '../entities/event.entity';
 import { ConfigModule } from '@nestjs/config';
 import { envConfig } from './env.config';
+import { join } from 'path';
 
 ConfigModule.forRoot({
     load: [envConfig],
@@ -14,7 +14,7 @@ export default new DataSource({
     username: process.env.TIMESCALE_USER,
     password: process.env.TIMESCALE_PASSWORD,
     database: process.env.TIMESCALE_DB,
-    entities: [Event],
+    entities: [join(__dirname, '..', 'entities', '*.entity.{ts,js}')],
     migrations: ['src/migrations/*.ts'],
     ssl: process.env.DB_SSL === 'true',
 });

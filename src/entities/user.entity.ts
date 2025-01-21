@@ -1,24 +1,25 @@
 import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Role } from '../auth/enums/roles.enum';
 
 @Entity({ name: 'user' })
 export class User {
     @PrimaryGeneratedColumn('uuid')
     id: string;
 
-    @Column()
+    @Column({type: 'varchar'})
     firstName: string;
 
-    @Column('string')
+    @Column({type: 'varchar'})
     lastName: string;
     
-    @Column('email')
+    @Column({type: 'varchar', unique: true})
     email: string;
 
-    @Column()
-    userType: string;
-
-    @Column()
+    @Column({type: 'varchar'})
     password: string;
+
+    @Column({ type: 'varchar', default: Role.USER })
+    roles: Role;
 
     @CreateDateColumn({ type: 'timestamp with time zone' })
     createdAt: Date;

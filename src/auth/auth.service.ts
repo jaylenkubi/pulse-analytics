@@ -10,6 +10,7 @@ import { Request } from 'express';
 interface JwtPayload {
   sub: string;
   email: string;
+  roles: string[];
   sessionId: string;
 }
 
@@ -23,9 +24,9 @@ export class AuthService {
   private readonly logger = new Logger(AuthService.name);
 
   constructor(
-    @Inject('USER_SERVICE')
+    @Inject('USERS_SERVICE')
     private readonly userService: GenericCrudService<User>,
-    @Inject('SESSION_SERVICE')
+    @Inject('SESSIONS_SERVICE')
     private readonly sessionService: GenericCrudService<Session>,
     private readonly jwtService: JwtService
   ) {}
@@ -46,19 +47,29 @@ export class AuthService {
     return session;
   }
 
-  private async generateTokens(payload: JwtPayload): Promise<{ accessToken: string; refreshToken: string }> {
+  private async generateTokens(user: User, sessionId: string): Promise<{ accessToken: string; refreshToken: string }> {
+    const payload = {
+      sub: user.id,
+      email: user.email,
+      roles: user.roles,
+      sessionId
+    };
+
     const [accessToken, refreshToken] = await Promise.all([
       this.jwtService.signAsync(payload, {
-        secret: process.env.JWT_SECRET,
         expiresIn: '15m',
+        secret: process.env.JWT_SECRET,
       }),
       this.jwtService.signAsync(payload, {
+        expiresIn: '7d',
         secret: process.env.JWT_REFRESH_SECRET,
-        expiresIn: '1d',
       }),
     ]);
 
-    return { accessToken, refreshToken };
+    return {
+      accessToken,
+      refreshToken,
+    };
   }
 
   async refreshAccessToken(refreshToken: string): Promise<{ accessToken: string }> {
@@ -73,7 +84,7 @@ export class AuthService {
       }
 
       const newAccessToken = await this.jwtService.signAsync(
-        { sub: payload.sub, email: payload.email, sessionId: payload.sessionId },
+        { sub: payload.sub, email: payload.email, roles: payload.roles, sessionId: payload.sessionId },
         {
           secret: process.env.JWT_SECRET,
           expiresIn: '15m',
@@ -92,7 +103,8 @@ export class AuthService {
         select: { 
           id: true,
           email: true,
-          password: true 
+          password: true,
+          roles: true
         } 
       });
 
@@ -101,7 +113,7 @@ export class AuthService {
         throw new UnauthorizedException('Invalid credentials');
       }
 
-      const { password, id } = user;
+      const { password, id, roles } = user;
       const isMatch = await bcrypt.compare(pass, password);
 
       if (!isMatch) {
@@ -111,13 +123,7 @@ export class AuthService {
 
       const session = await this.createSession(user, req);
 
-      const payload: JwtPayload = { 
-        sub: id, 
-        email,
-        sessionId: session.id 
-      };
-
-      const tokens = await this.generateTokens(payload);
+      const tokens = await this.generateTokens(user, session.id);
 
       this.logger.log(`Successful login for user: ${email} from IP ${req.ip}`);
       return tokens;

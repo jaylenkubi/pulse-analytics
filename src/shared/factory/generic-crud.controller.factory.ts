@@ -1,11 +1,14 @@
-import { Controller, Get, Post, Put, Delete, Body, Param, Query } from '@nestjs/common';
+import { Controller, Get, Post, Put, Delete, Body, Param, Query, Inject } from '@nestjs/common';
 import { GenericCrudService } from '../services/generic-crud.service';
 import { FindManyOptions } from 'typeorm';
 
 export function createGenericController<T>(path: string) {
   @Controller(path)
   class GenericController {
-    constructor(readonly service: GenericCrudService<T>) {}
+    constructor(
+      @Inject(`${path.toUpperCase()}_SERVICE`)
+      readonly service: GenericCrudService<T>
+    ) {}
 
     @Post()
     create(@Body() data: any): Promise<T> {

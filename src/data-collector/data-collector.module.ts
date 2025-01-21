@@ -8,9 +8,12 @@ import { DataCollectorGateway } from './data-collector.gateway';
   imports: [
     BullModule.registerQueue({
       name: 'event',
-    }),
+    })
   ],
-  providers: [DataCollectorService, DataCollectorGateway],
+  providers: [
+    DataCollectorService, 
+    DataCollectorGateway,
+  ],
   controllers: [DataCollectorController]
 })
 export class DataCollectorModule {}

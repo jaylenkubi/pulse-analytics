@@ -5,7 +5,7 @@ export class Event {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column()
+  @Column({ type: 'varchar' })
   eventType: string;
 
   @Column('jsonb')
