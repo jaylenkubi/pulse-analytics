@@ -1,9 +1,8 @@
-import { CacheModule } from '@nestjs/cache-manager';
+import { Session } from '@entities/session.entity';
 import { Module } from '@nestjs/common';
 import { getRepositoryToken, TypeOrmModule } from '@nestjs/typeorm';
 import { createGenericController } from '@shared/factory/generic-crud.controller.factory';
 import { createGenericService } from '@shared/factory/generic-crud.service.factory';
-import { Session } from 'src/entities/session.entity';
 import { Repository } from 'typeorm';
 
 const SessionController = createGenericController<Session>('sessions');

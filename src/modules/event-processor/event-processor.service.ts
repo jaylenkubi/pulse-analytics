@@ -1,4 +1,4 @@
-import { Event } from '../entities/event.entity';
+import { Event } from '@entities/event.entity';
 import { Processor, WorkerHost } from '@nestjs/bullmq';
 import { Inject, Logger } from '@nestjs/common';
 import { CreateEventDto } from '@shared/dto';

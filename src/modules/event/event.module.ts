@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Event } from '../entities/event.entity';
+import { Event } from '@entities/event.entity';
 import { createGenericService } from '@shared/factory/generic-crud.service.factory';
 import { Repository } from 'typeorm';
 import { getRepositoryToken } from '@nestjs/typeorm';

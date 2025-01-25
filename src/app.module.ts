@@ -5,16 +5,16 @@ import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { CacheModule, CacheStore } from '@nestjs/cache-manager';
 import { redisStore } from 'cache-manager-redis-yet';
 import { JwtModule } from '@nestjs/jwt';
-import { UserModule } from './user/user.module';
-import { SessionModule } from './session/session.module';
-import { AuthModule } from './auth/auth.module';
-import { DataCollectorModule } from './data-collector/data-collector.module';
-import { AnalyticsModule } from './analytics/analytics.module';
 import { APP_GUARD } from '@nestjs/core';
-import { RolesGuard } from './auth/guards/roles.guard';
 import { RateLimitGuard } from '@shared/guards/rate-limit.guard';
-import { AuditLogModule } from './audit-log/audit-log.module';
 import { BullModule } from '@nestjs/bullmq';
+import { AnalyticsModule } from '@modules/analytics/analytics.module';
+import { AuditLogModule } from '@modules/audit-log/audit-log.module';
+import { AuthModule } from '@modules/auth/auth.module';
+import { RolesGuard } from '@modules/auth/guards/roles.guard';
+import { DataCollectorModule } from '@modules/data-collector/data-collector.module';
+import { SessionModule } from '@modules/session/session.module';
+import { UserModule } from '@modules/user/user.module';
 
 @Module({
   imports: [

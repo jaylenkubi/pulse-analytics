@@ -1,11 +1,12 @@
 import { Injectable, Inject, UnauthorizedException, Logger } from '@nestjs/common';
-import { User } from 'src/entities/user.entity';
-import { Session } from 'src/entities/session.entity';
 import { GenericCrudService } from '@shared/services/generic-crud.service';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { CreateUserDto } from '@shared/dto';
 import { Request } from 'express';
+import { User } from '@entities/user.entity';
+import { Session } from '@entities/session.entity';
+
 
 interface JwtPayload {
   sub: string;

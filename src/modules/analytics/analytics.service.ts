@@ -4,7 +4,7 @@ import { Repository } from 'typeorm';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Cache } from 'cache-manager';
 import { Inject } from '@nestjs/common';
-import { Event } from 'src/entities/event.entity';
+import { Event } from '@entities/event.entity';
 
 @Injectable()
 export class AnalyticsService {

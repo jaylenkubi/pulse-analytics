@@ -18,7 +18,12 @@
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false,
     "paths": {
-      "@shared/*": ["./src/shared/*"]
+      "@shared/*": ["./src/shared/*"],
+      "@modules/*": ["./src/modules/*"],
+      "@entities/*": ["./src/database/entities/*"],
+      "@auth/*": ["./src/auth/*"],
+      "@data-collector/*": ["./src/data-collector/*"],
+      "@audit-log/*": ["./src/audit-log/*"],
     }
   }
 }

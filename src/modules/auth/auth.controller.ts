@@ -1,6 +1,6 @@
-import { Controller, Post, Body, Req, UseGuards, UnauthorizedException, Headers } from '@nestjs/common';
-import { AuthService, SignInResponse } from './auth.service';
+import { Body, Controller, Headers, Post, Req, UnauthorizedException } from '@nestjs/common';
 import { Request } from 'express';
+import { AuthService, SignInResponse } from './auth.service';
 
 interface LoginDto {
   email: string;
@@ -13,7 +13,7 @@ interface RefreshTokenDto {
 
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(private readonly authService: AuthService) { }
 
   @Post('login')
   async login(@Body() loginDto: LoginDto, @Req() req: Request): Promise<SignInResponse> {
