@@ -1,20 +1,20 @@
+import { CacheModule, CacheStore } from '@nestjs/cache-manager';
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { envConfig } from './config/env.config';
-import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
-import { CacheModule, CacheStore } from '@nestjs/cache-manager';
-import { redisStore } from 'cache-manager-redis-yet';
 import { JwtModule } from '@nestjs/jwt';
+import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
+import { redisStore } from 'cache-manager-redis-yet';
+import { envConfig } from './config/env.config';
 import { APP_GUARD } from '@nestjs/core';
 import { RateLimitGuard } from '@shared/guards/rate-limit.guard';
 import { BullModule } from '@nestjs/bullmq';
+import { UserModule } from '@modules/user/user.module';
 import { AnalyticsModule } from '@modules/analytics/analytics.module';
 import { AuditLogModule } from '@modules/audit-log/audit-log.module';
 import { AuthModule } from '@modules/auth/auth.module';
 import { RolesGuard } from '@modules/auth/guards/roles.guard';
 import { DataCollectorModule } from '@modules/data-collector/data-collector.module';
 import { SessionModule } from '@modules/session/session.module';
-import { UserModule } from '@modules/user/user.module';
 
 @Module({
   imports: [

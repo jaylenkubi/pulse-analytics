@@ -1,4 +1,4 @@
-import { DeepPartial, FindManyOptions, FindOptionsWhere } from 'typeorm';
+import { DeepPartial, FindManyOptions } from 'typeorm';
 import { TypeOrmAdapter } from '../adapters/typeorm.adapter';
 
 export class GenericCrudService<T> {

@@ -7,7 +7,6 @@ import { Request } from 'express';
 import { User } from '@entities/user.entity';
 import { Session } from '@entities/session.entity';
 
-
 interface JwtPayload {
   sub: string;
   email: string;
