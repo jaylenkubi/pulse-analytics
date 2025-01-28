@@ -24,6 +24,8 @@
       "@auth/*": ["./src/auth/*"],
       "@data-collector/*": ["./src/data-collector/*"],
       "@audit-log/*": ["./src/audit-log/*"],
+      "@/*": ["./src/*"]
     }
-  }
+  },
+  "exclude": ["frontend/**/*", "node_modules", "dist"]
 }

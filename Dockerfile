@@ -6,11 +6,12 @@ RUN apk add --no-cache redis
 
 WORKDIR /app
 
-COPY package.json ./
+COPY package.json pnpm-lock.yaml ./
+COPY tsconfig.json ./
+COPY src/ ./src/
 
-RUN pnpm install --no-frozen-lockfile
+RUN pnpm install --frozen-lockfile
 
-COPY . .
 RUN pnpm build
 
 EXPOSE 3000
