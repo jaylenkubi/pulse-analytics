@@ -12,7 +12,7 @@ export class Session {
     @Column()
     userId: string;
 
-    @Column()
+    @Column({ nullable: true })
     token: string;
 
     @Column({ nullable: true })

@@ -11,3 +11,5 @@ export * from './analyticsControllerGetEventTimelineInterval';
 export * from './analyticsControllerGetEventTimelineParams';
 export * from './createEventDto';
 export * from './createEventDtoPayload';
+export * from './loginDto';
+export * from './signInResponseDto';

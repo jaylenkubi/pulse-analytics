@@ -14,7 +14,7 @@ export default new DataSource({
     username: process.env.TIMESCALE_USER,
     password: process.env.TIMESCALE_PASSWORD,
     database: process.env.TIMESCALE_DB,
-    entities: [join(__dirname, '..', 'entities', '*.entity.{ts,js}')],
-    migrations: ['src/migrations/*.ts'],
+    entities: [join(__dirname, '..', 'database', 'entities', '*.entity.{ts,js}')],
+    migrations: [join(__dirname, '..', 'database', 'migrations', '*.ts')],
     ssl: process.env.DB_SSL === 'true',
 });

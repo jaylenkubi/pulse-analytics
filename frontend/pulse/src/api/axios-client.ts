@@ -1,7 +1,11 @@
 import axios, { AxiosError, AxiosRequestConfig } from 'axios';
 
+const API_URL = process.env.API_URL || 'http://localhost:3000';
+
 export const AXIOS_INSTANCE = axios.create({
-  baseURL: '/api',
+  baseURL: `${API_URL}/api`,
+  // Add CORS headers
+  withCredentials: true,
 });
 
 export const customInstance = <T>(config: AxiosRequestConfig): Promise<T> => {

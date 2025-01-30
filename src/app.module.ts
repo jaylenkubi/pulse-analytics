@@ -51,7 +51,7 @@ import { SessionModule } from '@modules/session/session.module';
           retryAttempts: 3,
           retryDelay: 3000,
           keepConnectionAlive: true,
-          migrations: [__dirname + '/migrations/*.{js,ts}'],
+          migrations: [__dirname + '/database/migrations/*.{js,ts}'],
           migrationsRun: true,
         };
       }

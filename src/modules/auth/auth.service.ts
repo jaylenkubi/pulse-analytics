@@ -1,6 +1,7 @@
 import { Injectable, Inject, UnauthorizedException, Logger } from '@nestjs/common';
 import { GenericCrudService } from '@shared/services/generic-crud.service';
 import { JwtService } from '@nestjs/jwt';
+import { ConfigService } from '@nestjs/config';
 import * as bcrypt from 'bcrypt';
 import { CreateUserDto } from '@shared/dto';
 import { Request } from 'express';
@@ -28,7 +29,7 @@ export class AuthService {
     private readonly userService: GenericCrudService<User>,
     @Inject('SESSIONS_SERVICE')
     private readonly sessionService: GenericCrudService<Session>,
-    private readonly jwtService: JwtService
+    private readonly jwtService: JwtService,
   ) {}
 
   private async createSession(user: User, req: Request): Promise<Session> {
@@ -124,6 +125,8 @@ export class AuthService {
       const session = await this.createSession(user, req);
 
       const tokens = await this.generateTokens(user, session.id);
+
+      await this.sessionService.update(session.id, { token: tokens.refreshToken });
 
       this.logger.log(`Successful login for user: ${email} from IP ${req.ip}`);
       return tokens;

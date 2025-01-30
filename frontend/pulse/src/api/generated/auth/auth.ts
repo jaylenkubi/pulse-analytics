@@ -13,17 +13,26 @@ import type {
   UseMutationOptions,
   UseMutationResult
 } from '@tanstack/react-query'
+import type {
+  LoginDto,
+  SignInResponseDto
+} from '.././schemas'
 import { customInstance } from '../../axios-client';
 
 
 
+/**
+ * @summary Login with email and password
+ */
 export const authControllerLogin = (
-    
+    loginDto: LoginDto,
  ) => {
       
       
-      return customInstance<void>(
-      {url: `/auth/login`, method: 'POST'
+      return customInstance<SignInResponseDto>(
+      {url: `/auth/login`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: loginDto
     },
       );
     }
@@ -31,17 +40,17 @@ export const authControllerLogin = (
 
 
 export const getAuthControllerLoginMutationOptions = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof authControllerLogin>>, TError,void, TContext>, }
-): UseMutationOptions<Awaited<ReturnType<typeof authControllerLogin>>, TError,void, TContext> => {
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof authControllerLogin>>, TError,{data: LoginDto}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof authControllerLogin>>, TError,{data: LoginDto}, TContext> => {
 const {mutation: mutationOptions} = options ?? {};
 
       
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof authControllerLogin>>, void> = () => {
-          
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof authControllerLogin>>, {data: LoginDto}> = (props) => {
+          const {data} = props ?? {};
 
-          return  authControllerLogin()
+          return  authControllerLogin(data,)
         }
 
         
@@ -50,15 +59,18 @@ const {mutation: mutationOptions} = options ?? {};
   return  { mutationFn, ...mutationOptions }}
 
     export type AuthControllerLoginMutationResult = NonNullable<Awaited<ReturnType<typeof authControllerLogin>>>
-    
+    export type AuthControllerLoginMutationBody = LoginDto
     export type AuthControllerLoginMutationError = unknown
 
-    export const useAuthControllerLogin = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof authControllerLogin>>, TError,void, TContext>, }
+    /**
+ * @summary Login with email and password
+ */
+export const useAuthControllerLogin = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof authControllerLogin>>, TError,{data: LoginDto}, TContext>, }
 ): UseMutationResult<
         Awaited<ReturnType<typeof authControllerLogin>>,
         TError,
-        void,
+        {data: LoginDto},
         TContext
       > => {
 

@@ -19,7 +19,7 @@
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "typeorm": "typeorm-ts-node-commonjs -d src/config/typeorm.config.ts",
-    "migration:generate": "docker exec pulse-analytics-api-1 npx typeorm-ts-node-commonjs -d src/config/typeorm.config.ts migration:generate src/migrations/init && docker cp pulse-analytics-api-1:/app/src/migrations/. ./src/migrations/",
+    "migration:generate": "docker exec pulse-analytics-api-1 npx typeorm-ts-node-commonjs -d src/config/typeorm.config.ts migration:generate src/database/migrations/init && docker cp pulse-analytics-api-1:/app/src/database/migrations/. ./src/database/migrations/",
     "migration:run": "pnpm typeorm migration:run",
     "generate-api": "pnpm orval --input ./swagger.json --output frontend/pulse/src/generated/api",
     "postgenerate-api": "prettier --write frontend/pulse/src/generated/api",
