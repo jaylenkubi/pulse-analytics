@@ -1,11 +1,13 @@
 import { Controller, Get, Query, UseGuards, UseInterceptors } from '@nestjs/common';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiTags } from '@nestjs/swagger';
 import { AnalyticsService } from './analytics.service';
 import { TimeRangeDto, EventTimelineDto } from '@shared/dto';
 import { CacheInterceptor } from '@nestjs/cache-manager';
 import { RolesGuard } from '../auth/guards/roles.guard';
 import { Roles } from '../auth/decorators/roles.decorator';
 import { Role } from '../auth/enums/roles.enum';
+import { SwaggerRoute } from '@shared/decorators/swagger.decorator';
+
 
 @ApiTags('Analytics')
 @Controller('analytics')
@@ -15,17 +17,24 @@ export class AnalyticsController {
 
   @Get('stats')
   @UseInterceptors(CacheInterceptor)
-  @ApiOperation({ summary: 'Get event statistics' })
-  @Roles(Role.ADMIN, Role.ANALYST)
+  @SwaggerRoute({
+    summary: 'Get event statistics',
+    query: {
+      start: { type: 'string', format: 'date-time' },
+      end: { type: 'string', format: 'date-time' }
+    }
+  })
   async getEventStats(@Query() timeRange: TimeRangeDto) {
     return this.analyticsService.getEventStats({
       start: new Date(timeRange.start),
-      end: new Date(timeRange.end),
+      end: new Date(timeRange.end)
     });
   }
 
   @Get('realtime')
-  @ApiOperation({ summary: 'Get realtime events' })
+  @SwaggerRoute({
+    summary: 'Get realtime events'
+  })
   @Roles(Role.ADMIN, Role.ANALYST)
   async getRealtimeEvents() {
     return this.analyticsService.getRealtimeEvents();
@@ -33,8 +42,17 @@ export class AnalyticsController {
 
   @Get('timeline')
   @UseInterceptors(CacheInterceptor)
-  @ApiOperation({ summary: 'Get event timeline' })
-  @Roles(Role.ADMIN, Role.ANALYST)
+  @SwaggerRoute({
+    summary: 'Get event timeline',
+    query: {
+      eventType: { type: 'string' },
+      interval: { type: 'string' },
+      start: { type: 'string', format: 'date-time' },
+      end: { type: 'string', format: 'date-time' },
+      page: { type: 'number', minimum: 1, default: 1 },
+      limit: { type: 'number', minimum: 1, maximum: 100, default: 20 }
+    }
+  })
   async getEventTimeline(@Query() query: EventTimelineDto) {
     return this.analyticsService.getEventTimeline(
       query.eventType,
@@ -42,7 +60,9 @@ export class AnalyticsController {
       {
         start: new Date(query.start),
         end: new Date(query.end),
-      },
+        page: query.page,
+        limit: query.limit
+      } as { start: Date; end: Date; page?: number; limit?: number }
     );
   }
 }

@@ -6,9 +6,4 @@
  * OpenAPI spec version: 1.0
  */
 
-export interface SignInResponseDto {
-  /** JWT access token */
-  accessToken: string;
-  /** JWT refresh token */
-  refreshToken: string;
-}
+export type GetUsersById200 = { [key: string]: unknown };

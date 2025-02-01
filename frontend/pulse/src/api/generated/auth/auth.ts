@@ -5,175 +5,296 @@
  * Pulse Analytics API
  * OpenAPI spec version: 1.0
  */
-import {
-  useMutation
-} from '@tanstack/react-query'
+import { useMutation } from '@tanstack/react-query';
 import type {
   MutationFunction,
   UseMutationOptions,
-  UseMutationResult
-} from '@tanstack/react-query'
+  UseMutationResult,
+} from '@tanstack/react-query';
 import type {
+  CreateUserDto,
   LoginDto,
-  SignInResponseDto
-} from '.././schemas'
+  RefreshTokenDto,
+  RefreshTokenResponseDto,
+  SignInResponseDto,
+  User,
+} from '.././models';
 import { customInstance } from '../../axios-client';
 
+/**
+ * @summary Create a new user account
+ */
+export const authControllerSignup = (createUserDto: CreateUserDto) => {
+  return customInstance<User>({
+    url: `/auth/signup`,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    data: createUserDto,
+  });
+};
 
+export const getAuthControllerSignupMutationOptions = <
+  TError = unknown,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof authControllerSignup>>,
+    TError,
+    { data: CreateUserDto },
+    TContext
+  >;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof authControllerSignup>>,
+  TError,
+  { data: CreateUserDto },
+  TContext
+> => {
+  const { mutation: mutationOptions } = options ?? {};
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof authControllerSignup>>,
+    { data: CreateUserDto }
+  > = (props) => {
+    const { data } = props ?? {};
+
+    return authControllerSignup(data);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type AuthControllerSignupMutationResult = NonNullable<
+  Awaited<ReturnType<typeof authControllerSignup>>
+>;
+export type AuthControllerSignupMutationBody = CreateUserDto;
+export type AuthControllerSignupMutationError = unknown;
+
+/**
+ * @summary Create a new user account
+ */
+export const useAuthControllerSignup = <
+  TError = unknown,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof authControllerSignup>>,
+    TError,
+    { data: CreateUserDto },
+    TContext
+  >;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof authControllerSignup>>,
+  TError,
+  { data: CreateUserDto },
+  TContext
+> => {
+  const mutationOptions = getAuthControllerSignupMutationOptions(options);
+
+  return useMutation(mutationOptions);
+};
+/**
+ * @summary Login with email and password
+ */
+export const authControllerLogin = (loginDto: LoginDto) => {
+  return customInstance<SignInResponseDto>({
+    url: `/auth/login`,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    data: loginDto,
+  });
+};
+
+export const getAuthControllerLoginMutationOptions = <
+  TError = unknown,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof authControllerLogin>>,
+    TError,
+    { data: LoginDto },
+    TContext
+  >;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof authControllerLogin>>,
+  TError,
+  { data: LoginDto },
+  TContext
+> => {
+  const { mutation: mutationOptions } = options ?? {};
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof authControllerLogin>>,
+    { data: LoginDto }
+  > = (props) => {
+    const { data } = props ?? {};
+
+    return authControllerLogin(data);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type AuthControllerLoginMutationResult = NonNullable<
+  Awaited<ReturnType<typeof authControllerLogin>>
+>;
+export type AuthControllerLoginMutationBody = LoginDto;
+export type AuthControllerLoginMutationError = unknown;
 
 /**
  * @summary Login with email and password
  */
-export const authControllerLogin = (
-    loginDto: LoginDto,
- ) => {
-      
-      
-      return customInstance<SignInResponseDto>(
-      {url: `/auth/login`, method: 'POST',
-      headers: {'Content-Type': 'application/json', },
-      data: loginDto
-    },
-      );
-    }
-  
+export const useAuthControllerLogin = <
+  TError = unknown,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof authControllerLogin>>,
+    TError,
+    { data: LoginDto },
+    TContext
+  >;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof authControllerLogin>>,
+  TError,
+  { data: LoginDto },
+  TContext
+> => {
+  const mutationOptions = getAuthControllerLoginMutationOptions(options);
 
-
-export const getAuthControllerLoginMutationOptions = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof authControllerLogin>>, TError,{data: LoginDto}, TContext>, }
-): UseMutationOptions<Awaited<ReturnType<typeof authControllerLogin>>, TError,{data: LoginDto}, TContext> => {
-const {mutation: mutationOptions} = options ?? {};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof authControllerLogin>>, {data: LoginDto}> = (props) => {
-          const {data} = props ?? {};
-
-          return  authControllerLogin(data,)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type AuthControllerLoginMutationResult = NonNullable<Awaited<ReturnType<typeof authControllerLogin>>>
-    export type AuthControllerLoginMutationBody = LoginDto
-    export type AuthControllerLoginMutationError = unknown
-
-    /**
- * @summary Login with email and password
+  return useMutation(mutationOptions);
+};
+/**
+ * @summary Refresh access token
  */
-export const useAuthControllerLogin = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof authControllerLogin>>, TError,{data: LoginDto}, TContext>, }
-): UseMutationResult<
-        Awaited<ReturnType<typeof authControllerLogin>>,
-        TError,
-        {data: LoginDto},
-        TContext
-      > => {
+export const authControllerRefresh = (refreshTokenDto: RefreshTokenDto) => {
+  return customInstance<RefreshTokenResponseDto>({
+    url: `/auth/refresh`,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    data: refreshTokenDto,
+  });
+};
 
-      const mutationOptions = getAuthControllerLoginMutationOptions(options);
+export const getAuthControllerRefreshMutationOptions = <
+  TError = unknown,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof authControllerRefresh>>,
+    TError,
+    { data: RefreshTokenDto },
+    TContext
+  >;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof authControllerRefresh>>,
+  TError,
+  { data: RefreshTokenDto },
+  TContext
+> => {
+  const { mutation: mutationOptions } = options ?? {};
 
-      return useMutation(mutationOptions);
-    }
-    export const authControllerRefresh = (
-    
- ) => {
-      
-      
-      return customInstance<void>(
-      {url: `/auth/refresh`, method: 'POST'
-    },
-      );
-    }
-  
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof authControllerRefresh>>,
+    { data: RefreshTokenDto }
+  > = (props) => {
+    const { data } = props ?? {};
 
+    return authControllerRefresh(data);
+  };
 
-export const getAuthControllerRefreshMutationOptions = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof authControllerRefresh>>, TError,void, TContext>, }
-): UseMutationOptions<Awaited<ReturnType<typeof authControllerRefresh>>, TError,void, TContext> => {
-const {mutation: mutationOptions} = options ?? {};
+  return { mutationFn, ...mutationOptions };
+};
 
-      
+export type AuthControllerRefreshMutationResult = NonNullable<
+  Awaited<ReturnType<typeof authControllerRefresh>>
+>;
+export type AuthControllerRefreshMutationBody = RefreshTokenDto;
+export type AuthControllerRefreshMutationError = unknown;
 
+/**
+ * @summary Refresh access token
+ */
+export const useAuthControllerRefresh = <
+  TError = unknown,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof authControllerRefresh>>,
+    TError,
+    { data: RefreshTokenDto },
+    TContext
+  >;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof authControllerRefresh>>,
+  TError,
+  { data: RefreshTokenDto },
+  TContext
+> => {
+  const mutationOptions = getAuthControllerRefreshMutationOptions(options);
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof authControllerRefresh>>, void> = () => {
-          
+  return useMutation(mutationOptions);
+};
+/**
+ * @summary Logout from the current session
+ */
+export const authControllerLogout = () => {
+  return customInstance<void>({ url: `/auth/logout`, method: 'POST' });
+};
 
-          return  authControllerRefresh()
-        }
+export const getAuthControllerLogoutMutationOptions = <
+  TError = unknown,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof authControllerLogout>>,
+    TError,
+    void,
+    TContext
+  >;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof authControllerLogout>>,
+  TError,
+  void,
+  TContext
+> => {
+  const { mutation: mutationOptions } = options ?? {};
 
-        
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof authControllerLogout>>,
+    void
+  > = () => {
+    return authControllerLogout();
+  };
 
+  return { mutationFn, ...mutationOptions };
+};
 
-  return  { mutationFn, ...mutationOptions }}
+export type AuthControllerLogoutMutationResult = NonNullable<
+  Awaited<ReturnType<typeof authControllerLogout>>
+>;
 
-    export type AuthControllerRefreshMutationResult = NonNullable<Awaited<ReturnType<typeof authControllerRefresh>>>
-    
-    export type AuthControllerRefreshMutationError = unknown
+export type AuthControllerLogoutMutationError = unknown;
 
-    export const useAuthControllerRefresh = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof authControllerRefresh>>, TError,void, TContext>, }
-): UseMutationResult<
-        Awaited<ReturnType<typeof authControllerRefresh>>,
-        TError,
-        void,
-        TContext
-      > => {
+/**
+ * @summary Logout from the current session
+ */
+export const useAuthControllerLogout = <
+  TError = unknown,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof authControllerLogout>>,
+    TError,
+    void,
+    TContext
+  >;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof authControllerLogout>>,
+  TError,
+  void,
+  TContext
+> => {
+  const mutationOptions = getAuthControllerLogoutMutationOptions(options);
 
-      const mutationOptions = getAuthControllerRefreshMutationOptions(options);
-
-      return useMutation(mutationOptions);
-    }
-    export const authControllerLogout = (
-    
- ) => {
-      
-      
-      return customInstance<void>(
-      {url: `/auth/logout`, method: 'POST'
-    },
-      );
-    }
-  
-
-
-export const getAuthControllerLogoutMutationOptions = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof authControllerLogout>>, TError,void, TContext>, }
-): UseMutationOptions<Awaited<ReturnType<typeof authControllerLogout>>, TError,void, TContext> => {
-const {mutation: mutationOptions} = options ?? {};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof authControllerLogout>>, void> = () => {
-          
-
-          return  authControllerLogout()
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type AuthControllerLogoutMutationResult = NonNullable<Awaited<ReturnType<typeof authControllerLogout>>>
-    
-    export type AuthControllerLogoutMutationError = unknown
-
-    export const useAuthControllerLogout = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof authControllerLogout>>, TError,void, TContext>, }
-): UseMutationResult<
-        Awaited<ReturnType<typeof authControllerLogout>>,
-        TError,
-        void,
-        TContext
-      > => {
-
-      const mutationOptions = getAuthControllerLogoutMutationOptions(options);
-
-      return useMutation(mutationOptions);
-    }
-    
+  return useMutation(mutationOptions);
+};

@@ -5,76 +5,86 @@
  * Pulse Analytics API
  * OpenAPI spec version: 1.0
  */
-import {
-  useMutation
-} from '@tanstack/react-query'
+import { useMutation } from '@tanstack/react-query';
 import type {
   MutationFunction,
   UseMutationOptions,
-  UseMutationResult
-} from '@tanstack/react-query'
-import type {
-  CreateEventDto
-} from '.././schemas'
+  UseMutationResult,
+} from '@tanstack/react-query';
+import type { CreateEventDto } from '.././models';
 import { customInstance } from '../../axios-client';
-
-
 
 /**
  * @summary Collect event data
  */
 export const dataCollectorControllerCollectEvent = (
-    createEventDto: CreateEventDto,
- ) => {
-      
-      
-      return customInstance<void>(
-      {url: `/data-collector/event`, method: 'POST',
-      headers: {'Content-Type': 'application/json', },
-      data: createEventDto
-    },
-      );
-    }
-  
+  createEventDto: CreateEventDto,
+) => {
+  return customInstance<void>({
+    url: `/data-collector/event`,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    data: createEventDto,
+  });
+};
 
+export const getDataCollectorControllerCollectEventMutationOptions = <
+  TError = unknown,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof dataCollectorControllerCollectEvent>>,
+    TError,
+    { data: CreateEventDto },
+    TContext
+  >;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof dataCollectorControllerCollectEvent>>,
+  TError,
+  { data: CreateEventDto },
+  TContext
+> => {
+  const { mutation: mutationOptions } = options ?? {};
 
-export const getDataCollectorControllerCollectEventMutationOptions = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof dataCollectorControllerCollectEvent>>, TError,{data: CreateEventDto}, TContext>, }
-): UseMutationOptions<Awaited<ReturnType<typeof dataCollectorControllerCollectEvent>>, TError,{data: CreateEventDto}, TContext> => {
-const {mutation: mutationOptions} = options ?? {};
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof dataCollectorControllerCollectEvent>>,
+    { data: CreateEventDto }
+  > = (props) => {
+    const { data } = props ?? {};
 
-      
+    return dataCollectorControllerCollectEvent(data);
+  };
 
+  return { mutationFn, ...mutationOptions };
+};
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof dataCollectorControllerCollectEvent>>, {data: CreateEventDto}> = (props) => {
-          const {data} = props ?? {};
+export type DataCollectorControllerCollectEventMutationResult = NonNullable<
+  Awaited<ReturnType<typeof dataCollectorControllerCollectEvent>>
+>;
+export type DataCollectorControllerCollectEventMutationBody = CreateEventDto;
+export type DataCollectorControllerCollectEventMutationError = unknown;
 
-          return  dataCollectorControllerCollectEvent(data,)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type DataCollectorControllerCollectEventMutationResult = NonNullable<Awaited<ReturnType<typeof dataCollectorControllerCollectEvent>>>
-    export type DataCollectorControllerCollectEventMutationBody = CreateEventDto
-    export type DataCollectorControllerCollectEventMutationError = unknown
-
-    /**
+/**
  * @summary Collect event data
  */
-export const useDataCollectorControllerCollectEvent = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof dataCollectorControllerCollectEvent>>, TError,{data: CreateEventDto}, TContext>, }
-): UseMutationResult<
-        Awaited<ReturnType<typeof dataCollectorControllerCollectEvent>>,
-        TError,
-        {data: CreateEventDto},
-        TContext
-      > => {
+export const useDataCollectorControllerCollectEvent = <
+  TError = unknown,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof dataCollectorControllerCollectEvent>>,
+    TError,
+    { data: CreateEventDto },
+    TContext
+  >;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof dataCollectorControllerCollectEvent>>,
+  TError,
+  { data: CreateEventDto },
+  TContext
+> => {
+  const mutationOptions =
+    getDataCollectorControllerCollectEventMutationOptions(options);
 
-      const mutationOptions = getDataCollectorControllerCollectEventMutationOptions(options);
-
-      return useMutation(mutationOptions);
-    }
-    
+  return useMutation(mutationOptions);
+};

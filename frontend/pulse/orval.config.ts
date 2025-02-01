@@ -2,11 +2,11 @@ import { defineConfig } from 'orval';
 
 export default defineConfig({
   pulse: {
-    input: './swagger.json',
+    input: '../../swagger.json',
     output: {
       mode: 'tags-split',
       target: './src/api/generated/index.ts',
-      schemas: './src/api/generated/schemas',
+      schemas: './src/api/generated/models',
       client: 'react-query',
       override: {
         mutator: {

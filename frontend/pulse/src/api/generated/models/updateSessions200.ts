@@ -6,7 +6,4 @@
  * OpenAPI spec version: 1.0
  */
 
-export type AnalyticsControllerGetEventStatsParams = {
-start: string;
-end: string;
-};
+export type UpdateSessions200 = { [key: string]: unknown };

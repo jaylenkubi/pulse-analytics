@@ -52,7 +52,7 @@ export class AnalyticsService {
   async getEventTimeline(
     eventType: string,
     interval: '1m' | '5m' | '1h' = '5m',
-    timeRange: { start: Date; end: Date }
+    timeRange: { start: Date; end: Date; page?: number; limit?: number }
   ) {
     const cacheKey = `timeline-${eventType}-${interval}-${timeRange.start}-${timeRange.end}`;
     const cached = await this.cacheManager.get(cacheKey);

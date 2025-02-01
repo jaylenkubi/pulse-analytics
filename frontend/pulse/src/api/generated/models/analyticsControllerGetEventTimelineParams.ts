@@ -8,8 +8,10 @@
 import type { AnalyticsControllerGetEventTimelineInterval } from './analyticsControllerGetEventTimelineInterval';
 
 export type AnalyticsControllerGetEventTimelineParams = {
-start: string;
-end: string;
-eventType: string;
-interval: AnalyticsControllerGetEventTimelineInterval;
+  start: string;
+  end: string;
+  page?: number;
+  limit?: number;
+  eventType: string;
+  interval: AnalyticsControllerGetEventTimelineInterval;
 };

@@ -1,4 +1,4 @@
-import { IsISO8601, IsNotEmpty } from 'class-validator';
+import { IsISO8601, IsNotEmpty, IsNumber, IsOptional } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class TimeRangeDto {
@@ -11,4 +11,14 @@ export class TimeRangeDto {
   @IsISO8601()
   @IsNotEmpty()
   end: string;
+
+  @ApiProperty({ required: false, example: 1 })
+  @IsNumber()
+  @IsOptional()
+  page?: number;
+
+  @ApiProperty({ required: false, example: 20 })
+  @IsNumber()
+  @IsOptional()
+  limit?: number;
 }

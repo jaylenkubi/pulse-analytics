@@ -6,8 +6,8 @@
  * OpenAPI spec version: 1.0
  */
 
-export type AnalyticsControllerGetEventTimelineInterval = typeof AnalyticsControllerGetEventTimelineInterval[keyof typeof AnalyticsControllerGetEventTimelineInterval];
-
+export type AnalyticsControllerGetEventTimelineInterval =
+  (typeof AnalyticsControllerGetEventTimelineInterval)[keyof typeof AnalyticsControllerGetEventTimelineInterval];
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const AnalyticsControllerGetEventTimelineInterval = {
