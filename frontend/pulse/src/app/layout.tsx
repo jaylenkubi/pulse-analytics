@@ -1,11 +1,8 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { Providers } from "./providers";
-import { AuthProvider } from "@/lib/auth";
-import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
-import { AppSidebar } from "@/components/sidebar/app-sidebar";
 import { cookies } from "next/headers";
+import { RootWrapper } from "@/components/root-wrapper";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -27,25 +24,17 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode
 }) {
-
   const cookieStore = await cookies()
   const defaultOpen = cookieStore.get("sidebar:state")?.value === "true"
+
   return (
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <Providers>
-          <AuthProvider>
-            <SidebarProvider defaultOpen={defaultOpen}>
-              <AppSidebar />
-              <main className="flex-1">
-                <SidebarTrigger />
-                {children}
-              </main>
-            </SidebarProvider>
-          </AuthProvider>
-        </Providers>
+        <RootWrapper defaultOpen={defaultOpen}>
+          {children}
+        </RootWrapper>
       </body>
     </html>
   );
