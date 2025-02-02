@@ -2,7 +2,7 @@
 
 import { usePathname } from "next/navigation"
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
-import { AppSidebar } from "./sidebar/app-sidebar"
+import { AppSidebar } from "../sidebar/app-sidebar"
 
 export function PathCheck({ children, defaultOpen }: { children: React.ReactNode, defaultOpen: boolean }) {
   const pathname = usePathname()
