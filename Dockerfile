@@ -1,6 +1,6 @@
 FROM node:18-alpine
 
-RUN corepack enable && corepack prepare pnpm@latest --activate
+RUN corepack enable && corepack prepare pnpm@9.15.2 --activate
 
 RUN apk add --no-cache redis
 
