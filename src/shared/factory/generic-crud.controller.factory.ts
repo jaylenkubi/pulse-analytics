@@ -1,14 +1,19 @@
-import { Controller, Get, Post, Put, Delete, Body, Param, Query, Inject, Type } from '@nestjs/common';
+import { Controller, Get, Post, Put, Delete, Body, Param, Query, Inject, Type, UseInterceptors } from '@nestjs/common';
 import { GenericCrudService } from '../services/generic-crud.service';
 import { FindManyOptions } from 'typeorm';
 import { ApiTags } from '@nestjs/swagger';
 import { SwaggerRoute } from '../decorators/swagger.decorator';
+import { HttpCacheInterceptor } from '../interceptors/http-cache.interceptor';
+import { CacheInvalidationInterceptor } from '../interceptors/cache-invalidation.interceptor';
+import { InvalidateCache } from '../decorators/invalidate-cache.decorator';
+import { CacheTTL } from '@nestjs/cache-manager';
 
 export function createGenericController<T>(path: string) {
   const entityName = path.charAt(0).toUpperCase() + path.slice(1);
 
   @ApiTags(entityName)
   @Controller(path)
+  @UseInterceptors(HttpCacheInterceptor)
   class GenericController {
     constructor(
       @Inject(`${path.toUpperCase()}_SERVICE`)
@@ -16,6 +21,8 @@ export function createGenericController<T>(path: string) {
     ) {}
 
     @Post()
+    @UseInterceptors(CacheInvalidationInterceptor)
+    @InvalidateCache({ entity: path })
     @SwaggerRoute({
       summary: `Create ${entityName}`,
       operationId: `create${entityName}`,
@@ -28,6 +35,7 @@ export function createGenericController<T>(path: string) {
     }
 
     @Get('/:id')
+    @CacheTTL(300000) // Cache for 5 minutes
     @SwaggerRoute({
       summary: `Get ${entityName} by ID`,
       operationId: `get${entityName}ById`,
@@ -39,6 +47,7 @@ export function createGenericController<T>(path: string) {
     }
 
     @Get()
+    @CacheTTL(300000) // Cache for 5 minutes
     @SwaggerRoute({
       summary: `Get all ${entityName}s`,
       operationId: `getAll${entityName}s`,
@@ -53,6 +62,8 @@ export function createGenericController<T>(path: string) {
     }
 
     @Put('/:id')
+    @UseInterceptors(CacheInvalidationInterceptor)
+    @InvalidateCache({ entity: path })
     @SwaggerRoute({
       summary: `Update ${entityName}`,
       operationId: `update${entityName}`,
@@ -64,6 +75,8 @@ export function createGenericController<T>(path: string) {
     }
 
     @Delete('/:id')
+    @UseInterceptors(CacheInvalidationInterceptor)
+    @InvalidateCache({ entity: path })
     @SwaggerRoute({
       summary: `Delete ${entityName}`,
       operationId: `delete${entityName}`,

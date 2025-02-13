@@ -6,15 +6,15 @@ import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { redisStore } from 'cache-manager-redis-yet';
 import { envConfig } from './config/env.config';
 import { APP_GUARD } from '@nestjs/core';
-import { RateLimitGuard } from '@shared/guards/rate-limit.guard';
 import { BullModule } from '@nestjs/bullmq';
 import { UserModule } from '@modules/user/user.module';
 import { AnalyticsModule } from '@modules/analytics/analytics.module';
 import { AuditLogModule } from '@modules/audit-log/audit-log.module';
 import { AuthModule } from '@modules/auth/auth.module';
-import { RolesGuard } from '@modules/auth/guards/roles.guard';
 import { DataCollectorModule } from '@modules/data-collector/data-collector.module';
 import { SessionModule } from '@modules/session/session.module';
+import { SharedModule } from '@shared/shared.module';
+import { RolesGuard } from '@modules/auth/guards/roles.guard';
 
 @Module({
   imports: [
@@ -56,7 +56,7 @@ import { SessionModule } from '@modules/session/session.module';
         };
       }
     }),
-      CacheModule.registerAsync({
+    CacheModule.registerAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
       isGlobal: true,
@@ -89,16 +89,13 @@ import { SessionModule } from '@modules/session/session.module';
     AnalyticsModule,
     DataCollectorModule,
     AuditLogModule,
+    SharedModule,
   ],
   providers: [
     {
       provide: APP_GUARD,
       useClass: RolesGuard,
-    },
-    {
-      provide: APP_GUARD,
-      useClass: RateLimitGuard,
-    },
+    }
   ],
   exports: [],
 })
