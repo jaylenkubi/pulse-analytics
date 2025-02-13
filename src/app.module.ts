@@ -78,8 +78,8 @@ import { SessionModule } from '@modules/session/session.module';
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => ({
         connection: {
-          host: configService.get('queue.host'),
-          port: configService.get('queue.port'),
+          host: configService.get('dragonfly.host'),
+          port: configService.get('dragonfly.port'),
         },
       }),
     }),
