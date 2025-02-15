@@ -1,6 +1,11 @@
 import * as React from "react"
+<<<<<<< HEAD
 import { Slot } from "@radix-ui/react-slot"
 import { ChevronRight, MoreHorizontal } from "lucide-react"
+=======
+import { ChevronRightIcon, DotsHorizontalIcon } from "@radix-ui/react-icons"
+import { Slot } from "@radix-ui/react-slot"
+>>>>>>> d913826 (frontend added and event entity changes)
 
 import { cn } from "@/lib/utils"
 
@@ -80,10 +85,17 @@ const BreadcrumbSeparator = ({
   <li
     role="presentation"
     aria-hidden="true"
+<<<<<<< HEAD
     className={cn("[&>svg]:w-3.5 [&>svg]:h-3.5", className)}
     {...props}
   >
     {children ?? <ChevronRight />}
+=======
+    className={cn("[&>svg]:size-3.5", className)}
+    {...props}
+  >
+    {children ?? <ChevronRightIcon />}
+>>>>>>> d913826 (frontend added and event entity changes)
   </li>
 )
 BreadcrumbSeparator.displayName = "BreadcrumbSeparator"
@@ -98,7 +110,11 @@ const BreadcrumbEllipsis = ({
     className={cn("flex h-9 w-9 items-center justify-center", className)}
     {...props}
   >
+<<<<<<< HEAD
     <MoreHorizontal className="h-4 w-4" />
+=======
+    <DotsHorizontalIcon className="h-4 w-4" />
+>>>>>>> d913826 (frontend added and event entity changes)
     <span className="sr-only">More</span>
   </span>
 )

@@ -1,5 +1,8 @@
+<<<<<<< HEAD
 "use client"
 
+=======
+>>>>>>> d913826 (frontend added and event entity changes)
 import * as React from "react"
 import * as AvatarPrimitive from "@radix-ui/react-avatar"
 

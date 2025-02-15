@@ -1,7 +1,15 @@
 {
   "compilerOptions": {
+<<<<<<< HEAD
     "target": "ES2017",
     "lib": ["dom", "dom.iterable", "esnext"],
+=======
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+>>>>>>> d913826 (frontend added and event entity changes)
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
@@ -13,10 +21,19 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "incremental": true,
+<<<<<<< HEAD
+=======
+    "paths": {
+      "@/*": [
+        "./src/*"
+      ]
+    },
+>>>>>>> d913826 (frontend added and event entity changes)
     "plugins": [
       {
         "name": "next"
       }
+<<<<<<< HEAD
     ],
     "paths": {
       "@/*": ["./src/*"]
@@ -24,4 +41,17 @@
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
   "exclude": ["node_modules"]
+=======
+    ]
+  },
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+>>>>>>> d913826 (frontend added and event entity changes)
 }

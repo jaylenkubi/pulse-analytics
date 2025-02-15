@@ -1,5 +1,6 @@
 {
   "$schema": "https://ui.shadcn.com/schema.json",
+<<<<<<< HEAD
   "style": "default",
   "rsc": true,
   "tsx": true,
@@ -7,6 +8,15 @@
     "config": "tailwind.config.ts",
     "css": "src/app/globals.css",
     "baseColor": "slate",
+=======
+  "style": "new-york",
+  "rsc": false,
+  "tsx": true,
+  "tailwind": {
+    "config": "tailwind.config.js",
+    "css": "src/styles/globals.css",
+    "baseColor": "zinc",
+>>>>>>> d913826 (frontend added and event entity changes)
     "cssVariables": true,
     "prefix": ""
   },
@@ -16,6 +26,10 @@
     "ui": "@/components/ui",
     "lib": "@/lib",
     "hooks": "@/hooks"
+<<<<<<< HEAD
   },
   "iconLibrary": "lucide"
+=======
+  }
+>>>>>>> d913826 (frontend added and event entity changes)
 }
