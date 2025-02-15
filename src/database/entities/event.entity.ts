@@ -1,40 +1,12 @@
-<<<<<<< HEAD
-import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn } from 'typeorm';
-
-@Entity({ name: 'event' })
-export class Event {
-=======
 import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, BeforeInsert, BeforeUpdate } from 'typeorm';
 import { AnalyticsEvent, EventName } from '../../types/analytics';
 
 @Entity({ name: 'event' })
 export class Event implements Partial<AnalyticsEvent> {
->>>>>>> d913826 (frontend added and event entity changes)
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @Column({ type: 'varchar' })
-<<<<<<< HEAD
-  eventType: string;
-
-  @Column('jsonb')
-  payload: Record<string, any>;
-
-  @Column('timestamp with time zone')
-  timestamp: Date;
-
-  @Column('jsonb', { nullable: true })
-  metadata: Record<string, any>;
-
-  @Column({ 
-    type: 'varchar',
-    default: 'pending'
-  })
-  processingStatus: 'pending' | 'processed' | 'failed';
-
-  @CreateDateColumn({ type: 'timestamp with time zone' })
-  createdAt: Date;
-=======
   message_id: string;
 
   @Column({ type: 'varchar' })
@@ -79,5 +51,4 @@ export class Event implements Partial<AnalyticsEvent> {
       this._timestamp = new Date(this._timestamp);
     }
   }
->>>>>>> d913826 (frontend added and event entity changes)
 }
