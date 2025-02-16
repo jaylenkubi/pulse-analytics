@@ -1,8 +1,8 @@
 import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, BeforeInsert, BeforeUpdate } from 'typeorm';
-import { AnalyticsEvent, EventName } from '../../types/analytics';
+import { EventInterface, EventName } from '../../types/event.type';
 
 @Entity({ name: 'event' })
-export class Event implements Partial<AnalyticsEvent> {
+export class Event implements Partial<EventInterface> {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
@@ -13,22 +13,22 @@ export class Event implements Partial<AnalyticsEvent> {
   event_name: EventName;
 
   @Column('jsonb')
-  user: AnalyticsEvent['user'];
+  user: EventInterface['user'];
 
   @Column('jsonb')
-  context: AnalyticsEvent['context'];
+  context: EventInterface['context'];
 
   @Column('jsonb')
-  traffic: AnalyticsEvent['traffic'];
+  traffic: EventInterface['traffic'];
 
   @Column('jsonb')
-  page: AnalyticsEvent['page'];
+  page: EventInterface['page'];
 
   @Column('jsonb')
-  metrics: AnalyticsEvent['metrics'];
+  metrics: EventInterface['metrics'];
 
   @Column('jsonb')
-  pulse_analytics: AnalyticsEvent['pulse_analytics'];
+  pulse_analytics: EventInterface['pulse_analytics'];
 
   @Column('timestamp with time zone')
   private _timestamp: Date;

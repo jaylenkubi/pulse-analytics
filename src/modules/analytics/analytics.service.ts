@@ -1,77 +1,236 @@
-import { Injectable, Logger } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { CACHE_MANAGER } from '@nestjs/cache-manager';
-import { Cache } from 'cache-manager';
-import { Inject } from '@nestjs/common';
-import { Event } from '@entities/event.entity';
+import { Injectable, Inject } from '@nestjs/common';
+import { Event } from '../../database/entities/event.entity';
+import { EventName } from '@/types/event.type';
+import { GenericCrudService } from '@shared/services/generic-crud.service';
+import { Between, FindManyOptions } from 'typeorm';
 
 @Injectable()
 export class AnalyticsService {
-  private readonly logger = new Logger(AnalyticsService.name);
-
   constructor(
-    @InjectRepository(Event)
-    private readonly eventRepository: Repository<Event>,
-    @Inject(CACHE_MANAGER) private cacheManager: Cache
+    @Inject('EVENT_SERVICE')
+    private eventService: GenericCrudService<Event>,
   ) {}
 
-  async getEventStats(timeRange: { start: Date; end: Date }) {
-    const cacheKey = `event-stats-${timeRange.start}-${timeRange.end}`;
-    const cached = await this.cacheManager.get(cacheKey);
-    
-    if (cached) {
-      return cached;
-    }
-
-    const stats = await this.eventRepository
-      .createQueryBuilder('event')
-      .select('event.eventType', 'type')
-      .addSelect('COUNT(*)', 'count')
-      .where('event.timestamp BETWEEN :start AND :end', timeRange)
-      .groupBy('event.eventType')
-      .getRawMany();
-
-    await this.cacheManager.set(cacheKey, stats, 300); // Cache for 5 minutes
-    return stats;
-  }
-
-  async getRealtimeEvents() {
-    const lastMinute = new Date(Date.now() - 60000);
-    return this.eventRepository.find({
-        where: {
-          // @ts-ignore
-        timestamp: { $gte: lastMinute },
-        processingStatus: 'processed'
+  async getTrafficSourceStats(startDate: Date, endDate: Date) {
+    const query: FindManyOptions<Event> = {
+      where: {
+        event_name: EventName.PAGE_VIEW,
+        timestamp: Between(startDate.toISOString(), endDate.toISOString())
       },
-      order: { timestamp: 'DESC' },
-      take: 100
+      select: [
+        'traffic',
+        'user',
+        'metrics'
+      ]
+    };
+
+    const events = await this.eventService.getByQuery(query);
+    
+    // Process the events in memory since we can't use raw SQL with the generic service
+    const statsMap = new Map<string, any>();
+    
+    events.forEach(event => {
+      const key = `${event.traffic?.source || 'unknown'}-${event.traffic?.medium || 'unknown'}`;
+      const stats = statsMap.get(key) || {
+        source: event.traffic?.source,
+        medium: event.traffic?.medium,
+        visits: 0,
+        unique_visitors: new Set(),
+        total_engagement_time: 0,
+        bounce_count: 0,
+        count: 0
+      };
+      
+      stats.visits++;
+      stats.unique_visitors.add(event.user?.id);
+      stats.total_engagement_time += Number(event.metrics?.engagement_time_ms || '0');
+      if (event.metrics?.bounced) {
+        stats.bounce_count++;
+      }
+      stats.count++;
+      
+      statsMap.set(key, stats);
     });
+    
+    return Array.from(statsMap.values()).map(stats => ({
+      source: stats.source,
+      medium: stats.medium,
+      visits: stats.visits,
+      unique_visitors: stats.unique_visitors.size,
+      avg_engagement_time: stats.total_engagement_time / stats.count,
+      bounce_rate: stats.bounce_count / stats.count
+    }));
   }
 
-  async getEventTimeline(
-    eventType: string,
-    interval: '1m' | '5m' | '1h' = '5m',
-    timeRange: { start: Date; end: Date; page?: number; limit?: number }
-  ) {
-    const cacheKey = `timeline-${eventType}-${interval}-${timeRange.start}-${timeRange.end}`;
-    const cached = await this.cacheManager.get(cacheKey);
+  async getPagePerformance(startDate: Date, endDate: Date) {
+    const query: FindManyOptions<Event> = {
+      where: {
+        event_name: EventName.PAGE_VIEW,
+        timestamp: Between(startDate.toISOString(), endDate.toISOString())
+      },
+      select: [
+        'page',
+        'metrics'
+      ]
+    };
 
-    if (cached) {
-      return cached;
-    }
+    const events = await this.eventService.getByQuery(query);
+    
+    const statsMap = new Map<string, any>();
+    
+    events.forEach(event => {
+      const path = event.page?.path || 'unknown';
+      const stats = statsMap.get(path) || {
+        path,
+        pageviews: 0,
+        total_load_time: 0,
+        total_scroll_depth: 0,
+        count: 0
+      };
+      
+      stats.pageviews++;
+      stats.total_load_time += Number(event.metrics?.load_time_ms || '0');
+      stats.total_scroll_depth += Number(event.metrics?.scroll_depth || '0');
+      stats.count++;
+      
+      statsMap.set(path, stats);
+    });
+    
+    return Array.from(statsMap.values()).map(stats => ({
+      path: stats.path,
+      pageviews: stats.pageviews,
+      avg_load_time: stats.total_load_time / stats.count,
+      avg_scroll_depth: stats.total_scroll_depth / stats.count
+    }));
+  }
 
-    const timeline = await this.eventRepository
-      .createQueryBuilder('event')
-      .select(`time_bucket('${interval}', event.timestamp)`, 'bucket')
-      .addSelect('COUNT(*)', 'count')
-      .where('event.eventType = :eventType', { eventType })
-      .andWhere('event.timestamp BETWEEN :start AND :end', timeRange)
-      .groupBy('bucket')
-      .orderBy('bucket', 'ASC')
-      .getRawMany();
+  async getUserBehavior(startDate: Date, endDate: Date) {
+    const query: FindManyOptions<Event> = {
+      where: {
+        timestamp: Between(startDate.toISOString(), endDate.toISOString())
+      },
+      select: [
+        'user',
+        'event_name',
+        'metrics'
+      ]
+    };
 
-    await this.cacheManager.set(cacheKey, timeline, 300);
-    return timeline;
+    const events = await this.eventService.getByQuery(query);
+    
+    const statsMap = new Map<string, any>();
+    
+    events.forEach(event => {
+      const userId = event.user?.id || 'unknown';
+      const stats = statsMap.get(userId) || {
+        user_id: userId,
+        total_events: 0,
+        pageviews: 0,
+        total_engagement_time: 0,
+        count: 0
+      };
+      
+      stats.total_events++;
+      if (event.event_name === EventName.PAGE_VIEW) {
+        stats.pageviews++;
+      }
+      stats.total_engagement_time += Number(event.metrics?.engagement_time_ms || '0');
+      stats.count++;
+      
+      statsMap.set(userId, stats);
+    });
+    
+    return Array.from(statsMap.values()).map(stats => ({
+      user_id: stats.user_id,
+      total_events: stats.total_events,
+      pageviews: stats.pageviews,
+      avg_engagement_time: stats.total_engagement_time / stats.count
+    }));
+  }
+
+  async getRealtimeAnalytics() {
+    const fiveMinutesAgo = new Date(Date.now() - 5 * 60 * 1000);
+    
+    const query: FindManyOptions<Event> = {
+      where: {
+        timestamp: Between(fiveMinutesAgo.toISOString(), new Date().toISOString())
+      },
+      order: {
+        timestamp: 'DESC'
+      },
+      take: 100
+    };
+
+    const events = await this.eventService.getByQuery(query);
+    
+    const activePages = new Map<string, number>();
+    const recentEvents = events.slice(0, 10).map(event => ({
+      type: event.event_name,
+      page: event.page?.path,
+      timestamp: event.timestamp
+    }));
+    
+    events.forEach(event => {
+      if (event.event_name === EventName.PAGE_VIEW) {
+        const path = event.page?.path || 'unknown';
+        activePages.set(path, (activePages.get(path) || 0) + 1);
+      }
+    });
+
+    return {
+      active_visitors: new Set(events.map(e => e.user?.id)).size,
+      active_pages: Array.from(activePages.entries()).map(([path, count]) => ({
+        path,
+        visitors: count
+      })).sort((a, b) => b.visitors - a.visitors).slice(0, 5),
+      recent_events: recentEvents,
+      events_per_minute: events.length / 5
+    };
+  }
+
+  async getAudienceAnalytics(startDate: Date, endDate: Date) {
+    const query: FindManyOptions<Event> = {
+      where: {
+        timestamp: Between(startDate.toISOString(), endDate.toISOString())
+      },
+      select: [
+        'user',
+        'context',
+        'metrics'
+      ]
+    };
+
+    const events = await this.eventService.getByQuery(query);
+    
+    const deviceStats = new Map<string, number>();
+    const geoStats = new Map<string, number>();
+    const userRetention = new Map<string, Set<string>>();
+    
+    events.forEach(event => {
+      const deviceType = event.context?.device?.type || 'unknown';
+      deviceStats.set(deviceType, (deviceStats.get(deviceType) || 0) + 1);
+      
+      const country = event.context?.geo?.country || 'unknown';
+      geoStats.set(country, (geoStats.get(country) || 0) + 1);
+      
+      const date = event.timestamp.split('T')[0];
+      const userId = event.user?.id;
+      if (userId) {
+        if (!userRetention.has(date)) {
+          userRetention.set(date, new Set());
+        }
+        userRetention.get(date)?.add(userId);
+      }
+    });
+
+    return {
+      total_users: new Set(events.map(e => e.user?.id)).size,
+      device_breakdown: Object.fromEntries(deviceStats),
+      geo_distribution: Object.fromEntries(geoStats),
+      daily_active_users: Array.from(userRetention.entries()).map(([date, users]) => ({
+        date,
+        users: users.size
+      }))
+    };
   }
 }

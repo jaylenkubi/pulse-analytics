@@ -1,8 +1,10 @@
 import { Processor, WorkerHost } from '@nestjs/bullmq';
 import { Inject, Logger } from '@nestjs/common';
-import { CreateEventDto } from '@shared/dto';
 import { Event } from '@entities/event.entity';
 import { GenericCrudService } from '@shared/services/generic-crud.service';
+import { v4 as uuidv4 } from 'uuid';
+import { CreateEventDto } from '@shared/dto/event/create-event.dto';
+import { EventName } from '../../types/event.type';
 
 @Processor('event')
 export class EventProcessorService extends WorkerHost {
@@ -17,26 +19,25 @@ export class EventProcessorService extends WorkerHost {
 
   async process(job: any): Promise<any> {
     const eventData = job.data as CreateEventDto;
-    console.log(`Processing event: ${job}`);
-    this.logger.log(`Processing event: ${job}`);
+    this.logger.log(`Processing event: ${eventData.event_name}`);
 
     try {
-      const event = await this.eventService.create({
-        eventType: eventData.eventType,
-        payload: eventData.payload,
-        timestamp: eventData.timestamp ? new Date(eventData.timestamp) : new Date(),
-        processingStatus: 'pending',
-        metadata: {}
-      });
+      const event = {
+        message_id: `evt_${uuidv4()}`,
+        timestamp: new Date().toISOString(),
+        event_name: eventData.event_name,
+        user: eventData.user,
+        context: eventData.context,
+        traffic: eventData.traffic,
+        page: eventData.page,
+        metrics: eventData.metrics,
+        pulse_analytics: eventData.pulse_analytics
+      };
 
-      await this.processEventByType(event);
+      const createdEvent = await this.eventService.create(event);
+      await this.processEventByType(createdEvent);
 
-      event.processingStatus = 'processed';
-      await this.eventService.update(event.id, {
-        processingStatus: event.processingStatus
-      });
-
-      return { success: true, eventId: event.id };
+      return { success: true, eventId: createdEvent.id };
     } catch (error) {
       this.logger.error(`Error processing event: ${error.message}`, error.stack);
       throw error;
@@ -46,57 +47,51 @@ export class EventProcessorService extends WorkerHost {
   private async processEventByType(event: Event): Promise<void> {
     const startTime = Date.now();
     try {
-      switch (event.eventType) {
-        case 'pageView':
+      switch (event.event_name) {
+        case EventName.PAGE_VIEW:
           await this.processPageViewEvent(event);
           break;
-        case 'userAction':
+        case EventName.USER_ACTION:
           await this.processUserActionEvent(event);
           break;
-        default:
-          await this.processGenericEvent(event);
+        case EventName.SYSTEM_EVENT:
+          await this.processSystemEvent(event);
+          break;
       }
 
-      event.metadata = {
-        ...event.metadata,
-        processingTime: Date.now() - startTime,
-        processedAt: new Date().toISOString(),
-      };
+      // Update metrics based on processing
+      if (event.metrics) {
+        event.metrics.load_time_ms = Date.now() - startTime;
+        event.metrics.errors = 0;
+      }
+
+      await this.eventService.update(event.id, event);
     } catch (error) {
-      event.processingStatus = 'failed';
-      event.metadata = {
-        ...event.metadata,
-        error: error.message,
-        failedAt: new Date().toISOString(),
-      };
+      if (event.metrics) {
+        event.metrics.errors = (event.metrics.errors || 0) + 1;
+      }
+      await this.eventService.update(event.id, event);
       throw error;
     }
   }
 
   private async processPageViewEvent(event: Event): Promise<void> {
-    event.metadata = {
-      ...event.metadata,
-      pageViewData: {
-        processedAt: new Date().toISOString(),
-      },
-    };
+    if (event.metrics) {
+      event.metrics.pages_viewed = (event.metrics.pages_viewed || 0) + 1;
+      event.metrics.bounced = event.metrics.pages_viewed <= 1;
+    }
   }
 
   private async processUserActionEvent(event: Event): Promise<void> {
-    event.metadata = {
-      ...event.metadata,
-      userActionData: {
-        processedAt: new Date().toISOString(),
-      },
-    };
+    if (event.metrics) {
+      event.metrics.interactions = (event.metrics.interactions || 0) + 1;
+      event.metrics.bounced = false;
+    }
   }
 
-  private async processGenericEvent(event: Event): Promise<void> {
-    event.metadata = {
-      ...event.metadata,
-      genericData: {
-        processedAt: new Date().toISOString(),
-      },
-    };
+  private async processSystemEvent(event: Event): Promise<void> {
+    if (event.metrics) {
+      event.metrics.interactions = (event.metrics.interactions || 0) + 1;
+    }
   }
 }

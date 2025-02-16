@@ -1,4 +1,9 @@
-export type EventName = 'page_view' | 'user_action' | 'system_event';
+export enum EventName {
+  PAGE_VIEW = 'page_view',
+  USER_ACTION = 'user_action',
+  SYSTEM_EVENT = 'system_event'
+}
+
 export type DeviceType = 'desktop' | 'mobile' | 'tablet';
 export type PageSection = 'dashboard' | 'settings' | 'analytics' | 'auth';
 export type Theme = 'dark' | 'light';
@@ -72,7 +77,7 @@ export interface PulseAnalytics {
   custom_reports: number;
 }
 
-export interface AnalyticsEvent {
+export interface EventInterface {
   event_name: EventName;
   message_id: string;
   timestamp: string;
