@@ -1,8 +1,3 @@
-<<<<<<< HEAD
-"use client"
-
-=======
->>>>>>> d913826 (frontend added and event entity changes)
 import * as React from "react"
 import * as SeparatorPrimitive from "@radix-ui/react-separator"
 
