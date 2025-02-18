@@ -22,7 +22,9 @@ export class AnalyticsController {
     summary: 'Get traffic source statistics',
     query: {
       start: { type: 'string', format: 'date-time' },
-      end: { type: 'string', format: 'date-time' }
+      end: { type: 'string', format: 'date-time' },
+      limit: { type: 'number', default: 10 },
+      offset: { type: 'number', default: 0 }
     }
   })
   @Roles(Role.ADMIN, Role.ANALYST)
@@ -39,7 +41,9 @@ export class AnalyticsController {
     summary: 'Get page performance statistics',
     query: {
       start: { type: 'string', format: 'date-time' },
-      end: { type: 'string', format: 'date-time' }
+      end: { type: 'string', format: 'date-time' },
+      limit: { type: 'number', default: 10 },
+      offset: { type: 'number', default: 0 }
     }
   })
   @Roles(Role.ADMIN, Role.ANALYST)
@@ -56,7 +60,9 @@ export class AnalyticsController {
     summary: 'Get user behavior statistics',
     query: {
       start: { type: 'string', format: 'date-time' },
-      end: { type: 'string', format: 'date-time' }
+      end: { type: 'string', format: 'date-time' },
+      limit: { type: 'number', default: 10 },
+      offset: { type: 'number', default: 0 }
     }
   })
   @Roles(Role.ADMIN, Role.ANALYST)
@@ -82,7 +88,9 @@ export class AnalyticsController {
     summary: 'Get audience analytics',
     query: {
       start: { type: 'string', format: 'date-time' },
-      end: { type: 'string', format: 'date-time' }
+      end: { type: 'string', format: 'date-time' },
+      limit: { type: 'number', default: 10 },
+      offset: { type: 'number', default: 0 }
     }
   })
   @Roles(Role.ADMIN, Role.ANALYST)

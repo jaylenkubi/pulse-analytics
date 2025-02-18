@@ -52,7 +52,7 @@ import { RolesGuard } from '@modules/auth/guards/roles.guard';
           retryDelay: 3000,
           keepConnectionAlive: true,
           migrations: [__dirname + '/database/migrations/*.{js,ts}'],
-          migrationsRun: true,
+          migrationsRun: false,
         };
       }
     }),

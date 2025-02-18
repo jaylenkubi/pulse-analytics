@@ -389,9 +389,9 @@
         ]
       }
     },
-    "/analytics/stats": {
+    "/analytics/traffic": {
       "get": {
-        "operationId": "AnalyticsController_getEventStats",
+        "operationId": "AnalyticsController_getTrafficSourceStats",
         "parameters": [
           {
             "name": "start",
@@ -424,10 +424,20 @@
           },
           {
             "name": "limit",
-            "required": false,
+            "required": true,
             "in": "query",
             "schema": {
+              "default": 10,
               "example": 20,
+              "type": "number"
+            }
+          },
+          {
+            "name": "offset",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "default": 0,
               "type": "number"
             }
           }
@@ -437,7 +447,135 @@
             "description": ""
           }
         },
-        "summary": "Get event statistics",
+        "summary": "Get traffic source statistics",
+        "tags": [
+          "Analytics"
+        ]
+      }
+    },
+    "/analytics/pages": {
+      "get": {
+        "operationId": "AnalyticsController_getPagePerformance",
+        "parameters": [
+          {
+            "name": "start",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "format": "date-time",
+              "example": "2024-03-01T00:00:00Z",
+              "type": "string"
+            }
+          },
+          {
+            "name": "end",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "format": "date-time",
+              "example": "2024-03-02T00:00:00Z",
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "example": 1,
+              "type": "number"
+            }
+          },
+          {
+            "name": "limit",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "default": 10,
+              "example": 20,
+              "type": "number"
+            }
+          },
+          {
+            "name": "offset",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "default": 0,
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Get page performance statistics",
+        "tags": [
+          "Analytics"
+        ]
+      }
+    },
+    "/analytics/users": {
+      "get": {
+        "operationId": "AnalyticsController_getUserBehavior",
+        "parameters": [
+          {
+            "name": "start",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "format": "date-time",
+              "example": "2024-03-01T00:00:00Z",
+              "type": "string"
+            }
+          },
+          {
+            "name": "end",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "format": "date-time",
+              "example": "2024-03-02T00:00:00Z",
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "example": 1,
+              "type": "number"
+            }
+          },
+          {
+            "name": "limit",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "default": 10,
+              "example": 20,
+              "type": "number"
+            }
+          },
+          {
+            "name": "offset",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "default": 0,
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Get user behavior statistics",
         "tags": [
           "Analytics"
         ]
@@ -445,22 +583,22 @@
     },
     "/analytics/realtime": {
       "get": {
-        "operationId": "AnalyticsController_getRealtimeEvents",
+        "operationId": "AnalyticsController_getRealtimeAnalytics",
         "parameters": [],
         "responses": {
           "200": {
             "description": ""
           }
         },
-        "summary": "Get realtime events",
+        "summary": "Get realtime analytics data",
         "tags": [
           "Analytics"
         ]
       }
     },
-    "/analytics/timeline": {
+    "/analytics/audience": {
       "get": {
-        "operationId": "AnalyticsController_getEventTimeline",
+        "operationId": "AnalyticsController_getAudienceAnalytics",
         "parameters": [
           {
             "name": "start",
@@ -484,11 +622,9 @@
           },
           {
             "name": "page",
-            "required": true,
+            "required": false,
             "in": "query",
             "schema": {
-              "minimum": 1,
-              "default": 1,
               "example": 1,
               "type": "number"
             }
@@ -498,33 +634,18 @@
             "required": true,
             "in": "query",
             "schema": {
-              "minimum": 1,
-              "maximum": 100,
-              "default": 20,
-              "example": 10,
+              "default": 10,
+              "example": 20,
               "type": "number"
             }
           },
           {
-            "name": "eventType",
+            "name": "offset",
             "required": true,
             "in": "query",
             "schema": {
-              "example": "pageView",
-              "type": "string"
-            }
-          },
-          {
-            "name": "interval",
-            "required": true,
-            "in": "query",
-            "schema": {
-              "enum": [
-                "1m",
-                "5m",
-                "1h"
-              ],
-              "type": "string"
+              "default": 0,
+              "type": "number"
             }
           }
         ],
@@ -533,7 +654,7 @@
             "description": ""
           }
         },
-        "summary": "Get event timeline",
+        "summary": "Get audience analytics",
         "tags": [
           "Analytics"
         ]
@@ -656,21 +777,7 @@
       },
       "CreateEventDto": {
         "type": "object",
-        "properties": {
-          "eventType": {
-            "type": "string"
-          },
-          "payload": {
-            "type": "object"
-          },
-          "timestamp": {
-            "type": "string"
-          }
-        },
-        "required": [
-          "eventType",
-          "timestamp"
-        ]
+        "properties": {}
       }
     }
   }
