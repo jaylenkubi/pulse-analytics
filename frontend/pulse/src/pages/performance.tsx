@@ -41,9 +41,6 @@ const serverResponseData = [
   { time: "20:00", response: 190 },
 ]
 
-// Common card style
-const cardStyle = "border-primary/10 shadow-sm hover:shadow-md hover:border-primary/20 transition-all duration-200 bg-background/60 backdrop-blur supports-[backdrop-filter]:bg-background/40"
-
 const getBadgeVariant = (value: string) => {
   // For time values (ending with 's' or 'ms')
   if (value.endsWith('s') || value.endsWith('ms')) {
@@ -67,7 +64,7 @@ export default function PerformancePage() {
 
       {/* Overview Section - Always Visible */}
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        <Card className={cardStyle}>
+        <Card className="border-border/40 shadow-sm hover:shadow-md hover:border-border/80 transition-all duration-200 bg-background/60 backdrop-blur supports-[backdrop-filter]:bg-background/40">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Avg. Load Time</CardTitle>
           </CardHeader>
@@ -79,7 +76,7 @@ export default function PerformancePage() {
             </div>
           </CardContent>
         </Card>
-        <Card className={cardStyle}>
+        <Card className="border-border/40 shadow-sm hover:shadow-md hover:border-border/80 transition-all duration-200 bg-background/60 backdrop-blur supports-[backdrop-filter]:bg-background/40">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Error Rate</CardTitle>
           </CardHeader>
@@ -91,7 +88,7 @@ export default function PerformancePage() {
             </div>
           </CardContent>
         </Card>
-        <Card className={cardStyle}>
+        <Card className="border-border/40 shadow-sm hover:shadow-md hover:border-border/80 transition-all duration-200 bg-background/60 backdrop-blur supports-[backdrop-filter]:bg-background/40">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Server Response</CardTitle>
           </CardHeader>
@@ -103,7 +100,7 @@ export default function PerformancePage() {
             </div>
           </CardContent>
         </Card>
-        <Card className={cardStyle}>
+        <Card className="border-border/40 shadow-sm hover:shadow-md hover:border-border/80 transition-all duration-200 bg-background/60 backdrop-blur supports-[backdrop-filter]:bg-background/40">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Uptime</CardTitle>
           </CardHeader>
@@ -125,7 +122,7 @@ export default function PerformancePage() {
 
         <TabsContent value="speed" className="space-y-4">
           <div className="grid gap-4 md:grid-cols-2">
-            <Card className={cardStyle}>
+            <Card className="border-border/40 shadow-sm hover:shadow-md hover:border-border/80 transition-all duration-200 bg-background/60 backdrop-blur supports-[backdrop-filter]:bg-background/40">
               <CardHeader>
                 <CardTitle>Page Load Time (Last 7 Days)</CardTitle>
               </CardHeader>
@@ -140,7 +137,7 @@ export default function PerformancePage() {
                       <Line
                         type="monotone"
                         dataKey="time"
-                        stroke="#8884d8"
+                        stroke="var(--chart-1)"
                         name="Load Time (s)"
                       />
                     </LineChart>
@@ -148,7 +145,7 @@ export default function PerformancePage() {
                 </div>
               </CardContent>
             </Card>
-            <Card className={cardStyle}>
+            <Card className="border-border/40 shadow-sm hover:shadow-md hover:border-border/80 transition-all duration-200 bg-background/60 backdrop-blur supports-[backdrop-filter]:bg-background/40">
               <CardHeader>
                 <CardTitle>Server Response Time (24h)</CardTitle>
               </CardHeader>
@@ -163,7 +160,7 @@ export default function PerformancePage() {
                       <Line
                         type="monotone"
                         dataKey="response"
-                        stroke="#82ca9d"
+                        stroke="var(--chart-2)"
                         name="Response Time (ms)"
                       />
                     </LineChart>
@@ -176,7 +173,7 @@ export default function PerformancePage() {
 
         <TabsContent value="errors" className="space-y-4">
           <div className="grid gap-4 md:grid-cols-2">
-            <Card className={cardStyle}>
+            <Card className="border-border/40 shadow-sm hover:shadow-md hover:border-border/80 transition-all duration-200 bg-background/60 backdrop-blur supports-[backdrop-filter]:bg-background/40">
               <CardHeader>
                 <CardTitle>Error Rate Trend</CardTitle>
               </CardHeader>
@@ -191,7 +188,7 @@ export default function PerformancePage() {
                       <Line
                         type="monotone"
                         dataKey="rate"
-                        stroke="#ff4d4f"
+                        stroke="var(--chart-3)"
                         name="Error Rate (%)"
                       />
                     </LineChart>
@@ -199,7 +196,7 @@ export default function PerformancePage() {
                 </div>
               </CardContent>
             </Card>
-            <Card className={cardStyle}>
+            <Card className="border-border/40 shadow-sm hover:shadow-md hover:border-border/80 transition-all duration-200 bg-background/60 backdrop-blur supports-[backdrop-filter]:bg-background/40">
               <CardHeader>
                 <CardTitle>Error Distribution</CardTitle>
               </CardHeader>

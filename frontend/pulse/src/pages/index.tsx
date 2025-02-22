@@ -105,7 +105,13 @@ const mockData = {
   ]
 };
 
-const COLORS = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', '#FFEEAD'];
+const COLORS = [
+  "var(--chart-1)",
+  "var(--chart-2)",
+  "var(--chart-3)",
+  "var(--chart-4)",
+  "var(--chart-5)"
+];
 
 const MetricCard = ({ 
   title, 
@@ -179,7 +185,7 @@ export default function Home() {
             description="Total unique visitors"
             value={mockData.visitors.current.toLocaleString()}
             data={mockData.visitors.trend}
-            color="#FF6B6B"
+            color="var(--chart-1)"
             isHighlighted={true}
             trend={mockData.visitors.percentageChange}
           />
@@ -188,7 +194,7 @@ export default function Home() {
             description="Total page views"
             value={mockData.pageviews.current.toLocaleString()}
             data={mockData.pageviews.trend}
-            color="#4ECDC4"
+            color="var(--chart-2)"
             isHighlighted={true}
             trend={mockData.pageviews.percentageChange}
           />
@@ -197,7 +203,7 @@ export default function Home() {
             description="Time on site"
             value={mockData.avgTime.current}
             data={mockData.avgTime.trend}
-            color="#45B7D1"
+            color="var(--chart-3)"
             trend={mockData.avgTime.percentageChange}
           />
           <MetricCard
@@ -205,7 +211,7 @@ export default function Home() {
             description="Visitor bounce rate"
             value={mockData.bounceRate.current}
             data={mockData.bounceRate.trend}
-            color="#96CEB4"
+            color="var(--chart-4)"
             isHighlighted={mockData.bounceRate.percentageChange < 0}
             trend={mockData.bounceRate.percentageChange}
           />
@@ -221,15 +227,16 @@ export default function Home() {
             <CardContent className="h-[300px]">
               <ResponsiveContainer width="100%" height="100%">
                 <LineChart data={mockData.trafficData}>
-                  <CartesianGrid strokeDasharray="3 3" />
                   <XAxis dataKey="date" />
                   <YAxis />
+                  <CartesianGrid strokeDasharray="3 3" />
                   <Tooltip />
                   <Line 
                     type="monotone" 
                     dataKey="visitors" 
-                    stroke="#FF6B6B" 
+                    stroke="var(--chart-1)" 
                     strokeWidth={2}
+                    dot={false}
                   />
                 </LineChart>
               </ResponsiveContainer>
@@ -244,11 +251,10 @@ export default function Home() {
             <CardContent className="h-[300px]">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={mockData.trafficSources}>
-                  <CartesianGrid strokeDasharray="3 3" />
                   <XAxis dataKey="source" />
                   <YAxis />
                   <Tooltip />
-                  <Bar dataKey="visits" fill="#4ECDC4" />
+                  <Bar dataKey="visits" fill="var(--chart-2)" />
                 </BarChart>
               </ResponsiveContainer>
             </CardContent>

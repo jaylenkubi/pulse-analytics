@@ -37,10 +37,13 @@ const locationData = [
   { country: "Canada", users: 1200 },
 ]
 
-const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#8884D8"]
-
-// Common card style
-const cardStyle = "border-primary/10 shadow-sm hover:shadow-md hover:border-primary/20 transition-all duration-200 bg-background/60 backdrop-blur supports-[backdrop-filter]:bg-background/40"
+const COLORS = [
+  "var(--chart-1)",
+  "var(--chart-2)",
+  "var(--chart-3)",
+  "var(--chart-4)",
+  "var(--chart-5)"
+]
 
 const getBadgeVariant = (value: string) => {
   const numericValue = parseFloat(value.replace(/%/g, ''))
@@ -58,7 +61,7 @@ export default function AudiencePage() {
       
       {/* Overview Section - Always Visible */}
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        <Card className={cardStyle}>
+        <Card className="border-border/40 shadow-sm hover:shadow-md hover:border-border/80 transition-all duration-200 bg-background/60 backdrop-blur supports-[backdrop-filter]:bg-background/40">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Total Users</CardTitle>
           </CardHeader>
@@ -70,7 +73,7 @@ export default function AudiencePage() {
             </div>
           </CardContent>
         </Card>
-        <Card className={cardStyle}>
+        <Card className="border-border/40 shadow-sm hover:shadow-md hover:border-border/80 transition-all duration-200 bg-background/60 backdrop-blur supports-[backdrop-filter]:bg-background/40">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">New Users</CardTitle>
           </CardHeader>
@@ -82,7 +85,7 @@ export default function AudiencePage() {
             </div>
           </CardContent>
         </Card>
-        <Card className={cardStyle}>
+        <Card className="border-border/40 shadow-sm hover:shadow-md hover:border-border/80 transition-all duration-200 bg-background/60 backdrop-blur supports-[backdrop-filter]:bg-background/40">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Avg. Session Duration</CardTitle>
           </CardHeader>
@@ -94,7 +97,7 @@ export default function AudiencePage() {
             </div>
           </CardContent>
         </Card>
-        <Card className={cardStyle}>
+        <Card className="border-border/40 shadow-sm hover:shadow-md hover:border-border/80 transition-all duration-200 bg-background/60 backdrop-blur supports-[backdrop-filter]:bg-background/40">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Bounce Rate</CardTitle>
           </CardHeader>
@@ -117,7 +120,7 @@ export default function AudiencePage() {
 
         <TabsContent value="demographics" className="space-y-4">
           <div className="grid gap-4 md:grid-cols-2">
-            <Card className={cardStyle}>
+            <Card className="border-border/40 shadow-sm hover:shadow-md hover:border-border/80 transition-all duration-200 bg-background/60 backdrop-blur supports-[backdrop-filter]:bg-background/40">
               <CardHeader>
                 <CardTitle>Age Distribution</CardTitle>
               </CardHeader>
@@ -128,13 +131,13 @@ export default function AudiencePage() {
                       <XAxis dataKey="age" />
                       <YAxis />
                       <Tooltip />
-                      <Bar dataKey="users" fill="#8884d8" />
+                      <Bar dataKey="users" fill="var(--chart-1)" />
                     </BarChart>
                   </ResponsiveContainer>
                 </div>
               </CardContent>
             </Card>
-            <Card className={cardStyle}>
+            <Card className="border-border/40 shadow-sm hover:shadow-md hover:border-border/80 transition-all duration-200 bg-background/60 backdrop-blur supports-[backdrop-filter]:bg-background/40">
               <CardHeader>
                 <CardTitle>Top Locations</CardTitle>
               </CardHeader>
@@ -145,7 +148,7 @@ export default function AudiencePage() {
                       <XAxis type="number" />
                       <YAxis dataKey="country" type="category" />
                       <Tooltip />
-                      <Bar dataKey="users" fill="#82ca9d" />
+                      <Bar dataKey="users" fill="var(--chart-2)" />
                     </BarChart>
                   </ResponsiveContainer>
                 </div>
@@ -156,7 +159,7 @@ export default function AudiencePage() {
 
         <TabsContent value="technology" className="space-y-4">
           <div className="grid gap-4 md:grid-cols-2">
-            <Card className={cardStyle}>
+            <Card className="border-border/40 shadow-sm hover:shadow-md hover:border-border/80 transition-all duration-200 bg-background/60 backdrop-blur supports-[backdrop-filter]:bg-background/40">
               <CardHeader>
                 <CardTitle>Device Distribution</CardTitle>
               </CardHeader>
@@ -171,7 +174,7 @@ export default function AudiencePage() {
                         labelLine={false}
                         label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
                         outerRadius={100}
-                        fill="#8884d8"
+                        fill="var(--chart-1)"
                         dataKey="value"
                       >
                         {deviceData.map((entry, index) => (
@@ -184,7 +187,7 @@ export default function AudiencePage() {
                 </div>
               </CardContent>
             </Card>
-            <Card className={cardStyle}>
+            <Card className="border-border/40 shadow-sm hover:shadow-md hover:border-border/80 transition-all duration-200 bg-background/60 backdrop-blur supports-[backdrop-filter]:bg-background/40">
               <CardHeader>
                 <CardTitle>Browser Usage</CardTitle>
               </CardHeader>

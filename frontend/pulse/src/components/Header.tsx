@@ -56,7 +56,7 @@ const Header = ({ className }: HeaderProps) => {
           </Button>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="relative flex items-center gap-2 p-1 hover:bg-accent">
+              <Button variant="ghost" className="relative flex items-center gap-2 p-1">
                 <Avatar className="h-8 w-8">
                   <AvatarFallback className="bg-primary/10 text-primary">
                     {firstName[0]}{lastName[0]}

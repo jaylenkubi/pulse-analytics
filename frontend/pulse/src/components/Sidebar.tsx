@@ -74,7 +74,7 @@ export default function Sidebar({ collapsed, onToggle }: SidebarProps) {
       <Button
         variant="ghost"
         size="icon"
-        className="absolute -right-3 top-6 h-6 w-6 rounded-full border shadow-md bg-background hover:bg-accent focus-visible:outline-none"
+        className="absolute -right-3 top-6 h-6 w-6 rounded-full border shadow-md focus-visible:outline-none z-500"
         onClick={onToggle}
       >
         {collapsed ? (
@@ -97,9 +97,10 @@ export default function Sidebar({ collapsed, onToggle }: SidebarProps) {
                   key={item.title}
                   href={item.href}
                   className={cn(
-                    "text-sm group flex p-3 w-full justify-start font-medium cursor-pointer hover:text-primary hover:bg-primary/10 rounded-lg transition",
+                    "text-sm group flex p-3 w-full justify-start font-medium cursor-pointer rounded-sm transition-all duration-200",
+                    "hover:text-primary hover:bg-[var(--sidebar-hover)]",
                     currentPath === item.href
-                      ? "text-primary bg-primary/10"
+                      ? "text-primary bg-[var(--sidebar-active)] shadow-sm"
                       : "text-muted-foreground"
                   )}
                 >
@@ -130,9 +131,10 @@ export default function Sidebar({ collapsed, onToggle }: SidebarProps) {
                 key={item.title}
                 href={item.href}
                 className={cn(
-                  "text-sm group flex p-3 w-full justify-start font-medium cursor-pointer hover:text-primary hover:bg-primary/10 rounded-lg transition",
+                  "text-sm group flex p-3 w-full justify-start font-medium cursor-pointer rounded-sm transition-all duration-200",
+                  "hover:text-primary hover:bg-[var(--sidebar-hover)]",
                   currentPath === item.href
-                    ? "text-primary bg-primary/10"
+                    ? "text-primary bg-[var(--sidebar-active)] shadow-sm"
                     : "text-muted-foreground"
                 )}
               >

@@ -34,7 +34,7 @@ export default function BehaviorPage() {
       <h1 className="text-3xl font-bold">User Behavior Analytics</h1>
       
       <div className="grid gap-6 md:grid-cols-2">
-        <Card>
+        <Card className="border-border/40 shadow-sm hover:shadow-md hover:border-border/80 transition-all duration-200 bg-background/60 backdrop-blur supports-[backdrop-filter]:bg-background/40">
           <CardHeader>
             <CardTitle>Popular Pages</CardTitle>
           </CardHeader>
@@ -45,14 +45,14 @@ export default function BehaviorPage() {
                   <XAxis dataKey="page" />
                   <YAxis />
                   <Tooltip />
-                  <Bar dataKey="views" fill="#8884d8" />
+                  <Bar dataKey="views" fill="var(--chart-1)" />
                 </BarChart>
               </ResponsiveContainer>
             </div>
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="border-border/40 shadow-sm hover:shadow-md hover:border-border/80 transition-all duration-200 bg-background/60 backdrop-blur supports-[backdrop-filter]:bg-background/40">
           <CardHeader>
             <CardTitle>User Flow</CardTitle>
           </CardHeader>
@@ -63,14 +63,14 @@ export default function BehaviorPage() {
                   <XAxis dataKey="step" />
                   <YAxis />
                   <Tooltip />
-                  <Bar dataKey="users" fill="#82ca9d" />
+                  <Bar dataKey="users" fill="var(--chart-2)" />
                 </BarChart>
               </ResponsiveContainer>
             </div>
           </CardContent>
         </Card>
 
-        <Card className="md:col-span-2">
+        <Card className="border-border/40 shadow-sm hover:shadow-md hover:border-border/80 transition-all duration-200 bg-background/60 backdrop-blur supports-[backdrop-filter]:bg-background/40 md:col-span-2">
           <CardHeader>
             <CardTitle>Engagement Score Trend</CardTitle>
           </CardHeader>
@@ -81,14 +81,14 @@ export default function BehaviorPage() {
                   <XAxis dataKey="date" />
                   <YAxis />
                   <Tooltip />
-                  <Line type="monotone" dataKey="score" stroke="#8884d8" />
+                  <Line type="monotone" dataKey="score" stroke="var(--chart-3)" />
                 </LineChart>
               </ResponsiveContainer>
             </div>
           </CardContent>
         </Card>
 
-        <Card className="md:col-span-2">
+        <Card className="border-border/40 shadow-sm hover:shadow-md hover:border-border/80 transition-all duration-200 bg-background/60 backdrop-blur supports-[backdrop-filter]:bg-background/40 md:col-span-2">
           <CardHeader>
             <CardTitle>Page Performance Details</CardTitle>
           </CardHeader>

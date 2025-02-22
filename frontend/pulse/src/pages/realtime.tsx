@@ -72,7 +72,7 @@ export default function RealtimePage() {
       <h1 className="text-3xl font-bold">Real-time Analytics</h1>
 
       <div className="grid gap-6 md:grid-cols-2">
-        <Card className="md:col-span-2">
+        <Card className="border-border/40 shadow-sm hover:shadow-md hover:border-border/80 transition-all duration-200 bg-background/60 backdrop-blur supports-[backdrop-filter]:bg-background/40 md:col-span-2">
           <CardHeader>
             <CardTitle>Live Visitor Count: {currentVisitors}</CardTitle>
           </CardHeader>
@@ -86,7 +86,7 @@ export default function RealtimePage() {
                   <Line
                     type="monotone"
                     dataKey="visitors"
-                    stroke="#8884d8"
+                    stroke="var(--chart-1)"
                     strokeWidth={2}
                     dot={false}
                   />
@@ -96,7 +96,7 @@ export default function RealtimePage() {
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="border-border/40 shadow-sm hover:shadow-md hover:border-border/80 transition-all duration-200 bg-background/60 backdrop-blur supports-[backdrop-filter]:bg-background/40">
           <CardHeader>
             <CardTitle>Active Pages</CardTitle>
           </CardHeader>
@@ -128,7 +128,7 @@ export default function RealtimePage() {
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="border-border/40 shadow-sm hover:shadow-md hover:border-border/80 transition-all duration-200 bg-background/60 backdrop-blur supports-[backdrop-filter]:bg-background/40">
           <CardHeader>
             <CardTitle>Recent Events</CardTitle>
           </CardHeader>

@@ -67,7 +67,7 @@ export default function SourcesPage() {
       <h1 className="text-3xl font-bold mb-6">Traffic Sources</h1>
 
       {/* Overview Chart */}
-      <Card className="mb-8">
+      <Card className="border-border/40 shadow-sm hover:shadow-md hover:border-border/80 transition-all duration-200 bg-background/60 backdrop-blur supports-[backdrop-filter]:bg-background/40 mb-8">
         <CardHeader>
           <CardTitle>Traffic by Source Category</CardTitle>
           <CardDescription>Distribution of visitors across different traffic sources</CardDescription>
@@ -79,7 +79,7 @@ export default function SourcesPage() {
                 <XAxis dataKey="name" />
                 <YAxis />
                 <Tooltip />
-                <Bar dataKey="value" fill="#2563eb" />
+                <Bar dataKey="value" fill="var(--chart-1)" />
               </BarChart>
             </ResponsiveContainer>
           </div>
@@ -87,7 +87,7 @@ export default function SourcesPage() {
       </Card>
 
       {/* Detailed Sources Table */}
-      <Card>
+      <Card className="border-border/40 shadow-sm hover:shadow-md hover:border-border/80 transition-all duration-200 bg-background/60 backdrop-blur supports-[backdrop-filter]:bg-background/40">
         <CardHeader>
           <CardTitle>Detailed Source Analysis</CardTitle>
           <CardDescription>Comprehensive metrics for each traffic source</CardDescription>
