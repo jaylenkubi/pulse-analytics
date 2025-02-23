@@ -684,6 +684,274 @@
           "Data Collector"
         ]
       }
+    },
+    "/websites": {
+      "post": {
+        "operationId": "createWebsites",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": "The Websites has been successfully created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Create Websites",
+        "tags": [
+          "Websites"
+        ]
+      },
+      "get": {
+        "operationId": "getAllWebsitess",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Return all Websitess",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "summary": "Get all Websitess",
+        "tags": [
+          "Websites"
+        ]
+      }
+    },
+    "/websites/{id}": {
+      "get": {
+        "operationId": "getWebsitesById",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Return the Websites with the specified ID",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Get Websites by ID",
+        "tags": [
+          "Websites"
+        ]
+      },
+      "put": {
+        "operationId": "updateWebsites",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Update the Websites with the specified ID",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Update Websites",
+        "tags": [
+          "Websites"
+        ]
+      },
+      "delete": {
+        "operationId": "deleteWebsites",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Delete the Websites with the specified ID",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Delete Websites",
+        "tags": [
+          "Websites"
+        ]
+      }
+    },
+    "/website-access": {
+      "post": {
+        "operationId": "createWebsite-access",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": "The Website-access has been successfully created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Create Website-access",
+        "tags": [
+          "Website-access"
+        ]
+      },
+      "get": {
+        "operationId": "getAllWebsite-accesss",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Return all Website-accesss",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "summary": "Get all Website-accesss",
+        "tags": [
+          "Website-access"
+        ]
+      }
+    },
+    "/website-access/{id}": {
+      "get": {
+        "operationId": "getWebsite-accessById",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Return the Website-access with the specified ID",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Get Website-access by ID",
+        "tags": [
+          "Website-access"
+        ]
+      },
+      "put": {
+        "operationId": "updateWebsite-access",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Update the Website-access with the specified ID",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Update Website-access",
+        "tags": [
+          "Website-access"
+        ]
+      },
+      "delete": {
+        "operationId": "deleteWebsite-access",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Delete the Website-access with the specified ID",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Delete Website-access",
+        "tags": [
+          "Website-access"
+        ]
+      }
     }
   },
   "info": {

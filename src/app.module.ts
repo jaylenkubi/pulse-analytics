@@ -15,6 +15,8 @@ import { DataCollectorModule } from '@modules/data-collector/data-collector.modu
 import { SessionModule } from '@modules/session/session.module';
 import { SharedModule } from '@shared/shared.module';
 import { RolesGuard } from '@modules/auth/guards/roles.guard';
+import { WebsiteModule } from '@modules/website/website.module';
+import { WebsiteAccessModule } from '@modules/website-access/website-access.module';
 
 @Module({
   imports: [
@@ -90,6 +92,8 @@ import { RolesGuard } from '@modules/auth/guards/roles.guard';
     DataCollectorModule,
     AuditLogModule,
     SharedModule,
+    WebsiteModule,
+    WebsiteAccessModule,
   ],
   providers: [
     {

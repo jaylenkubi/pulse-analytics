@@ -1,5 +1,6 @@
-import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, BeforeInsert, BeforeUpdate } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, BeforeInsert, BeforeUpdate, ManyToOne } from 'typeorm';
 import { EventInterface, EventName } from '../../types/event.type';
+import { Website } from './website.entity';
 
 @Entity({ name: 'event' })
 export class Event implements Partial<EventInterface> {
@@ -11,6 +12,15 @@ export class Event implements Partial<EventInterface> {
 
   @Column({ type: 'varchar' })
   event_name: EventName;
+
+  @ManyToOne(() => Website)
+  website: Website;
+
+  @Column({ type: 'uuid' })
+  website_id: string;
+
+  @Column({ type: 'varchar' })
+  tracking_id: string;
 
   @Column('jsonb')
   user: EventInterface['user'];
