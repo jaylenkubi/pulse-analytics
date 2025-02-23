@@ -10,6 +10,7 @@ import { RateLimit } from '@shared/decorators/rate-limit.decorator';
 import { CacheInvalidationInterceptor } from '@shared/interceptors/cache-invalidation.interceptor';
 import { InvalidateCache } from '@shared/decorators/invalidate-cache.decorator';
 import { SwaggerRoute } from '@shared/decorators/swagger.decorator';
+import { EventResponseDto } from '@shared/dto/event/event-response.dto';
 
 @ApiTags('Data Collector')
 @Controller('data-collector')
@@ -20,7 +21,11 @@ export class DataCollectorController {
   @Post('event')
   @SwaggerRoute({
     summary: 'Collect event data',
-    requestType: CreateEventDto
+    bodyType: CreateEventDto,
+    responseType: EventResponseDto,
+    status: 201,
+    description: 'The event has been successfully collected',
+    operationId: 'collectEvent'
   })
   @Roles(Role.ADMIN, Role.ANALYST, Role.USER)
   @RateLimit({

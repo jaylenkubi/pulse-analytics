@@ -11,38 +11,46 @@ interface QueryParam {
   required?: boolean;
 }
 
-export function SwaggerRoute(options: {
+interface SwaggerRouteOptions {
   summary: string;
-  operationId?: string;
-  requestType?: Type<unknown>;
-  responseType?: Type<unknown>;
+  operationId: string;
+  bodyType?: any;
+  responseType?: any;
   status?: number;
   description?: string;
   query?: Record<string, QueryParam>;
-}) {
+}
+
+export function SwaggerRoute(options: SwaggerRouteOptions) {
+  const {
+    summary,
+    operationId,
+    responseType,
+    bodyType,
+    status = 200,
+    description = '',
+    query
+  } = options;
+
   const decorators = [
-    ApiOperation({ 
-      summary: options.summary,
-      operationId: options.operationId
+    ApiOperation({
+      summary,
+      operationId,
+      description
     }),
+    ApiResponse({
+      status,
+      description,
+      type: responseType
+    })
   ];
 
-  if (options.requestType) {
-    decorators.push(ApiBody({ type: options.requestType }));
+  if (bodyType) {
+    decorators.push(ApiBody({ type: bodyType }));
   }
 
-  if (options.responseType) {
-    decorators.push(
-      ApiResponse({
-        status: options.status || 200,
-        description: options.description || 'Success',
-        type: options.responseType,
-      }),
-    );
-  }
-
-  if (options.query) {
-    Object.entries(options.query).forEach(([name, param]) => {
+  if (query) {
+    Object.entries(query).forEach(([name, param]) => {
       decorators.push(
         ApiQuery({
           name,

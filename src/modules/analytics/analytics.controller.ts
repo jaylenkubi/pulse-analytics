@@ -20,6 +20,9 @@ export class AnalyticsController {
   @CacheTTL(300000) // Cache for 5 minutes
   @SwaggerRoute({
     summary: 'Get traffic source statistics',
+    operationId: 'getTrafficSourceStats',
+    responseType: Object,
+    description: 'Returns traffic source statistics for the specified time range',
     query: {
       start: { type: 'string', format: 'date-time' },
       end: { type: 'string', format: 'date-time' },
@@ -39,6 +42,9 @@ export class AnalyticsController {
   @CacheTTL(300000) // Cache for 5 minutes
   @SwaggerRoute({
     summary: 'Get page performance statistics',
+    operationId: 'getPagePerformanceStats',
+    responseType: Object,
+    description: 'Returns page performance statistics for the specified time range',
     query: {
       start: { type: 'string', format: 'date-time' },
       end: { type: 'string', format: 'date-time' },
@@ -58,6 +64,9 @@ export class AnalyticsController {
   @CacheTTL(300000) // Cache for 5 minutes
   @SwaggerRoute({
     summary: 'Get user behavior statistics',
+    operationId: 'getUserBehaviorStats',
+    responseType: Object,
+    description: 'Returns user behavior statistics for the specified time range',
     query: {
       start: { type: 'string', format: 'date-time' },
       end: { type: 'string', format: 'date-time' },
@@ -76,6 +85,9 @@ export class AnalyticsController {
   @Get('realtime')
   @SwaggerRoute({
     summary: 'Get realtime analytics data',
+    operationId: 'getRealtimeAnalytics',
+    responseType: Object,
+    description: 'Returns realtime analytics data'
   })
   @Roles(Role.ADMIN, Role.ANALYST)
   async getRealtimeAnalytics() {
@@ -86,6 +98,9 @@ export class AnalyticsController {
   @CacheTTL(300000) // Cache for 5 minutes
   @SwaggerRoute({
     summary: 'Get audience analytics',
+    operationId: 'getAudienceAnalytics',
+    responseType: Object,
+    description: 'Returns audience analytics for the specified time range',
     query: {
       start: { type: 'string', format: 'date-time' },
       end: { type: 'string', format: 'date-time' },

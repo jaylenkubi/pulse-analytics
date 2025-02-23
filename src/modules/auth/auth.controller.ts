@@ -6,7 +6,7 @@ import { CreateUserDto } from '@shared/dto';
 import { Request } from 'express';
 import { AuthService, SignInResponse } from './auth.service';
 import { LoginDto, RefreshTokenDto, RefreshTokenResponseDto, SignInResponseDto } from './dtos/auth.dto';
-
+import { LogoutResponseDto } from '@shared/dto/auth/logout-response.dto';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -16,7 +16,8 @@ export class AuthController {
 	@Post('signup')
 	@SwaggerRoute({
 		summary: 'Create a new user account',
-		requestType: CreateUserDto,
+		operationId: 'signup',
+		bodyType: CreateUserDto,
 		responseType: User
 	})
 	async signup(@Body() signUpDto: CreateUserDto): Promise<User> {
@@ -26,7 +27,8 @@ export class AuthController {
 	@Post('login')
 	@SwaggerRoute({
 		summary: 'Login with email and password',
-		requestType: LoginDto,
+		operationId: 'login',
+		bodyType: LoginDto,
 		responseType: SignInResponseDto
 	})
 	async login(
@@ -39,8 +41,10 @@ export class AuthController {
 	@Post('refresh')
 	@SwaggerRoute({
 		summary: 'Refresh access token',
-		requestType: RefreshTokenDto,
-		responseType: RefreshTokenResponseDto
+		bodyType: RefreshTokenDto,
+		responseType: RefreshTokenResponseDto,
+		description: 'Access token refreshed successfully',
+		operationId: 'refresh'
 	})
 	async refresh(@Body() refreshTokenDto: RefreshTokenDto): Promise<RefreshTokenResponseDto> {
 		const { refreshToken } = refreshTokenDto;
@@ -50,13 +54,16 @@ export class AuthController {
 	@Post('logout')
 	@SwaggerRoute({
 		summary: 'Logout from the current session',
+		responseType: LogoutResponseDto,
+		status: 200,
+		description: 'Logged out successfully',
+		operationId: 'logout'
 	})
-	async logout(@Headers('authorization') auth: string) {
+	async logout(@Headers('authorization') auth: string): Promise<LogoutResponseDto> {
 		if (!auth?.startsWith('Bearer ')) {
-			throw new UnauthorizedException('Invalid token format');
+			throw new Error('Invalid authorization header');
 		}
-		const token = auth.split(' ')[1];
-		await this.authService.logout(token);
+		await this.authService.logout(auth.split(' ')[1]);
 		return { message: 'Logged out successfully' };
 	}
 }

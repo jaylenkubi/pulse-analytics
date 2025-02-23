@@ -3,15 +3,26 @@
   "paths": {
     "/users": {
       "post": {
+        "description": "The Users has been successfully created",
         "operationId": "createUsers",
         "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateUserDto"
+              }
+            }
+          }
+        },
         "responses": {
           "201": {
             "description": "The Users has been successfully created",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object"
+                  "$ref": "#/components/schemas/UserResponseDto"
                 }
               }
             }
@@ -23,6 +34,7 @@
         ]
       },
       "get": {
+        "description": "Return all Userss",
         "operationId": "getAllUserss",
         "parameters": [],
         "responses": {
@@ -31,10 +43,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "type": "object"
-                  }
+                  "$ref": "#/components/schemas/ResponseDtoArray"
                 }
               }
             }
@@ -48,6 +57,7 @@
     },
     "/users/{id}": {
       "get": {
+        "description": "Return the Users with the specified ID",
         "operationId": "getUsersById",
         "parameters": [
           {
@@ -65,7 +75,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object"
+                  "$ref": "#/components/schemas/UserResponseDto"
                 }
               }
             }
@@ -77,6 +87,7 @@
         ]
       },
       "put": {
+        "description": "Update the Users with the specified ID",
         "operationId": "updateUsers",
         "parameters": [
           {
@@ -88,13 +99,23 @@
             }
           }
         ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateUserDto"
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
             "description": "Update the Users with the specified ID",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object"
+                  "$ref": "#/components/schemas/UserResponseDto"
                 }
               }
             }
@@ -106,6 +127,7 @@
         ]
       },
       "delete": {
+        "description": "Delete the Users with the specified ID",
         "operationId": "deleteUsers",
         "parameters": [
           {
@@ -137,15 +159,26 @@
     },
     "/sessions": {
       "post": {
+        "description": "The Sessions has been successfully created",
         "operationId": "createSessions",
         "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateSessionDto"
+              }
+            }
+          }
+        },
         "responses": {
           "201": {
             "description": "The Sessions has been successfully created",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object"
+                  "$ref": "#/components/schemas/SessionResponseDto"
                 }
               }
             }
@@ -157,6 +190,7 @@
         ]
       },
       "get": {
+        "description": "Return all Sessionss",
         "operationId": "getAllSessionss",
         "parameters": [],
         "responses": {
@@ -165,10 +199,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "type": "object"
-                  }
+                  "$ref": "#/components/schemas/ResponseDtoArray"
                 }
               }
             }
@@ -182,6 +213,7 @@
     },
     "/sessions/{id}": {
       "get": {
+        "description": "Return the Sessions with the specified ID",
         "operationId": "getSessionsById",
         "parameters": [
           {
@@ -199,7 +231,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object"
+                  "$ref": "#/components/schemas/SessionResponseDto"
                 }
               }
             }
@@ -211,6 +243,7 @@
         ]
       },
       "put": {
+        "description": "Update the Sessions with the specified ID",
         "operationId": "updateSessions",
         "parameters": [
           {
@@ -222,13 +255,23 @@
             }
           }
         ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateSessionDto"
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
             "description": "Update the Sessions with the specified ID",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object"
+                  "$ref": "#/components/schemas/SessionResponseDto"
                 }
               }
             }
@@ -240,6 +283,7 @@
         ]
       },
       "delete": {
+        "description": "Delete the Sessions with the specified ID",
         "operationId": "deleteSessions",
         "parameters": [
           {
@@ -271,7 +315,8 @@
     },
     "/auth/signup": {
       "post": {
-        "operationId": "AuthController_signup",
+        "description": "",
+        "operationId": "signup",
         "parameters": [],
         "requestBody": {
           "required": true,
@@ -285,7 +330,7 @@
         },
         "responses": {
           "200": {
-            "description": "Success",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {
@@ -303,7 +348,8 @@
     },
     "/auth/login": {
       "post": {
-        "operationId": "AuthController_login",
+        "description": "",
+        "operationId": "login",
         "parameters": [],
         "requestBody": {
           "required": true,
@@ -317,7 +363,7 @@
         },
         "responses": {
           "200": {
-            "description": "Success",
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {
@@ -335,7 +381,8 @@
     },
     "/auth/refresh": {
       "post": {
-        "operationId": "AuthController_refresh",
+        "description": "Access token refreshed successfully",
+        "operationId": "refresh",
         "parameters": [],
         "requestBody": {
           "required": true,
@@ -349,7 +396,7 @@
         },
         "responses": {
           "200": {
-            "description": "Success",
+            "description": "Access token refreshed successfully",
             "content": {
               "application/json": {
                 "schema": {
@@ -367,7 +414,8 @@
     },
     "/auth/logout": {
       "post": {
-        "operationId": "AuthController_logout",
+        "description": "Logged out successfully",
+        "operationId": "logout",
         "parameters": [
           {
             "name": "authorization",
@@ -379,8 +427,15 @@
           }
         ],
         "responses": {
-          "201": {
-            "description": ""
+          "200": {
+            "description": "Logged out successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LogoutResponseDto"
+                }
+              }
+            }
           }
         },
         "summary": "Logout from the current session",
@@ -391,7 +446,8 @@
     },
     "/analytics/traffic": {
       "get": {
-        "operationId": "AnalyticsController_getTrafficSourceStats",
+        "description": "Returns traffic source statistics for the specified time range",
+        "operationId": "getTrafficSourceStats",
         "parameters": [
           {
             "name": "start",
@@ -444,7 +500,14 @@
         ],
         "responses": {
           "200": {
-            "description": ""
+            "description": "Returns traffic source statistics for the specified time range",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
           }
         },
         "summary": "Get traffic source statistics",
@@ -455,7 +518,8 @@
     },
     "/analytics/pages": {
       "get": {
-        "operationId": "AnalyticsController_getPagePerformance",
+        "description": "Returns page performance statistics for the specified time range",
+        "operationId": "getPagePerformanceStats",
         "parameters": [
           {
             "name": "start",
@@ -508,7 +572,14 @@
         ],
         "responses": {
           "200": {
-            "description": ""
+            "description": "Returns page performance statistics for the specified time range",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
           }
         },
         "summary": "Get page performance statistics",
@@ -519,7 +590,8 @@
     },
     "/analytics/users": {
       "get": {
-        "operationId": "AnalyticsController_getUserBehavior",
+        "description": "Returns user behavior statistics for the specified time range",
+        "operationId": "getUserBehaviorStats",
         "parameters": [
           {
             "name": "start",
@@ -572,7 +644,14 @@
         ],
         "responses": {
           "200": {
-            "description": ""
+            "description": "Returns user behavior statistics for the specified time range",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
           }
         },
         "summary": "Get user behavior statistics",
@@ -583,11 +662,19 @@
     },
     "/analytics/realtime": {
       "get": {
-        "operationId": "AnalyticsController_getRealtimeAnalytics",
+        "description": "Returns realtime analytics data",
+        "operationId": "getRealtimeAnalytics",
         "parameters": [],
         "responses": {
           "200": {
-            "description": ""
+            "description": "Returns realtime analytics data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
           }
         },
         "summary": "Get realtime analytics data",
@@ -598,7 +685,8 @@
     },
     "/analytics/audience": {
       "get": {
-        "operationId": "AnalyticsController_getAudienceAnalytics",
+        "description": "Returns audience analytics for the specified time range",
+        "operationId": "getAudienceAnalytics",
         "parameters": [
           {
             "name": "start",
@@ -651,7 +739,14 @@
         ],
         "responses": {
           "200": {
-            "description": ""
+            "description": "Returns audience analytics for the specified time range",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
           }
         },
         "summary": "Get audience analytics",
@@ -662,7 +757,8 @@
     },
     "/data-collector/event": {
       "post": {
-        "operationId": "DataCollectorController_collectEvent",
+        "description": "The event has been successfully collected",
+        "operationId": "collectEvent",
         "parameters": [],
         "requestBody": {
           "required": true,
@@ -676,7 +772,14 @@
         },
         "responses": {
           "201": {
-            "description": ""
+            "description": "The event has been successfully collected",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EventResponseDto"
+                }
+              }
+            }
           }
         },
         "summary": "Collect event data",
@@ -687,15 +790,26 @@
     },
     "/websites": {
       "post": {
+        "description": "The Websites has been successfully created",
         "operationId": "createWebsites",
         "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateWebsiteDto"
+              }
+            }
+          }
+        },
         "responses": {
           "201": {
             "description": "The Websites has been successfully created",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object"
+                  "$ref": "#/components/schemas/WebsiteResponseDto"
                 }
               }
             }
@@ -707,6 +821,7 @@
         ]
       },
       "get": {
+        "description": "Return all Websitess",
         "operationId": "getAllWebsitess",
         "parameters": [],
         "responses": {
@@ -715,10 +830,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "type": "object"
-                  }
+                  "$ref": "#/components/schemas/ResponseDtoArray"
                 }
               }
             }
@@ -732,6 +844,7 @@
     },
     "/websites/{id}": {
       "get": {
+        "description": "Return the Websites with the specified ID",
         "operationId": "getWebsitesById",
         "parameters": [
           {
@@ -749,7 +862,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object"
+                  "$ref": "#/components/schemas/WebsiteResponseDto"
                 }
               }
             }
@@ -761,6 +874,7 @@
         ]
       },
       "put": {
+        "description": "Update the Websites with the specified ID",
         "operationId": "updateWebsites",
         "parameters": [
           {
@@ -772,13 +886,23 @@
             }
           }
         ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateWebsiteDto"
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
             "description": "Update the Websites with the specified ID",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object"
+                  "$ref": "#/components/schemas/WebsiteResponseDto"
                 }
               }
             }
@@ -790,6 +914,7 @@
         ]
       },
       "delete": {
+        "description": "Delete the Websites with the specified ID",
         "operationId": "deleteWebsites",
         "parameters": [
           {
@@ -821,15 +946,26 @@
     },
     "/website-access": {
       "post": {
+        "description": "The Website-access has been successfully created",
         "operationId": "createWebsite-access",
         "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateWebsiteAccessDto"
+              }
+            }
+          }
+        },
         "responses": {
           "201": {
             "description": "The Website-access has been successfully created",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object"
+                  "$ref": "#/components/schemas/WebsiteAccessResponseDto"
                 }
               }
             }
@@ -841,6 +977,7 @@
         ]
       },
       "get": {
+        "description": "Return all Website-accesss",
         "operationId": "getAllWebsite-accesss",
         "parameters": [],
         "responses": {
@@ -849,10 +986,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "type": "object"
-                  }
+                  "$ref": "#/components/schemas/ResponseDtoArray"
                 }
               }
             }
@@ -866,6 +1000,7 @@
     },
     "/website-access/{id}": {
       "get": {
+        "description": "Return the Website-access with the specified ID",
         "operationId": "getWebsite-accessById",
         "parameters": [
           {
@@ -883,7 +1018,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object"
+                  "$ref": "#/components/schemas/WebsiteAccessResponseDto"
                 }
               }
             }
@@ -895,6 +1030,7 @@
         ]
       },
       "put": {
+        "description": "Update the Website-access with the specified ID",
         "operationId": "updateWebsite-access",
         "parameters": [
           {
@@ -906,13 +1042,23 @@
             }
           }
         ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateWebsiteAccessDto"
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
             "description": "Update the Website-access with the specified ID",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object"
+                  "$ref": "#/components/schemas/WebsiteAccessResponseDto"
                 }
               }
             }
@@ -924,6 +1070,7 @@
         ]
       },
       "delete": {
+        "description": "Delete the Website-access with the specified ID",
         "operationId": "deleteWebsite-access",
         "parameters": [
           {
@@ -987,6 +1134,193 @@
           "password"
         ]
       },
+      "UserResponseDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique identifier"
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string",
+            "description": "Creation timestamp"
+          },
+          "updatedAt": {
+            "format": "date-time",
+            "type": "string",
+            "description": "Last update timestamp"
+          },
+          "firstName": {
+            "type": "string",
+            "description": "User's first name"
+          },
+          "lastName": {
+            "type": "string",
+            "description": "User's last name"
+          },
+          "email": {
+            "type": "string",
+            "description": "User's email address"
+          },
+          "roles": {
+            "type": "string",
+            "description": "User's role",
+            "enum": [
+              "admin",
+              "analyst",
+              "user"
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "createdAt",
+          "updatedAt",
+          "firstName",
+          "lastName",
+          "email",
+          "roles"
+        ]
+      },
+      "ResponseDtoArray": {
+        "type": "object",
+        "properties": {}
+      },
+      "UpdateUserDto": {
+        "type": "object",
+        "properties": {
+          "firstName": {
+            "type": "string",
+            "description": "User's first name"
+          },
+          "lastName": {
+            "type": "string",
+            "description": "User's last name"
+          },
+          "email": {
+            "type": "string",
+            "description": "User's email address"
+          },
+          "password": {
+            "type": "string",
+            "description": "User's password"
+          },
+          "roles": {
+            "type": "string",
+            "description": "User's role",
+            "enum": [
+              "admin",
+              "analyst",
+              "user"
+            ]
+          }
+        }
+      },
+      "CreateSessionDto": {
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "string",
+            "description": "ID of the user for this session"
+          },
+          "token": {
+            "type": "string",
+            "description": "Session token"
+          },
+          "ipAddress": {
+            "type": "string",
+            "description": "IP address of the client"
+          },
+          "userAgent": {
+            "type": "string",
+            "description": "User agent of the client"
+          },
+          "isValid": {
+            "type": "boolean",
+            "description": "Whether the session is valid",
+            "default": true
+          },
+          "expiresAt": {
+            "format": "date-time",
+            "type": "string",
+            "description": "When the session expires"
+          }
+        },
+        "required": [
+          "userId",
+          "isValid",
+          "expiresAt"
+        ]
+      },
+      "SessionResponseDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique identifier"
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string",
+            "description": "Creation timestamp"
+          },
+          "updatedAt": {
+            "format": "date-time",
+            "type": "string",
+            "description": "Last update timestamp"
+          },
+          "user": {
+            "type": "object",
+            "description": "User information"
+          },
+          "ipAddress": {
+            "type": "string",
+            "description": "IP address of the client"
+          },
+          "userAgent": {
+            "type": "string",
+            "description": "User agent of the client"
+          },
+          "isValid": {
+            "type": "boolean",
+            "description": "Whether the session is valid"
+          },
+          "expiresAt": {
+            "format": "date-time",
+            "type": "string",
+            "description": "When the session expires"
+          }
+        },
+        "required": [
+          "id",
+          "createdAt",
+          "updatedAt",
+          "user",
+          "ipAddress",
+          "userAgent",
+          "isValid",
+          "expiresAt"
+        ]
+      },
+      "UpdateSessionDto": {
+        "type": "object",
+        "properties": {
+          "token": {
+            "type": "string",
+            "description": "Session token"
+          },
+          "isValid": {
+            "type": "boolean",
+            "description": "Whether the session is valid"
+          },
+          "expiresAt": {
+            "format": "date-time",
+            "type": "string",
+            "description": "When the session expires"
+          }
+        }
+      },
       "User": {
         "type": "object",
         "properties": {}
@@ -1043,9 +1377,337 @@
           "accessToken"
         ]
       },
+      "LogoutResponseDto": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "Response message"
+          }
+        },
+        "required": [
+          "message"
+        ]
+      },
       "CreateEventDto": {
         "type": "object",
         "properties": {}
+      },
+      "EventResponseDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique identifier"
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string",
+            "description": "Creation timestamp"
+          },
+          "updatedAt": {
+            "format": "date-time",
+            "type": "string",
+            "description": "Last update timestamp"
+          },
+          "message_id": {
+            "type": "string",
+            "description": "Unique message ID"
+          },
+          "event_name": {
+            "type": "string",
+            "description": "Event name",
+            "enum": [
+              "page_view",
+              "user_action",
+              "system_event"
+            ]
+          },
+          "website": {
+            "type": "object",
+            "description": "Website information"
+          },
+          "tracking_id": {
+            "type": "string",
+            "description": "Website tracking ID"
+          },
+          "user": {
+            "type": "object",
+            "description": "User information"
+          },
+          "context": {
+            "type": "object",
+            "description": "Event context"
+          },
+          "traffic": {
+            "type": "object",
+            "description": "Traffic information"
+          },
+          "page": {
+            "type": "object",
+            "description": "Page information"
+          },
+          "metrics": {
+            "type": "object",
+            "description": "Event metrics"
+          }
+        },
+        "required": [
+          "id",
+          "createdAt",
+          "updatedAt",
+          "message_id",
+          "event_name",
+          "website",
+          "tracking_id",
+          "user",
+          "context",
+          "traffic",
+          "page",
+          "metrics"
+        ]
+      },
+      "WebsiteSettings": {
+        "type": "object",
+        "properties": {
+          "tracking_options": {
+            "description": "Tracking options for the website",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "excluded_paths": {
+            "description": "Paths to exclude from tracking",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "custom_variables": {
+            "type": "object",
+            "description": "Custom variables for tracking"
+          }
+        }
+      },
+      "CreateWebsiteDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Name of the website"
+          },
+          "domains": {
+            "description": "List of domains associated with this website",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "settings": {
+            "description": "Website settings",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/WebsiteSettings"
+              }
+            ]
+          }
+        },
+        "required": [
+          "name",
+          "domains"
+        ]
+      },
+      "WebsiteResponseDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique identifier"
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string",
+            "description": "Creation timestamp"
+          },
+          "updatedAt": {
+            "format": "date-time",
+            "type": "string",
+            "description": "Last update timestamp"
+          },
+          "name": {
+            "type": "string",
+            "description": "Name of the website"
+          },
+          "domains": {
+            "description": "List of domains associated with this website",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "tracking_id": {
+            "type": "string",
+            "description": "Unique tracking ID for this website"
+          },
+          "settings": {
+            "type": "object",
+            "description": "Website settings"
+          },
+          "owner": {
+            "type": "object",
+            "description": "Owner ID of the website"
+          }
+        },
+        "required": [
+          "id",
+          "createdAt",
+          "updatedAt",
+          "name",
+          "domains",
+          "tracking_id",
+          "settings",
+          "owner"
+        ]
+      },
+      "UpdateWebsiteSettings": {
+        "type": "object",
+        "properties": {
+          "tracking_options": {
+            "description": "Tracking options for the website",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "excluded_paths": {
+            "description": "Paths to exclude from tracking",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "custom_variables": {
+            "type": "object",
+            "description": "Custom variables for tracking"
+          }
+        }
+      },
+      "UpdateWebsiteDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Name of the website"
+          },
+          "domains": {
+            "description": "List of domains associated with this website",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "settings": {
+            "description": "Website settings",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/UpdateWebsiteSettings"
+              }
+            ]
+          }
+        }
+      },
+      "CreateWebsiteAccessDto": {
+        "type": "object",
+        "properties": {
+          "website_id": {
+            "type": "string",
+            "description": "ID of the website"
+          },
+          "user_id": {
+            "type": "string",
+            "description": "ID of the user to grant access"
+          },
+          "access_level": {
+            "type": "string",
+            "description": "Access level for the user",
+            "enum": [
+              "owner",
+              "admin",
+              "analyst",
+              "viewer"
+            ],
+            "default": "viewer"
+          }
+        },
+        "required": [
+          "website_id",
+          "user_id",
+          "access_level"
+        ]
+      },
+      "WebsiteAccessResponseDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique identifier"
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string",
+            "description": "Creation timestamp"
+          },
+          "updatedAt": {
+            "format": "date-time",
+            "type": "string",
+            "description": "Last update timestamp"
+          },
+          "website": {
+            "type": "object",
+            "description": "Website information"
+          },
+          "user": {
+            "type": "object",
+            "description": "User information"
+          },
+          "access_level": {
+            "type": "string",
+            "description": "Access level for the user",
+            "enum": [
+              "owner",
+              "admin",
+              "analyst",
+              "viewer"
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "createdAt",
+          "updatedAt",
+          "website",
+          "user",
+          "access_level"
+        ]
+      },
+      "UpdateWebsiteAccessDto": {
+        "type": "object",
+        "properties": {
+          "access_level": {
+            "type": "string",
+            "description": "Access level for the user",
+            "enum": [
+              "owner",
+              "admin",
+              "analyst",
+              "viewer"
+            ]
+          }
+        },
+        "required": [
+          "access_level"
+        ]
       }
     }
   }
