@@ -1,4 +1,4 @@
-import { Controller, Get, Query, UseGuards, UseInterceptors } from '@nestjs/common';
+import { Controller, Get, Query, UseGuards, UseInterceptors, Param } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { AnalyticsService } from './analytics.service';
 import { TimeRangeDto } from '@shared/dto';
@@ -8,10 +8,13 @@ import { Roles } from '../auth/decorators/roles.decorator';
 import { Role } from '../auth/enums/roles.enum';
 import { SwaggerRoute } from '@shared/decorators/swagger.decorator';
 import { CacheTTL } from '@nestjs/cache-manager';
+import { FeatureGuard } from '../../shared/guards/feature.guard';
+import { RequiresFeature, RequiresFeatures, RequiresAnyFeature } from '../../shared/decorators/requires-feature.decorator';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 
 @ApiTags('Analytics')
-@Controller('analytics')
-@UseGuards(RolesGuard)
+@Controller('websites/:websiteId/analytics')
+@UseGuards(JwtAuthGuard, RolesGuard, FeatureGuard)
 @UseInterceptors(HttpCacheInterceptor)
 export class AnalyticsController {
   constructor(private readonly analyticsService: AnalyticsService) {}
@@ -31,10 +34,12 @@ export class AnalyticsController {
     }
   })
   @Roles(Role.ADMIN, Role.ANALYST)
-  async getTrafficSourceStats(@Query() timeRange: TimeRangeDto) {
+  @RequiresFeature('analytics-traffic')
+  async getTrafficSourceStats(@Param('websiteId') websiteId: string, @Query() timeRange: TimeRangeDto) {
     return this.analyticsService.getTrafficSourceStats(
       new Date(timeRange.start),
-      new Date(timeRange.end)
+      new Date(timeRange.end),
+      websiteId
     );
   }
 
@@ -53,10 +58,12 @@ export class AnalyticsController {
     }
   })
   @Roles(Role.ADMIN, Role.ANALYST)
-  async getPagePerformance(@Query() timeRange: TimeRangeDto) {
+  @RequiresFeature('analytics-pages')
+  async getPagePerformance(@Param('websiteId') websiteId: string, @Query() timeRange: TimeRangeDto) {
     return this.analyticsService.getPagePerformance(
       new Date(timeRange.start),
-      new Date(timeRange.end)
+      new Date(timeRange.end),
+      websiteId
     );
   }
 
@@ -75,10 +82,12 @@ export class AnalyticsController {
     }
   })
   @Roles(Role.ADMIN, Role.ANALYST)
-  async getUserBehavior(@Query() timeRange: TimeRangeDto) {
+  @RequiresFeature('analytics-user-behavior')
+  async getUserBehavior(@Param('websiteId') websiteId: string, @Query() timeRange: TimeRangeDto) {
     return this.analyticsService.getUserBehavior(
       new Date(timeRange.start),
-      new Date(timeRange.end)
+      new Date(timeRange.end),
+      websiteId
     );
   }
 
@@ -90,8 +99,9 @@ export class AnalyticsController {
     description: 'Returns realtime analytics data'
   })
   @Roles(Role.ADMIN, Role.ANALYST)
-  async getRealtimeAnalytics() {
-    return this.analyticsService.getRealtimeAnalytics();
+  @RequiresFeature('analytics-realtime')
+  async getRealtimeAnalytics(@Param('websiteId') websiteId: string) {
+    return this.analyticsService.getRealtimeAnalytics(websiteId);
   }
 
   @Get('audience')
@@ -109,10 +119,12 @@ export class AnalyticsController {
     }
   })
   @Roles(Role.ADMIN, Role.ANALYST)
-  async getAudienceAnalytics(@Query() timeRange: TimeRangeDto) {
+  @RequiresAnyFeature(['analytics-audience', 'analytics-premium'])
+  async getAudienceAnalytics(@Param('websiteId') websiteId: string, @Query() timeRange: TimeRangeDto) {
     return this.analyticsService.getAudienceAnalytics(
       new Date(timeRange.start),
-      new Date(timeRange.end)
+      new Date(timeRange.end),
+      websiteId
     );
   }
 }

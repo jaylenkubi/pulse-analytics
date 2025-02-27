@@ -17,6 +17,8 @@ import { SharedModule } from '@shared/shared.module';
 import { RolesGuard } from '@modules/auth/guards/roles.guard';
 import { WebsiteModule } from '@modules/website/website.module';
 import { WebsiteAccessModule } from '@modules/website-access/website-access.module';
+import { FeatureModule } from '@modules/feature/feature.module';
+import { FeatureGuard } from './shared/guards/feature.guard';
 
 @Module({
   imports: [
@@ -94,11 +96,16 @@ import { WebsiteAccessModule } from '@modules/website-access/website-access.modu
     SharedModule,
     WebsiteModule,
     WebsiteAccessModule,
+    FeatureModule,
   ],
   providers: [
     {
       provide: APP_GUARD,
       useClass: RolesGuard,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: FeatureGuard,
     }
   ],
   exports: [],
