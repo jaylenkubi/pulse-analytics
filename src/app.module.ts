@@ -18,7 +18,7 @@ import { RolesGuard } from '@modules/auth/guards/roles.guard';
 import { WebsiteModule } from '@modules/website/website.module';
 import { WebsiteAccessModule } from '@modules/website-access/website-access.module';
 import { FeatureModule } from '@modules/feature/feature.module';
-import { FeatureGuard } from './shared/guards/feature.guard';
+import { FeatureGuard } from '@shared/guards/feature.guard';
 
 @Module({
   imports: [

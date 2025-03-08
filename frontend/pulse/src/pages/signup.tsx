@@ -3,39 +3,73 @@ import { useRouter } from "next/router";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import Logo from "@/components/Logo";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { useAuthControllerSignup } from "@/api/generated/auth/auth";
+import { useToast } from "@/components/ui/use-toast";
+
+// Define the form schema with validation
+const signupFormSchema = z.object({
+  firstName: z.string().min(1, { message: "" }),
+  lastName: z.string().min(1, { message: "" }),
+  email: z.string().min(1, { message: "" }).email({ message: "Please enter a valid email address" }),
+  password: z
+    .string()
+    .min(8, { message: "Password must be at least 8 characters" })
+    .regex(/[!@#$%^&*(),.?":{}|<>]/, { message: "Password must contain at least one symbol" }),
+});
+
+// Define the form values type
+type SignupFormValues = z.infer<typeof signupFormSchema>;
 
 export default function SignupPage() {
   const router = useRouter();
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState("");
+  const { mutate: signup, isPending } = useAuthControllerSignup();
+  const { toast } = useToast();
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setIsLoading(true);
-    setError("");
+  // Initialize the form with validation
+  const form = useForm<SignupFormValues>({
+    resolver: zodResolver(signupFormSchema),
+    defaultValues: {
+      firstName: "",
+      lastName: "",
+      email: "",
+      password: "",
+    },
+  });
 
-    const formData = new FormData(e.currentTarget);
-    const firstName = formData.get("firstName");
-    const lastName = formData.get("lastName");
-    const email = formData.get("email");
-    const password = formData.get("password");
-
-    // Here you would typically make an API call to register the user
-    try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      // For demo purposes, just redirect to dashboard
-      router.push("/");
-    } catch (err) {
-      setError("Something went wrong. Please try again.");
-    } finally {
-      setIsLoading(false);
-    }
+  const onSubmit = async (values: SignupFormValues) => {
+    signup({ data: { firstName: values.firstName, lastName: values.lastName, email: values.email, password: values.password } }, {
+      onSuccess: (data) => {
+        toast({
+          title: "Account created successfully!",
+          description: "You can now log in with your credentials.",
+          variant: "default",
+        });
+        setTimeout(() => {
+          router.push("/login");
+        }, 1500); // Give the user time to see the success message
+      },
+      onError: (error: any) => {
+        toast({
+          title: "Error creating account",
+          description: error?.response?.data?.message || "Something went wrong. Please try again.",
+          variant: "destructive",
+        });
+      },
+    });
   };
 
   return (
@@ -50,69 +84,94 @@ export default function SignupPage() {
             Enter your information to create your account
           </CardDescription>
         </CardHeader>
-        <form onSubmit={handleSubmit}>
-          <CardContent className="space-y-4">
-            {error && (
-              <Alert variant="destructive">
-                <AlertDescription>{error}</AlertDescription>
-              </Alert>
-            )}
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="firstName">First name</Label>
-                <Input
-                  id="firstName"
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+            <CardContent className="space-y-4">
+              <div className="grid grid-cols-2 gap-4">
+                <FormField
+                  control={form.control}
                   name="firstName"
-                  placeholder="John"
-                  required
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>First name</FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="John"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
                 />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="lastName">Last name</Label>
-                <Input
-                  id="lastName"
+                <FormField
+                  control={form.control}
                   name="lastName"
-                  placeholder="Doe"
-                  required
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Last name</FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="Doe"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
                 />
               </div>
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
-              <Input
-                id="email"
+              <FormField
+                control={form.control}
                 name="email"
-                type="email"
-                placeholder="name@example.com"
-                required
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Email</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="name@example.com"
+                        type="email"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
               />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="password">Password</Label>
-              <Input
-                id="password"
+              <FormField
+                control={form.control}
                 name="password"
-                type="password"
-                required
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Password</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="password"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
               />
-            </div>
-          </CardContent>
-          <CardFooter className="flex flex-col space-y-4">
-            <Button 
-              type="submit" 
-              className="w-full"
-              disabled={isLoading}
-            >
-              {isLoading ? "Creating account..." : "Create account"}
-            </Button>
-            <p className="text-sm text-muted-foreground text-center">
-              Already have an account?{" "}
-              <Link href="/login" className="text-primary hover:underline">
-                Sign in
-              </Link>
-            </p>
-          </CardFooter>
-        </form>
+            </CardContent>
+            <CardFooter className="flex flex-col space-y-4">
+              <Button 
+                type="submit" 
+                className="w-full"
+                disabled={isPending}
+              >
+                {isPending ? "Creating account..." : "Create account"}
+              </Button>
+              <p className="text-sm text-muted-foreground text-center">
+                Already have an account?{" "}
+                <Link href="/login" className="text-primary hover:underline">
+                  Sign in
+                </Link>
+              </p>
+            </CardFooter>
+          </form>
+        </Form>
       </Card>
     </div>
   );

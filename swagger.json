@@ -444,11 +444,19 @@
         ]
       }
     },
-    "/analytics/traffic": {
+    "/websites/{websiteId}/analytics/traffic": {
       "get": {
         "description": "Returns traffic source statistics for the specified time range",
         "operationId": "getTrafficSourceStats",
         "parameters": [
+          {
+            "name": "websiteId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
           {
             "name": "start",
             "required": true,
@@ -516,11 +524,19 @@
         ]
       }
     },
-    "/analytics/pages": {
+    "/websites/{websiteId}/analytics/pages": {
       "get": {
         "description": "Returns page performance statistics for the specified time range",
         "operationId": "getPagePerformanceStats",
         "parameters": [
+          {
+            "name": "websiteId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
           {
             "name": "start",
             "required": true,
@@ -588,11 +604,19 @@
         ]
       }
     },
-    "/analytics/users": {
+    "/websites/{websiteId}/analytics/users": {
       "get": {
         "description": "Returns user behavior statistics for the specified time range",
         "operationId": "getUserBehaviorStats",
         "parameters": [
+          {
+            "name": "websiteId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
           {
             "name": "start",
             "required": true,
@@ -660,11 +684,20 @@
         ]
       }
     },
-    "/analytics/realtime": {
+    "/websites/{websiteId}/analytics/realtime": {
       "get": {
         "description": "Returns realtime analytics data",
         "operationId": "getRealtimeAnalytics",
-        "parameters": [],
+        "parameters": [
+          {
+            "name": "websiteId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "Returns realtime analytics data",
@@ -683,11 +716,19 @@
         ]
       }
     },
-    "/analytics/audience": {
+    "/websites/{websiteId}/analytics/audience": {
       "get": {
         "description": "Returns audience analytics for the specified time range",
         "operationId": "getAudienceAnalytics",
         "parameters": [
+          {
+            "name": "websiteId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
           {
             "name": "start",
             "required": true,
@@ -752,6 +793,211 @@
         "summary": "Get audience analytics",
         "tags": [
           "Analytics"
+        ]
+      }
+    },
+    "/features": {
+      "post": {
+        "operationId": "FeatureController_createFeature",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateFeatureDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Feature"
+        ]
+      },
+      "get": {
+        "operationId": "FeatureController_getAllFeatures",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Feature"
+        ]
+      }
+    },
+    "/features/{name}": {
+      "get": {
+        "operationId": "FeatureController_getFeatureByName",
+        "parameters": [
+          {
+            "name": "name",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Feature"
+        ]
+      },
+      "put": {
+        "operationId": "FeatureController_updateFeature",
+        "parameters": [
+          {
+            "name": "name",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateFeatureDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Feature"
+        ]
+      },
+      "delete": {
+        "operationId": "FeatureController_deleteFeature",
+        "parameters": [
+          {
+            "name": "name",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Feature"
+        ]
+      }
+    },
+    "/features/website": {
+      "post": {
+        "operationId": "FeatureController_enableFeatureForWebsite",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WebsiteFeatureDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Feature"
+        ]
+      }
+    },
+    "/features/website/{websiteId}": {
+      "get": {
+        "operationId": "FeatureController_getWebsiteFeatures",
+        "parameters": [
+          {
+            "name": "websiteId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Feature"
+        ]
+      }
+    },
+    "/features/access-level": {
+      "post": {
+        "operationId": "FeatureController_setFeatureAccessLevel",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AccessLevelFeatureDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Feature"
+        ]
+      }
+    },
+    "/features/access-level/{featureName}": {
+      "get": {
+        "operationId": "FeatureController_getFeatureAccessLevels",
+        "parameters": [
+          {
+            "name": "featureName",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Feature"
         ]
       }
     },
@@ -1388,6 +1634,22 @@
         "required": [
           "message"
         ]
+      },
+      "CreateFeatureDto": {
+        "type": "object",
+        "properties": {}
+      },
+      "UpdateFeatureDto": {
+        "type": "object",
+        "properties": {}
+      },
+      "WebsiteFeatureDto": {
+        "type": "object",
+        "properties": {}
+      },
+      "AccessLevelFeatureDto": {
+        "type": "object",
+        "properties": {}
       },
       "CreateEventDto": {
         "type": "object",

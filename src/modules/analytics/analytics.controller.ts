@@ -3,14 +3,14 @@ import { ApiTags } from '@nestjs/swagger';
 import { AnalyticsService } from './analytics.service';
 import { TimeRangeDto } from '@shared/dto';
 import { HttpCacheInterceptor } from '@shared/interceptors/http-cache.interceptor';
-import { RolesGuard } from '../auth/guards/roles.guard';
-import { Roles } from '../auth/decorators/roles.decorator';
-import { Role } from '../auth/enums/roles.enum';
+import { Role } from '@modules/auth/enums/roles.enum';
 import { SwaggerRoute } from '@shared/decorators/swagger.decorator';
 import { CacheTTL } from '@nestjs/cache-manager';
-import { FeatureGuard } from '../../shared/guards/feature.guard';
-import { RequiresFeature, RequiresFeatures, RequiresAnyFeature } from '../../shared/decorators/requires-feature.decorator';
+import { FeatureGuard } from '@shared/guards/feature.guard';
+import { RequiresFeature, RequiresFeatures, RequiresAnyFeature } from '@shared/decorators/requires-feature.decorator';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { Roles } from '@modules/auth/decorators/roles.decorator';
+import { RolesGuard } from '@modules/auth/guards/roles.guard';
 
 @ApiTags('Analytics')
 @Controller('websites/:websiteId/analytics')

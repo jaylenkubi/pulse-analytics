@@ -1,8 +1,5 @@
 import { Body, Controller, Delete, Get, Param, Post, Put, UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
-import { RolesGuard } from '../../shared/guards/roles.guard';
-import { Roles } from '../../shared/decorators/roles.decorator';
-import { Role } from '../auth/enums/roles.enum';
 import { FeatureService } from './feature.service';
 import { Feature } from '../../database/entities/feature.entity';
 import { WebsiteFeature } from '../../database/entities/website-feature.entity';
@@ -11,6 +8,9 @@ import { CreateFeatureDto } from '../../shared/dto/feature/create-feature.dto';
 import { UpdateFeatureDto } from '../../shared/dto/feature/update-feature.dto';
 import { WebsiteFeatureDto } from '../../shared/dto/feature/website-feature.dto';
 import { AccessLevelFeatureDto } from '../../shared/dto/feature/access-level-feature.dto';
+import { Roles } from '@modules/auth/decorators/roles.decorator';
+import { Role } from '@modules/auth/enums/roles.enum';
+import { RolesGuard } from '@modules/auth/guards/roles.guard';
 
 @Controller('features')
 @UseGuards(JwtAuthGuard, RolesGuard)

@@ -3,37 +3,65 @@ import { useRouter } from "next/router";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import Logo from "@/components/Logo";
+import { useAuthControllerLogin } from "@/api/generated/auth/auth";
+import { useAuth } from "@/lib/auth";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+
+// Define the form schema with validation
+const loginFormSchema = z.object({
+  email: z.string().email({ message: "Please enter a valid email address" }),
+  password: z.string().min(1, { message: "Password is required" }),
+});
+
+// Define the form values type
+type LoginFormValues = z.infer<typeof loginFormSchema>;
 
 export default function LoginPage() {
   const router = useRouter();
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState("");
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setIsLoading(true);
-    setError("");
+  const { setTokens } = useAuth();
+  const { mutate: login, isPending } = useAuthControllerLogin();
 
-    const formData = new FormData(e.currentTarget);
-    const email = formData.get("email");
-    const password = formData.get("password");
+  // Initialize the form with validation
+  const form = useForm<LoginFormValues>({
+    resolver: zodResolver(loginFormSchema),
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+  });
 
-    // Here you would typically make an API call to authenticate
-    try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      // For demo purposes, just redirect to dashboard
-      router.push("/");
-    } catch (err) {
-      setError("Invalid email or password");
-    } finally {
-      setIsLoading(false);
-    }
+  const onSubmit = (values: LoginFormValues) => {
+    login(
+      { data: { email: values.email, password: values.password } },
+      {
+        onSuccess: (data) => {
+          setTokens(data.accessToken, data.refreshToken);
+          router.push("/");
+        },
+        onError: (error) => {
+          form.setError("email", {
+            message: "",
+          });
+          form.setError("password", {
+            message: "Incorrect email or password",
+          });
+        },
+      }
+    );
   };
 
   return (
@@ -48,49 +76,60 @@ export default function LoginPage() {
             Enter your email and password to login to your account
           </CardDescription>
         </CardHeader>
-        <form onSubmit={handleSubmit}>
-          <CardContent className="space-y-4">
-            {error && (
-              <Alert variant="destructive">
-                <AlertDescription>{error}</AlertDescription>
-              </Alert>
-            )}
-            <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
-              <Input
-                id="email"
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+            <CardContent className="space-y-4">
+              <FormField
+                control={form.control}
                 name="email"
-                type="email"
-                placeholder="name@example.com"
-                required
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Email</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="name@example.com"
+                        type="email"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
               />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="password">Password</Label>
-              <Input
-                id="password"
+              <FormField
+                control={form.control}
                 name="password"
-                type="password"
-                required
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Password</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="password"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
               />
-            </div>
-          </CardContent>
-          <CardFooter className="flex flex-col space-y-4">
-            <Button 
-              type="submit" 
-              className="w-full"
-              disabled={isLoading}
-            >
-              {isLoading ? "Signing in..." : "Sign in"}
-            </Button>
-            <p className="text-sm text-muted-foreground text-center">
-              Don't have an account?{" "}
-              <Link href="/signup" className="text-primary hover:underline">
-                Sign up
-              </Link>
-            </p>
-          </CardFooter>
-        </form>
+            </CardContent>
+            <CardFooter className="flex flex-col space-y-4">
+              <Button 
+                type="submit" 
+                className="w-full"
+                disabled={isPending}
+              >
+                {isPending ? "Signing in..." : "Sign in"}
+              </Button>
+              <p className="text-sm text-muted-foreground text-center">
+                Don't have an account?{" "}
+                <Link href="/signup" className="text-primary hover:underline">
+                  Sign up
+                </Link>
+              </p>
+            </CardFooter>
+          </form>
+        </Form>
       </Card>
     </div>
   );

@@ -11,11 +11,12 @@ export class AnalyticsService {
     private eventService: GenericCrudService<Event>,
   ) {}
 
-  async getTrafficSourceStats(startDate: Date, endDate: Date) {
+  async getTrafficSourceStats(startDate: Date, endDate: Date, websiteId: string) {
     const query: FindManyOptions<Event> = {
       where: {
         event_name: EventName.PAGE_VIEW,
-        timestamp: Between(startDate.toISOString(), endDate.toISOString())
+        timestamp: Between(startDate.toISOString(), endDate.toISOString()),
+        website_id: websiteId
       },
       select: [
         'traffic',
@@ -62,11 +63,12 @@ export class AnalyticsService {
     }));
   }
 
-  async getPagePerformance(startDate: Date, endDate: Date) {
+  async getPagePerformance(startDate: Date, endDate: Date, websiteId: string) {
     const query: FindManyOptions<Event> = {
       where: {
         event_name: EventName.PAGE_VIEW,
-        timestamp: Between(startDate.toISOString(), endDate.toISOString())
+        timestamp: Between(startDate.toISOString(), endDate.toISOString()),
+        website_id: websiteId
       },
       select: [
         'page',
@@ -104,10 +106,11 @@ export class AnalyticsService {
     }));
   }
 
-  async getUserBehavior(startDate: Date, endDate: Date) {
+  async getUserBehavior(startDate: Date, endDate: Date, websiteId: string) {
     const query: FindManyOptions<Event> = {
       where: {
-        timestamp: Between(startDate.toISOString(), endDate.toISOString())
+        timestamp: Between(startDate.toISOString(), endDate.toISOString()),
+        website_id: websiteId
       },
       select: [
         'user',
@@ -148,12 +151,13 @@ export class AnalyticsService {
     }));
   }
 
-  async getRealtimeAnalytics() {
+  async getRealtimeAnalytics(websiteId: string) {
     const fiveMinutesAgo = new Date(Date.now() - 5 * 60 * 1000);
     
     const query: FindManyOptions<Event> = {
       where: {
-        timestamp: Between(fiveMinutesAgo.toISOString(), new Date().toISOString())
+        timestamp: Between(fiveMinutesAgo.toISOString(), new Date().toISOString()),
+        website_id: websiteId
       },
       order: {
         timestamp: 'DESC'
@@ -188,10 +192,11 @@ export class AnalyticsService {
     };
   }
 
-  async getAudienceAnalytics(startDate: Date, endDate: Date) {
+  async getAudienceAnalytics(startDate: Date, endDate: Date, websiteId: string) {
     const query: FindManyOptions<Event> = {
       where: {
-        timestamp: Between(startDate.toISOString(), endDate.toISOString())
+        timestamp: Between(startDate.toISOString(), endDate.toISOString()),
+        website_id: websiteId
       },
       select: [
         'user',
