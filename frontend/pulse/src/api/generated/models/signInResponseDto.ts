@@ -5,8 +5,10 @@
  * Pulse Analytics API
  * OpenAPI spec version: 1.0
  */
+import type { SignInResponseDtoUser } from './signInResponseDtoUser';
 
 export interface SignInResponseDto {
+  user: SignInResponseDtoUser;
   accessToken: string;
   refreshToken: string;
 }

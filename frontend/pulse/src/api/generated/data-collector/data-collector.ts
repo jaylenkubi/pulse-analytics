@@ -11,17 +11,18 @@ import type {
   UseMutationOptions,
   UseMutationResult,
 } from '@tanstack/react-query';
-import type { CreateEventDto } from '.././models';
+import type { CreateEventDto, EventResponseDto } from '.././models';
 import { customInstance } from '../../axios-client';
 
 /**
+ * The event has been successfully collected
  * @summary Collect event data
  */
-export const dataCollectorControllerCollectEvent = (
+export const collectEvent = (
   createEventDto: CreateEventDto,
   signal?: AbortSignal,
 ) => {
-  return customInstance<void>({
+  return customInstance<EventResponseDto>({
     url: `/data-collector/event`,
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -30,23 +31,23 @@ export const dataCollectorControllerCollectEvent = (
   });
 };
 
-export const getDataCollectorControllerCollectEventMutationOptions = <
+export const getCollectEventMutationOptions = <
   TError = unknown,
   TContext = unknown,
 >(options?: {
   mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof dataCollectorControllerCollectEvent>>,
+    Awaited<ReturnType<typeof collectEvent>>,
     TError,
     { data: CreateEventDto },
     TContext
   >;
 }): UseMutationOptions<
-  Awaited<ReturnType<typeof dataCollectorControllerCollectEvent>>,
+  Awaited<ReturnType<typeof collectEvent>>,
   TError,
   { data: CreateEventDto },
   TContext
 > => {
-  const mutationKey = ['dataCollectorControllerCollectEvent'];
+  const mutationKey = ['collectEvent'];
   const { mutation: mutationOptions } = options
     ? options.mutation &&
       'mutationKey' in options.mutation &&
@@ -56,44 +57,43 @@ export const getDataCollectorControllerCollectEventMutationOptions = <
     : { mutation: { mutationKey } };
 
   const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof dataCollectorControllerCollectEvent>>,
+    Awaited<ReturnType<typeof collectEvent>>,
     { data: CreateEventDto }
   > = (props) => {
     const { data } = props ?? {};
 
-    return dataCollectorControllerCollectEvent(data);
+    return collectEvent(data);
   };
 
   return { mutationFn, ...mutationOptions };
 };
 
-export type DataCollectorControllerCollectEventMutationResult = NonNullable<
-  Awaited<ReturnType<typeof dataCollectorControllerCollectEvent>>
+export type CollectEventMutationResult = NonNullable<
+  Awaited<ReturnType<typeof collectEvent>>
 >;
-export type DataCollectorControllerCollectEventMutationBody = CreateEventDto;
-export type DataCollectorControllerCollectEventMutationError = unknown;
+export type CollectEventMutationBody = CreateEventDto;
+export type CollectEventMutationError = unknown;
 
 /**
  * @summary Collect event data
  */
-export const useDataCollectorControllerCollectEvent = <
+export const useCollectEvent = <
   TError = unknown,
   TContext = unknown,
 >(options?: {
   mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof dataCollectorControllerCollectEvent>>,
+    Awaited<ReturnType<typeof collectEvent>>,
     TError,
     { data: CreateEventDto },
     TContext
   >;
 }): UseMutationResult<
-  Awaited<ReturnType<typeof dataCollectorControllerCollectEvent>>,
+  Awaited<ReturnType<typeof collectEvent>>,
   TError,
   { data: CreateEventDto },
   TContext
 > => {
-  const mutationOptions =
-    getDataCollectorControllerCollectEventMutationOptions(options);
+  const mutationOptions = getCollectEventMutationOptions(options);
 
   return useMutation(mutationOptions);
 };

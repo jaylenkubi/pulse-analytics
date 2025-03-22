@@ -13,42 +13,54 @@ import type {
   UseQueryResult,
 } from '@tanstack/react-query';
 import type {
-  AnalyticsControllerGetAudienceAnalyticsParams,
-  AnalyticsControllerGetPagePerformanceParams,
-  AnalyticsControllerGetTrafficSourceStatsParams,
-  AnalyticsControllerGetUserBehaviorParams,
+  GetAudienceAnalytics200,
+  GetAudienceAnalyticsParams,
+  GetPagePerformanceStats200,
+  GetPagePerformanceStatsParams,
+  GetRealtimeAnalytics200,
+  GetTrafficSourceStats200,
+  GetTrafficSourceStatsParams,
+  GetUserBehaviorStats200,
+  GetUserBehaviorStatsParams,
 } from '.././models';
 import { customInstance } from '../../axios-client';
 
 /**
+ * Returns traffic source statistics for the specified time range
  * @summary Get traffic source statistics
  */
-export const analyticsControllerGetTrafficSourceStats = (
-  params: AnalyticsControllerGetTrafficSourceStatsParams,
+export const getTrafficSourceStats = (
+  websiteId: string,
+  params: GetTrafficSourceStatsParams,
   signal?: AbortSignal,
 ) => {
-  return customInstance<void>({
-    url: `/analytics/traffic`,
+  return customInstance<GetTrafficSourceStats200>({
+    url: `/websites/${websiteId}/analytics/traffic`,
     method: 'GET',
     params,
     signal,
   });
 };
 
-export const getAnalyticsControllerGetTrafficSourceStatsQueryKey = (
-  params: AnalyticsControllerGetTrafficSourceStatsParams,
+export const getGetTrafficSourceStatsQueryKey = (
+  websiteId: string,
+  params: GetTrafficSourceStatsParams,
 ) => {
-  return [`/analytics/traffic`, ...(params ? [params] : [])] as const;
+  return [
+    `/websites/${websiteId}/analytics/traffic`,
+    ...(params ? [params] : []),
+  ] as const;
 };
 
-export const getAnalyticsControllerGetTrafficSourceStatsQueryOptions = <
-  TData = Awaited<ReturnType<typeof analyticsControllerGetTrafficSourceStats>>,
+export const getGetTrafficSourceStatsQueryOptions = <
+  TData = Awaited<ReturnType<typeof getTrafficSourceStats>>,
   TError = unknown,
 >(
-  params: AnalyticsControllerGetTrafficSourceStatsParams,
+  websiteId: string,
+  params: GetTrafficSourceStatsParams,
   options?: {
     query?: UseQueryOptions<
-      Awaited<ReturnType<typeof analyticsControllerGetTrafficSourceStats>>,
+      Awaited<ReturnType<typeof getTrafficSourceStats>>,
       TError,
       TData
     >;
@@ -58,42 +70,49 @@ export const getAnalyticsControllerGetTrafficSourceStatsQueryOptions = <
 
   const queryKey =
     queryOptions?.queryKey ??
-    getAnalyticsControllerGetTrafficSourceStatsQueryKey(params);
+    getGetTrafficSourceStatsQueryKey(websiteId, params);
 
   const queryFn: QueryFunction<
-    Awaited<ReturnType<typeof analyticsControllerGetTrafficSourceStats>>
-  > = ({ signal }) => analyticsControllerGetTrafficSourceStats(params, signal);
+    Awaited<ReturnType<typeof getTrafficSourceStats>>
+  > = ({ signal }) => getTrafficSourceStats(websiteId, params, signal);
 
-  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
-    Awaited<ReturnType<typeof analyticsControllerGetTrafficSourceStats>>,
+  return {
+    queryKey,
+    queryFn,
+    enabled: !!websiteId,
+    ...queryOptions,
+  } as UseQueryOptions<
+    Awaited<ReturnType<typeof getTrafficSourceStats>>,
     TError,
     TData
   > & { queryKey: QueryKey };
 };
 
-export type AnalyticsControllerGetTrafficSourceStatsQueryResult = NonNullable<
-  Awaited<ReturnType<typeof analyticsControllerGetTrafficSourceStats>>
+export type GetTrafficSourceStatsQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getTrafficSourceStats>>
 >;
-export type AnalyticsControllerGetTrafficSourceStatsQueryError = unknown;
+export type GetTrafficSourceStatsQueryError = unknown;
 
 /**
  * @summary Get traffic source statistics
  */
 
-export function useAnalyticsControllerGetTrafficSourceStats<
-  TData = Awaited<ReturnType<typeof analyticsControllerGetTrafficSourceStats>>,
+export function useGetTrafficSourceStats<
+  TData = Awaited<ReturnType<typeof getTrafficSourceStats>>,
   TError = unknown,
 >(
-  params: AnalyticsControllerGetTrafficSourceStatsParams,
+  websiteId: string,
+  params: GetTrafficSourceStatsParams,
   options?: {
     query?: UseQueryOptions<
-      Awaited<ReturnType<typeof analyticsControllerGetTrafficSourceStats>>,
+      Awaited<ReturnType<typeof getTrafficSourceStats>>,
       TError,
       TData
     >;
   },
 ): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
-  const queryOptions = getAnalyticsControllerGetTrafficSourceStatsQueryOptions(
+  const queryOptions = getGetTrafficSourceStatsQueryOptions(
+    websiteId,
     params,
     options,
   );
@@ -106,81 +125,95 @@ export function useAnalyticsControllerGetTrafficSourceStats<
 
   return query;
 }
+
+/**
+ * Returns page performance statistics for the specified time range
+ * @summary Get page performance statistics
+ */
+export const getPagePerformanceStats = (
+  websiteId: string,
+  params: GetPagePerformanceStatsParams,
+  signal?: AbortSignal,
+) => {
+  return customInstance<GetPagePerformanceStats200>({
+    url: `/websites/${websiteId}/analytics/pages`,
+    method: 'GET',
+    params,
+    signal,
+  });
+};
+
+export const getGetPagePerformanceStatsQueryKey = (
+  websiteId: string,
+  params: GetPagePerformanceStatsParams,
+) => {
+  return [
+    `/websites/${websiteId}/analytics/pages`,
+    ...(params ? [params] : []),
+  ] as const;
+};
+
+export const getGetPagePerformanceStatsQueryOptions = <
+  TData = Awaited<ReturnType<typeof getPagePerformanceStats>>,
+  TError = unknown,
+>(
+  websiteId: string,
+  params: GetPagePerformanceStatsParams,
+  options?: {
+    query?: UseQueryOptions<
+      Awaited<ReturnType<typeof getPagePerformanceStats>>,
+      TError,
+      TData
+    >;
+  },
+) => {
+  const { query: queryOptions } = options ?? {};
+
+  const queryKey =
+    queryOptions?.queryKey ??
+    getGetPagePerformanceStatsQueryKey(websiteId, params);
+
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof getPagePerformanceStats>>
+  > = ({ signal }) => getPagePerformanceStats(websiteId, params, signal);
+
+  return {
+    queryKey,
+    queryFn,
+    enabled: !!websiteId,
+    ...queryOptions,
+  } as UseQueryOptions<
+    Awaited<ReturnType<typeof getPagePerformanceStats>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
+
+export type GetPagePerformanceStatsQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getPagePerformanceStats>>
+>;
+export type GetPagePerformanceStatsQueryError = unknown;
 
 /**
  * @summary Get page performance statistics
  */
-export const analyticsControllerGetPagePerformance = (
-  params: AnalyticsControllerGetPagePerformanceParams,
-  signal?: AbortSignal,
-) => {
-  return customInstance<void>({
-    url: `/analytics/pages`,
-    method: 'GET',
-    params,
-    signal,
-  });
-};
 
-export const getAnalyticsControllerGetPagePerformanceQueryKey = (
-  params: AnalyticsControllerGetPagePerformanceParams,
-) => {
-  return [`/analytics/pages`, ...(params ? [params] : [])] as const;
-};
-
-export const getAnalyticsControllerGetPagePerformanceQueryOptions = <
-  TData = Awaited<ReturnType<typeof analyticsControllerGetPagePerformance>>,
+export function useGetPagePerformanceStats<
+  TData = Awaited<ReturnType<typeof getPagePerformanceStats>>,
   TError = unknown,
 >(
-  params: AnalyticsControllerGetPagePerformanceParams,
+  websiteId: string,
+  params: GetPagePerformanceStatsParams,
   options?: {
     query?: UseQueryOptions<
-      Awaited<ReturnType<typeof analyticsControllerGetPagePerformance>>,
-      TError,
-      TData
-    >;
-  },
-) => {
-  const { query: queryOptions } = options ?? {};
-
-  const queryKey =
-    queryOptions?.queryKey ??
-    getAnalyticsControllerGetPagePerformanceQueryKey(params);
-
-  const queryFn: QueryFunction<
-    Awaited<ReturnType<typeof analyticsControllerGetPagePerformance>>
-  > = ({ signal }) => analyticsControllerGetPagePerformance(params, signal);
-
-  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
-    Awaited<ReturnType<typeof analyticsControllerGetPagePerformance>>,
-    TError,
-    TData
-  > & { queryKey: QueryKey };
-};
-
-export type AnalyticsControllerGetPagePerformanceQueryResult = NonNullable<
-  Awaited<ReturnType<typeof analyticsControllerGetPagePerformance>>
->;
-export type AnalyticsControllerGetPagePerformanceQueryError = unknown;
-
-/**
- * @summary Get page performance statistics
- */
-
-export function useAnalyticsControllerGetPagePerformance<
-  TData = Awaited<ReturnType<typeof analyticsControllerGetPagePerformance>>,
-  TError = unknown,
->(
-  params: AnalyticsControllerGetPagePerformanceParams,
-  options?: {
-    query?: UseQueryOptions<
-      Awaited<ReturnType<typeof analyticsControllerGetPagePerformance>>,
+      Awaited<ReturnType<typeof getPagePerformanceStats>>,
       TError,
       TData
     >;
   },
 ): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
-  const queryOptions = getAnalyticsControllerGetPagePerformanceQueryOptions(
+  const queryOptions = getGetPagePerformanceStatsQueryOptions(
+    websiteId,
     params,
     options,
   );
@@ -195,34 +228,41 @@ export function useAnalyticsControllerGetPagePerformance<
 }
 
 /**
+ * Returns user behavior statistics for the specified time range
  * @summary Get user behavior statistics
  */
-export const analyticsControllerGetUserBehavior = (
-  params: AnalyticsControllerGetUserBehaviorParams,
+export const getUserBehaviorStats = (
+  websiteId: string,
+  params: GetUserBehaviorStatsParams,
   signal?: AbortSignal,
 ) => {
-  return customInstance<void>({
-    url: `/analytics/users`,
+  return customInstance<GetUserBehaviorStats200>({
+    url: `/websites/${websiteId}/analytics/users`,
     method: 'GET',
     params,
     signal,
   });
 };
 
-export const getAnalyticsControllerGetUserBehaviorQueryKey = (
-  params: AnalyticsControllerGetUserBehaviorParams,
+export const getGetUserBehaviorStatsQueryKey = (
+  websiteId: string,
+  params: GetUserBehaviorStatsParams,
 ) => {
-  return [`/analytics/users`, ...(params ? [params] : [])] as const;
+  return [
+    `/websites/${websiteId}/analytics/users`,
+    ...(params ? [params] : []),
+  ] as const;
 };
 
-export const getAnalyticsControllerGetUserBehaviorQueryOptions = <
-  TData = Awaited<ReturnType<typeof analyticsControllerGetUserBehavior>>,
+export const getGetUserBehaviorStatsQueryOptions = <
+  TData = Awaited<ReturnType<typeof getUserBehaviorStats>>,
   TError = unknown,
 >(
-  params: AnalyticsControllerGetUserBehaviorParams,
+  websiteId: string,
+  params: GetUserBehaviorStatsParams,
   options?: {
     query?: UseQueryOptions<
-      Awaited<ReturnType<typeof analyticsControllerGetUserBehavior>>,
+      Awaited<ReturnType<typeof getUserBehaviorStats>>,
       TError,
       TData
     >;
@@ -232,42 +272,49 @@ export const getAnalyticsControllerGetUserBehaviorQueryOptions = <
 
   const queryKey =
     queryOptions?.queryKey ??
-    getAnalyticsControllerGetUserBehaviorQueryKey(params);
+    getGetUserBehaviorStatsQueryKey(websiteId, params);
 
   const queryFn: QueryFunction<
-    Awaited<ReturnType<typeof analyticsControllerGetUserBehavior>>
-  > = ({ signal }) => analyticsControllerGetUserBehavior(params, signal);
+    Awaited<ReturnType<typeof getUserBehaviorStats>>
+  > = ({ signal }) => getUserBehaviorStats(websiteId, params, signal);
 
-  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
-    Awaited<ReturnType<typeof analyticsControllerGetUserBehavior>>,
+  return {
+    queryKey,
+    queryFn,
+    enabled: !!websiteId,
+    ...queryOptions,
+  } as UseQueryOptions<
+    Awaited<ReturnType<typeof getUserBehaviorStats>>,
     TError,
     TData
   > & { queryKey: QueryKey };
 };
 
-export type AnalyticsControllerGetUserBehaviorQueryResult = NonNullable<
-  Awaited<ReturnType<typeof analyticsControllerGetUserBehavior>>
+export type GetUserBehaviorStatsQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getUserBehaviorStats>>
 >;
-export type AnalyticsControllerGetUserBehaviorQueryError = unknown;
+export type GetUserBehaviorStatsQueryError = unknown;
 
 /**
  * @summary Get user behavior statistics
  */
 
-export function useAnalyticsControllerGetUserBehavior<
-  TData = Awaited<ReturnType<typeof analyticsControllerGetUserBehavior>>,
+export function useGetUserBehaviorStats<
+  TData = Awaited<ReturnType<typeof getUserBehaviorStats>>,
   TError = unknown,
 >(
-  params: AnalyticsControllerGetUserBehaviorParams,
+  websiteId: string,
+  params: GetUserBehaviorStatsParams,
   options?: {
     query?: UseQueryOptions<
-      Awaited<ReturnType<typeof analyticsControllerGetUserBehavior>>,
+      Awaited<ReturnType<typeof getUserBehaviorStats>>,
       TError,
       TData
     >;
   },
 ): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
-  const queryOptions = getAnalyticsControllerGetUserBehaviorQueryOptions(
+  const queryOptions = getGetUserBehaviorStatsQueryOptions(
+    websiteId,
     params,
     options,
   );
@@ -282,70 +329,81 @@ export function useAnalyticsControllerGetUserBehavior<
 }
 
 /**
+ * Returns realtime analytics data
  * @summary Get realtime analytics data
  */
-export const analyticsControllerGetRealtimeAnalytics = (
+export const getRealtimeAnalytics = (
+  websiteId: string,
   signal?: AbortSignal,
 ) => {
-  return customInstance<void>({
-    url: `/analytics/realtime`,
+  return customInstance<GetRealtimeAnalytics200>({
+    url: `/websites/${websiteId}/analytics/realtime`,
     method: 'GET',
     signal,
   });
 };
 
-export const getAnalyticsControllerGetRealtimeAnalyticsQueryKey = () => {
-  return [`/analytics/realtime`] as const;
+export const getGetRealtimeAnalyticsQueryKey = (websiteId: string) => {
+  return [`/websites/${websiteId}/analytics/realtime`] as const;
 };
 
-export const getAnalyticsControllerGetRealtimeAnalyticsQueryOptions = <
-  TData = Awaited<ReturnType<typeof analyticsControllerGetRealtimeAnalytics>>,
+export const getGetRealtimeAnalyticsQueryOptions = <
+  TData = Awaited<ReturnType<typeof getRealtimeAnalytics>>,
   TError = unknown,
->(options?: {
-  query?: UseQueryOptions<
-    Awaited<ReturnType<typeof analyticsControllerGetRealtimeAnalytics>>,
-    TError,
-    TData
-  >;
-}) => {
+>(
+  websiteId: string,
+  options?: {
+    query?: UseQueryOptions<
+      Awaited<ReturnType<typeof getRealtimeAnalytics>>,
+      TError,
+      TData
+    >;
+  },
+) => {
   const { query: queryOptions } = options ?? {};
 
   const queryKey =
-    queryOptions?.queryKey ??
-    getAnalyticsControllerGetRealtimeAnalyticsQueryKey();
+    queryOptions?.queryKey ?? getGetRealtimeAnalyticsQueryKey(websiteId);
 
   const queryFn: QueryFunction<
-    Awaited<ReturnType<typeof analyticsControllerGetRealtimeAnalytics>>
-  > = ({ signal }) => analyticsControllerGetRealtimeAnalytics(signal);
+    Awaited<ReturnType<typeof getRealtimeAnalytics>>
+  > = ({ signal }) => getRealtimeAnalytics(websiteId, signal);
 
-  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
-    Awaited<ReturnType<typeof analyticsControllerGetRealtimeAnalytics>>,
+  return {
+    queryKey,
+    queryFn,
+    enabled: !!websiteId,
+    ...queryOptions,
+  } as UseQueryOptions<
+    Awaited<ReturnType<typeof getRealtimeAnalytics>>,
     TError,
     TData
   > & { queryKey: QueryKey };
 };
 
-export type AnalyticsControllerGetRealtimeAnalyticsQueryResult = NonNullable<
-  Awaited<ReturnType<typeof analyticsControllerGetRealtimeAnalytics>>
+export type GetRealtimeAnalyticsQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getRealtimeAnalytics>>
 >;
-export type AnalyticsControllerGetRealtimeAnalyticsQueryError = unknown;
+export type GetRealtimeAnalyticsQueryError = unknown;
 
 /**
  * @summary Get realtime analytics data
  */
 
-export function useAnalyticsControllerGetRealtimeAnalytics<
-  TData = Awaited<ReturnType<typeof analyticsControllerGetRealtimeAnalytics>>,
+export function useGetRealtimeAnalytics<
+  TData = Awaited<ReturnType<typeof getRealtimeAnalytics>>,
   TError = unknown,
->(options?: {
-  query?: UseQueryOptions<
-    Awaited<ReturnType<typeof analyticsControllerGetRealtimeAnalytics>>,
-    TError,
-    TData
-  >;
-}): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
-  const queryOptions =
-    getAnalyticsControllerGetRealtimeAnalyticsQueryOptions(options);
+>(
+  websiteId: string,
+  options?: {
+    query?: UseQueryOptions<
+      Awaited<ReturnType<typeof getRealtimeAnalytics>>,
+      TError,
+      TData
+    >;
+  },
+): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getGetRealtimeAnalyticsQueryOptions(websiteId, options);
 
   const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
     queryKey: QueryKey;
@@ -357,34 +415,41 @@ export function useAnalyticsControllerGetRealtimeAnalytics<
 }
 
 /**
+ * Returns audience analytics for the specified time range
  * @summary Get audience analytics
  */
-export const analyticsControllerGetAudienceAnalytics = (
-  params: AnalyticsControllerGetAudienceAnalyticsParams,
+export const getAudienceAnalytics = (
+  websiteId: string,
+  params: GetAudienceAnalyticsParams,
   signal?: AbortSignal,
 ) => {
-  return customInstance<void>({
-    url: `/analytics/audience`,
+  return customInstance<GetAudienceAnalytics200>({
+    url: `/websites/${websiteId}/analytics/audience`,
     method: 'GET',
     params,
     signal,
   });
 };
 
-export const getAnalyticsControllerGetAudienceAnalyticsQueryKey = (
-  params: AnalyticsControllerGetAudienceAnalyticsParams,
+export const getGetAudienceAnalyticsQueryKey = (
+  websiteId: string,
+  params: GetAudienceAnalyticsParams,
 ) => {
-  return [`/analytics/audience`, ...(params ? [params] : [])] as const;
+  return [
+    `/websites/${websiteId}/analytics/audience`,
+    ...(params ? [params] : []),
+  ] as const;
 };
 
-export const getAnalyticsControllerGetAudienceAnalyticsQueryOptions = <
-  TData = Awaited<ReturnType<typeof analyticsControllerGetAudienceAnalytics>>,
+export const getGetAudienceAnalyticsQueryOptions = <
+  TData = Awaited<ReturnType<typeof getAudienceAnalytics>>,
   TError = unknown,
 >(
-  params: AnalyticsControllerGetAudienceAnalyticsParams,
+  websiteId: string,
+  params: GetAudienceAnalyticsParams,
   options?: {
     query?: UseQueryOptions<
-      Awaited<ReturnType<typeof analyticsControllerGetAudienceAnalytics>>,
+      Awaited<ReturnType<typeof getAudienceAnalytics>>,
       TError,
       TData
     >;
@@ -394,42 +459,49 @@ export const getAnalyticsControllerGetAudienceAnalyticsQueryOptions = <
 
   const queryKey =
     queryOptions?.queryKey ??
-    getAnalyticsControllerGetAudienceAnalyticsQueryKey(params);
+    getGetAudienceAnalyticsQueryKey(websiteId, params);
 
   const queryFn: QueryFunction<
-    Awaited<ReturnType<typeof analyticsControllerGetAudienceAnalytics>>
-  > = ({ signal }) => analyticsControllerGetAudienceAnalytics(params, signal);
+    Awaited<ReturnType<typeof getAudienceAnalytics>>
+  > = ({ signal }) => getAudienceAnalytics(websiteId, params, signal);
 
-  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
-    Awaited<ReturnType<typeof analyticsControllerGetAudienceAnalytics>>,
+  return {
+    queryKey,
+    queryFn,
+    enabled: !!websiteId,
+    ...queryOptions,
+  } as UseQueryOptions<
+    Awaited<ReturnType<typeof getAudienceAnalytics>>,
     TError,
     TData
   > & { queryKey: QueryKey };
 };
 
-export type AnalyticsControllerGetAudienceAnalyticsQueryResult = NonNullable<
-  Awaited<ReturnType<typeof analyticsControllerGetAudienceAnalytics>>
+export type GetAudienceAnalyticsQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getAudienceAnalytics>>
 >;
-export type AnalyticsControllerGetAudienceAnalyticsQueryError = unknown;
+export type GetAudienceAnalyticsQueryError = unknown;
 
 /**
  * @summary Get audience analytics
  */
 
-export function useAnalyticsControllerGetAudienceAnalytics<
-  TData = Awaited<ReturnType<typeof analyticsControllerGetAudienceAnalytics>>,
+export function useGetAudienceAnalytics<
+  TData = Awaited<ReturnType<typeof getAudienceAnalytics>>,
   TError = unknown,
 >(
-  params: AnalyticsControllerGetAudienceAnalyticsParams,
+  websiteId: string,
+  params: GetAudienceAnalyticsParams,
   options?: {
     query?: UseQueryOptions<
-      Awaited<ReturnType<typeof analyticsControllerGetAudienceAnalytics>>,
+      Awaited<ReturnType<typeof getAudienceAnalytics>>,
       TError,
       TData
     >;
   },
 ): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
-  const queryOptions = getAnalyticsControllerGetAudienceAnalyticsQueryOptions(
+  const queryOptions = getGetAudienceAnalyticsQueryOptions(
+    websiteId,
     params,
     options,
   );

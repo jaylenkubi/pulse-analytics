@@ -1,7 +1,7 @@
 import { AxiosError, AxiosRequestConfig, InternalAxiosRequestConfig } from 'axios';
 import { AXIOS_INSTANCE } from './axios-client';
 import { jwtDecode } from 'jwt-decode';
-import { authControllerRefresh } from './generated/auth/auth';
+import { refresh } from './generated/auth/auth';
 
 const TOKEN_REFRESH_THRESHOLD = 5 * 60 * 1000;
 const REFRESH_TOKEN_KEY = 'refreshToken';
@@ -42,7 +42,7 @@ const refreshAccessToken = async (): Promise<string | null> => {
   if (!refreshToken) return null;
 
   try {
-    const response = await authControllerRefresh({ refreshToken });
+    const response = await refresh({ refreshToken });
     return response.accessToken;
   } catch (error) {
     console.error('Error refreshing token:', error);

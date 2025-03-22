@@ -1,6 +1,6 @@
 import { User } from '@entities/user.entity';
 import { Body, Controller, Headers, Post, Req, UnauthorizedException } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiTags, ApiBearerAuth } from '@nestjs/swagger';
 import { SwaggerRoute } from '@shared/decorators/swagger.decorator';
 import { CreateUserDto } from '@shared/dto';
 import { Request } from 'express';
@@ -52,6 +52,7 @@ export class AuthController {
 	}
 
 	@Post('logout')
+	@ApiBearerAuth('JWT')
 	@SwaggerRoute({
 		summary: 'Logout from the current session',
 		responseType: LogoutResponseDto,

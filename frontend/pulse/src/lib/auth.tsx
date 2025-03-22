@@ -2,14 +2,14 @@
 
 import { createContext, useContext, useState, useEffect, useCallback } from "react"
 import { useRouter } from "next/navigation"
-import { authControllerRefresh } from "@/api/generated/auth/auth"
 import { jwtDecode } from "jwt-decode"
+import { useRefresh } from "@/api/generated/auth/auth"
 
 type AuthContextType = {
   accessToken: string | null
   setTokens: (access: string, refresh: string) => void
   logout: () => void
-  refreshAccessToken: () => Promise<string | null>
+  refreshAccessToken: () => Promise<void>
   isTokenExpired: () => boolean
 }
 
@@ -22,24 +22,34 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
 const REFRESH_TOKEN_KEY = "refreshToken"
 const ACCESS_TOKEN_KEY = "accessToken"
+// Token will be refreshed when less than this amount of time remains (5 minutes)
 const TOKEN_REFRESH_THRESHOLD = 5 * 60 * 1000 
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [accessToken, setAccessToken] = useState<string | null>(null)
+  const storedRefreshToken = localStorage.getItem(REFRESH_TOKEN_KEY)
+  const storedAccessToken = localStorage.getItem(ACCESS_TOKEN_KEY)
   const router = useRouter()
 
-  // Check for existing token on initialization
+  const { mutateAsync: refreshToken } = useRefresh({
+    mutation: {
+      onSuccess: (data) => {
+      setAccessToken(data.accessToken)
+      localStorage.setItem(ACCESS_TOKEN_KEY, data.accessToken)
+      },
+      onError: (error) => {
+        console.error("Error refreshing token:", error)
+        logout()
+      }
+    }
+  })
+
   useEffect(() => {
     const initializeAuth = async () => {
-      // First check if we have a stored access token
-      const storedAccessToken = localStorage.getItem(ACCESS_TOKEN_KEY)
-      
       if (storedAccessToken) {
-        // Check if the stored token is valid and not expired
         try {
           const decodedToken = jwtDecode<JwtPayload>(storedAccessToken)
           const expirationTime = decodedToken.exp * 1000
-          
           if (Date.now() < expirationTime) {
             setAccessToken(storedAccessToken)
             return
@@ -48,18 +58,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           console.error("Error with stored access token:", error)
         }
       }
-      
-      // If we have a refresh token but no valid access token, try to refresh
-      const storedRefreshToken = localStorage.getItem(REFRESH_TOKEN_KEY)
       if (storedRefreshToken) {
-        try {
-          const newToken = await refreshAccessToken()
-          if (!newToken) {
-            logout()
-          }
-        } catch (error) {
-          logout()
-        }
+        await refreshToken({ data: { refreshToken: storedRefreshToken } })
       }
     }
 
@@ -86,7 +86,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     try {
       const decodedToken = jwtDecode<JwtPayload>(token)
       const expirationTime = decodedToken.exp * 1000 // Convert to milliseconds
-      
       return Date.now() >= expirationTime - TOKEN_REFRESH_THRESHOLD
     } catch (error) {
       console.error("Error decoding token:", error)
@@ -94,28 +93,18 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   }, [accessToken])
 
-  const refreshAccessToken = useCallback(async (): Promise<string | null> => {
-    const refreshToken = localStorage.getItem(REFRESH_TOKEN_KEY)
-    if (!refreshToken) return null
-
-    try {
-      const response = await authControllerRefresh({ refreshToken })
-      const newAccessToken = response.accessToken
-      setAccessToken(newAccessToken)
-      localStorage.setItem(ACCESS_TOKEN_KEY, newAccessToken)
-      return newAccessToken
-    } catch (error) {
-      console.error("Error refreshing token:", error)
-      return null
+  const refreshAccessToken = async () => {
+    if (storedRefreshToken) {
+      await refreshToken({ data: { refreshToken: storedRefreshToken } })
     }
-  }, [])
+  }
 
   return (
     <AuthContext.Provider value={{ 
       accessToken, 
       setTokens, 
-      logout, 
       refreshAccessToken,
+      logout, 
       isTokenExpired
     }}>
       {children}

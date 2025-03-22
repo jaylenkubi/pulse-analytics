@@ -71,7 +71,7 @@ export function createGenericController<T>(path: string) {
       return this.service.getById(id);
     }
 
-    @Get()
+    @Get('all')
     @CacheTTL(300000)
     @SwaggerRoute({
       summary: `Get all ${entityName}s`,
@@ -85,8 +85,20 @@ export function createGenericController<T>(path: string) {
       }
       return this.service.getAll();
     }
+    
+    @Get('query')
+    @CacheTTL(300000)
+    @SwaggerRoute({
+      summary: `Get by query ${entityName}s`,
+      operationId: `getByQuery${entityName}s`,
+      responseType: ResponseDtoArray,
+      description: `Return ${entityName}s by query`
+    })
+    getByQuery(@Query() query?: FindManyOptions<T>): Promise<T[]> {
+      return this.service.getByQuery(query);
+    }
 
-    @Put('/:id')
+    @Put('update/:id')
     @UseInterceptors(CacheInvalidationInterceptor)
     @InvalidateCache({ entity: path })
     @SwaggerRoute({
@@ -100,7 +112,7 @@ export function createGenericController<T>(path: string) {
       return this.service.update(id, data);
     }
 
-    @Delete('/:id')
+    @Delete('delete/:id')
     @UseInterceptors(CacheInvalidationInterceptor)
     @InvalidateCache({ entity: path })
     @SwaggerRoute({

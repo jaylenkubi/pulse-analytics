@@ -12,7 +12,6 @@ export default function Layout({ children }: LayoutProps) {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const router = useRouter();
   
-  // Define auth pages that should not have the sidebar and header
   const isAuthPage = ['/login', '/signup'].includes(router.pathname);
 
   if (isAuthPage) {

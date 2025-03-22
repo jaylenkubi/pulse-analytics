@@ -16,6 +16,11 @@ interface JwtPayload {
 }
 
 export interface SignInResponse {
+  user: {
+    id: string;
+    email: string;
+    roles: string;
+  };
   accessToken: string;
   refreshToken: string;
 }
@@ -34,13 +39,13 @@ export class AuthService {
 
   private async createSession(user: User, req: Request): Promise<Session> {
     const expiresAt = new Date();
-    expiresAt.setDate(expiresAt.getDate() + 1);
+    expiresAt.setDate(expiresAt.getDate() + 1); //todo: change to 7 days
 
     const session = await this.sessionService.create({
       userId: user.id,
       ipAddress: req.ip,
       userAgent: req.headers['user-agent'],
-      expiresAt,
+      expiresAt, 
       isValid: true
     });
 
@@ -58,11 +63,11 @@ export class AuthService {
 
     const [accessToken, refreshToken] = await Promise.all([
       this.jwtService.signAsync(payload, {
-        expiresIn: '1m', //todo: change to 15m
+        expiresIn: '15m', //todo: change to 15m
         secret: process.env.JWT_SECRET,
       }),
       this.jwtService.signAsync(payload, {
-        expiresIn: '1d', //todo: change to 7d
+        expiresIn: '7d', //todo: change to 7d
         secret: process.env.JWT_REFRESH_SECRET,
       }),
     ]);
@@ -129,7 +134,7 @@ export class AuthService {
       await this.sessionService.update(session.id, { token: tokens.refreshToken });
 
       this.logger.log(`Successful login for user: ${email} from IP ${req.ip}`);
-      return tokens;
+      return { ...tokens, user: { id, email, roles } };
     } catch (error) {
       if (error instanceof UnauthorizedException) {
         throw error;

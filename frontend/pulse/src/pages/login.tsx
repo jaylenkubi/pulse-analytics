@@ -1,12 +1,12 @@
-import { useState } from "react";
+'use client'
+
 import { useRouter } from "next/router";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Alert, AlertDescription } from "@/components/ui/alert";
 import Logo from "@/components/Logo";
-import { useAuthControllerLogin } from "@/api/generated/auth/auth";
+import { useLogin } from "@/api/generated/auth/auth";
 import { useAuth } from "@/lib/auth";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -19,23 +19,22 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { useGetByQueryWebsiteAccesss } from "@/api/generated/website-access/website-access";
 
-// Define the form schema with validation
 const loginFormSchema = z.object({
   email: z.string().email({ message: "Please enter a valid email address" }),
   password: z.string().min(1, { message: "Password is required" }),
 });
 
-// Define the form values type
 type LoginFormValues = z.infer<typeof loginFormSchema>;
 
 export default function LoginPage() {
   const router = useRouter();
 
   const { setTokens } = useAuth();
-  const { mutate: login, isPending } = useAuthControllerLogin();
+  const { mutate: login, isPending } = useLogin();
+  // const { data: websiteAccess } = useGetByQueryUserss();
 
-  // Initialize the form with validation
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(loginFormSchema),
     defaultValues: {

@@ -16,20 +16,26 @@ import type {
   UseQueryResult,
 } from '@tanstack/react-query';
 import type {
-  CreateSessions201,
-  GetAllSessionss200Item,
-  GetSessionsById200,
-  UpdateSessions200,
+  CreateSessionDto,
+  ResponseDtoArray,
+  SessionResponseDto,
+  UpdateSessionDto,
 } from '.././models';
 import { customInstance } from '../../axios-client';
 
 /**
+ * The Sessions has been successfully created
  * @summary Create Sessions
  */
-export const createSessions = (signal?: AbortSignal) => {
-  return customInstance<CreateSessions201>({
+export const createSessions = (
+  createSessionDto: CreateSessionDto,
+  signal?: AbortSignal,
+) => {
+  return customInstance<SessionResponseDto>({
     url: `/sessions`,
     method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    data: createSessionDto,
     signal,
   });
 };
@@ -41,13 +47,13 @@ export const getCreateSessionsMutationOptions = <
   mutation?: UseMutationOptions<
     Awaited<ReturnType<typeof createSessions>>,
     TError,
-    void,
+    { data: CreateSessionDto },
     TContext
   >;
 }): UseMutationOptions<
   Awaited<ReturnType<typeof createSessions>>,
   TError,
-  void,
+  { data: CreateSessionDto },
   TContext
 > => {
   const mutationKey = ['createSessions'];
@@ -61,9 +67,11 @@ export const getCreateSessionsMutationOptions = <
 
   const mutationFn: MutationFunction<
     Awaited<ReturnType<typeof createSessions>>,
-    void
-  > = () => {
-    return createSessions();
+    { data: CreateSessionDto }
+  > = (props) => {
+    const { data } = props ?? {};
+
+    return createSessions(data);
   };
 
   return { mutationFn, ...mutationOptions };
@@ -72,7 +80,7 @@ export const getCreateSessionsMutationOptions = <
 export type CreateSessionsMutationResult = NonNullable<
   Awaited<ReturnType<typeof createSessions>>
 >;
-
+export type CreateSessionsMutationBody = CreateSessionDto;
 export type CreateSessionsMutationError = unknown;
 
 /**
@@ -85,13 +93,13 @@ export const useCreateSessions = <
   mutation?: UseMutationOptions<
     Awaited<ReturnType<typeof createSessions>>,
     TError,
-    void,
+    { data: CreateSessionDto },
     TContext
   >;
 }): UseMutationResult<
   Awaited<ReturnType<typeof createSessions>>,
   TError,
-  void,
+  { data: CreateSessionDto },
   TContext
 > => {
   const mutationOptions = getCreateSessionsMutationOptions(options);
@@ -99,80 +107,11 @@ export const useCreateSessions = <
   return useMutation(mutationOptions);
 };
 /**
- * @summary Get all Sessionss
- */
-export const getAllSessionss = (signal?: AbortSignal) => {
-  return customInstance<GetAllSessionss200Item[]>({
-    url: `/sessions`,
-    method: 'GET',
-    signal,
-  });
-};
-
-export const getGetAllSessionssQueryKey = () => {
-  return [`/sessions`] as const;
-};
-
-export const getGetAllSessionssQueryOptions = <
-  TData = Awaited<ReturnType<typeof getAllSessionss>>,
-  TError = unknown,
->(options?: {
-  query?: UseQueryOptions<
-    Awaited<ReturnType<typeof getAllSessionss>>,
-    TError,
-    TData
-  >;
-}) => {
-  const { query: queryOptions } = options ?? {};
-
-  const queryKey = queryOptions?.queryKey ?? getGetAllSessionssQueryKey();
-
-  const queryFn: QueryFunction<Awaited<ReturnType<typeof getAllSessionss>>> = ({
-    signal,
-  }) => getAllSessionss(signal);
-
-  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
-    Awaited<ReturnType<typeof getAllSessionss>>,
-    TError,
-    TData
-  > & { queryKey: QueryKey };
-};
-
-export type GetAllSessionssQueryResult = NonNullable<
-  Awaited<ReturnType<typeof getAllSessionss>>
->;
-export type GetAllSessionssQueryError = unknown;
-
-/**
- * @summary Get all Sessionss
- */
-
-export function useGetAllSessionss<
-  TData = Awaited<ReturnType<typeof getAllSessionss>>,
-  TError = unknown,
->(options?: {
-  query?: UseQueryOptions<
-    Awaited<ReturnType<typeof getAllSessionss>>,
-    TError,
-    TData
-  >;
-}): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
-  const queryOptions = getGetAllSessionssQueryOptions(options);
-
-  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
-    queryKey: QueryKey;
-  };
-
-  query.queryKey = queryOptions.queryKey;
-
-  return query;
-}
-
-/**
+ * Return the Sessions with the specified ID
  * @summary Get Sessions by ID
  */
 export const getSessionsById = (id: string, signal?: AbortSignal) => {
-  return customInstance<GetSessionsById200>({
+  return customInstance<SessionResponseDto>({
     url: `/sessions/${id}`,
     method: 'GET',
     signal,
@@ -250,12 +189,160 @@ export function useGetSessionsById<
 }
 
 /**
+ * Return all Sessionss
+ * @summary Get all Sessionss
+ */
+export const getAllSessionss = (signal?: AbortSignal) => {
+  return customInstance<ResponseDtoArray>({
+    url: `/sessions/all`,
+    method: 'GET',
+    signal,
+  });
+};
+
+export const getGetAllSessionssQueryKey = () => {
+  return [`/sessions/all`] as const;
+};
+
+export const getGetAllSessionssQueryOptions = <
+  TData = Awaited<ReturnType<typeof getAllSessionss>>,
+  TError = unknown,
+>(options?: {
+  query?: UseQueryOptions<
+    Awaited<ReturnType<typeof getAllSessionss>>,
+    TError,
+    TData
+  >;
+}) => {
+  const { query: queryOptions } = options ?? {};
+
+  const queryKey = queryOptions?.queryKey ?? getGetAllSessionssQueryKey();
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getAllSessionss>>> = ({
+    signal,
+  }) => getAllSessionss(signal);
+
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof getAllSessionss>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
+
+export type GetAllSessionssQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getAllSessionss>>
+>;
+export type GetAllSessionssQueryError = unknown;
+
+/**
+ * @summary Get all Sessionss
+ */
+
+export function useGetAllSessionss<
+  TData = Awaited<ReturnType<typeof getAllSessionss>>,
+  TError = unknown,
+>(options?: {
+  query?: UseQueryOptions<
+    Awaited<ReturnType<typeof getAllSessionss>>,
+    TError,
+    TData
+  >;
+}): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getGetAllSessionssQueryOptions(options);
+
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: QueryKey;
+  };
+
+  query.queryKey = queryOptions.queryKey;
+
+  return query;
+}
+
+/**
+ * Return Sessionss by query
+ * @summary Get by query Sessionss
+ */
+export const getByQuerySessionss = (signal?: AbortSignal) => {
+  return customInstance<ResponseDtoArray>({
+    url: `/sessions/query`,
+    method: 'GET',
+    signal,
+  });
+};
+
+export const getGetByQuerySessionssQueryKey = () => {
+  return [`/sessions/query`] as const;
+};
+
+export const getGetByQuerySessionssQueryOptions = <
+  TData = Awaited<ReturnType<typeof getByQuerySessionss>>,
+  TError = unknown,
+>(options?: {
+  query?: UseQueryOptions<
+    Awaited<ReturnType<typeof getByQuerySessionss>>,
+    TError,
+    TData
+  >;
+}) => {
+  const { query: queryOptions } = options ?? {};
+
+  const queryKey = queryOptions?.queryKey ?? getGetByQuerySessionssQueryKey();
+
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof getByQuerySessionss>>
+  > = ({ signal }) => getByQuerySessionss(signal);
+
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof getByQuerySessionss>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
+
+export type GetByQuerySessionssQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getByQuerySessionss>>
+>;
+export type GetByQuerySessionssQueryError = unknown;
+
+/**
+ * @summary Get by query Sessionss
+ */
+
+export function useGetByQuerySessionss<
+  TData = Awaited<ReturnType<typeof getByQuerySessionss>>,
+  TError = unknown,
+>(options?: {
+  query?: UseQueryOptions<
+    Awaited<ReturnType<typeof getByQuerySessionss>>,
+    TError,
+    TData
+  >;
+}): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getGetByQuerySessionssQueryOptions(options);
+
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: QueryKey;
+  };
+
+  query.queryKey = queryOptions.queryKey;
+
+  return query;
+}
+
+/**
+ * Update the Sessions with the specified ID
  * @summary Update Sessions
  */
-export const updateSessions = (id: string) => {
-  return customInstance<UpdateSessions200>({
-    url: `/sessions/${id}`,
+export const updateSessions = (
+  id: string,
+  updateSessionDto: UpdateSessionDto,
+) => {
+  return customInstance<SessionResponseDto>({
+    url: `/sessions/update/${id}`,
     method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    data: updateSessionDto,
   });
 };
 
@@ -266,13 +353,13 @@ export const getUpdateSessionsMutationOptions = <
   mutation?: UseMutationOptions<
     Awaited<ReturnType<typeof updateSessions>>,
     TError,
-    { id: string },
+    { id: string; data: UpdateSessionDto },
     TContext
   >;
 }): UseMutationOptions<
   Awaited<ReturnType<typeof updateSessions>>,
   TError,
-  { id: string },
+  { id: string; data: UpdateSessionDto },
   TContext
 > => {
   const mutationKey = ['updateSessions'];
@@ -286,11 +373,11 @@ export const getUpdateSessionsMutationOptions = <
 
   const mutationFn: MutationFunction<
     Awaited<ReturnType<typeof updateSessions>>,
-    { id: string }
+    { id: string; data: UpdateSessionDto }
   > = (props) => {
-    const { id } = props ?? {};
+    const { id, data } = props ?? {};
 
-    return updateSessions(id);
+    return updateSessions(id, data);
   };
 
   return { mutationFn, ...mutationOptions };
@@ -299,7 +386,7 @@ export const getUpdateSessionsMutationOptions = <
 export type UpdateSessionsMutationResult = NonNullable<
   Awaited<ReturnType<typeof updateSessions>>
 >;
-
+export type UpdateSessionsMutationBody = UpdateSessionDto;
 export type UpdateSessionsMutationError = unknown;
 
 /**
@@ -312,13 +399,13 @@ export const useUpdateSessions = <
   mutation?: UseMutationOptions<
     Awaited<ReturnType<typeof updateSessions>>,
     TError,
-    { id: string },
+    { id: string; data: UpdateSessionDto },
     TContext
   >;
 }): UseMutationResult<
   Awaited<ReturnType<typeof updateSessions>>,
   TError,
-  { id: string },
+  { id: string; data: UpdateSessionDto },
   TContext
 > => {
   const mutationOptions = getUpdateSessionsMutationOptions(options);
@@ -326,10 +413,14 @@ export const useUpdateSessions = <
   return useMutation(mutationOptions);
 };
 /**
+ * Delete the Sessions with the specified ID
  * @summary Delete Sessions
  */
 export const deleteSessions = (id: string) => {
-  return customInstance<boolean>({ url: `/sessions/${id}`, method: 'DELETE' });
+  return customInstance<boolean>({
+    url: `/sessions/delete/${id}`,
+    method: 'DELETE',
+  });
 };
 
 export const getDeleteSessionsMutationOptions = <

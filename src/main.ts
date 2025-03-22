@@ -34,6 +34,18 @@ async function bootstrap() {
     .setTitle('Pulse Analytics')
     .setDescription('Pulse Analytics API')
     .setVersion('1.0')
+    .addSecurityRequirements('JWT')
+    .addBearerAuth(
+      {
+        type: 'http',
+        scheme: 'bearer',
+        bearerFormat: 'JWT',
+        name: 'Authorization',
+        description: 'Enter JWT token',
+        in: 'header',
+      },
+      'JWT', // This name is used as a key to reference this security scheme
+    )
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);

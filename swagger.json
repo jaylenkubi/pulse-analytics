@@ -32,27 +32,6 @@
         "tags": [
           "Users"
         ]
-      },
-      "get": {
-        "description": "Return all Userss",
-        "operationId": "getAllUserss",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Return all Userss",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ResponseDtoArray"
-                }
-              }
-            }
-          }
-        },
-        "summary": "Get all Userss",
-        "tags": [
-          "Users"
-        ]
       }
     },
     "/users/{id}": {
@@ -85,7 +64,55 @@
         "tags": [
           "Users"
         ]
-      },
+      }
+    },
+    "/users/all": {
+      "get": {
+        "description": "Return all Userss",
+        "operationId": "getAllUserss",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Return all Userss",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseDtoArray"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Get all Userss",
+        "tags": [
+          "Users"
+        ]
+      }
+    },
+    "/users/query": {
+      "get": {
+        "description": "Return Userss by query",
+        "operationId": "getByQueryUserss",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Return Userss by query",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseDtoArray"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Get by query Userss",
+        "tags": [
+          "Users"
+        ]
+      }
+    },
+    "/users/update/{id}": {
       "put": {
         "description": "Update the Users with the specified ID",
         "operationId": "updateUsers",
@@ -125,7 +152,9 @@
         "tags": [
           "Users"
         ]
-      },
+      }
+    },
+    "/users/delete/{id}": {
       "delete": {
         "description": "Delete the Users with the specified ID",
         "operationId": "deleteUsers",
@@ -188,27 +217,6 @@
         "tags": [
           "Sessions"
         ]
-      },
-      "get": {
-        "description": "Return all Sessionss",
-        "operationId": "getAllSessionss",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Return all Sessionss",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ResponseDtoArray"
-                }
-              }
-            }
-          }
-        },
-        "summary": "Get all Sessionss",
-        "tags": [
-          "Sessions"
-        ]
       }
     },
     "/sessions/{id}": {
@@ -241,7 +249,55 @@
         "tags": [
           "Sessions"
         ]
-      },
+      }
+    },
+    "/sessions/all": {
+      "get": {
+        "description": "Return all Sessionss",
+        "operationId": "getAllSessionss",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Return all Sessionss",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseDtoArray"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Get all Sessionss",
+        "tags": [
+          "Sessions"
+        ]
+      }
+    },
+    "/sessions/query": {
+      "get": {
+        "description": "Return Sessionss by query",
+        "operationId": "getByQuerySessionss",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Return Sessionss by query",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseDtoArray"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Get by query Sessionss",
+        "tags": [
+          "Sessions"
+        ]
+      }
+    },
+    "/sessions/update/{id}": {
       "put": {
         "description": "Update the Sessions with the specified ID",
         "operationId": "updateSessions",
@@ -281,7 +337,9 @@
         "tags": [
           "Sessions"
         ]
-      },
+      }
+    },
+    "/sessions/delete/{id}": {
       "delete": {
         "description": "Delete the Sessions with the specified ID",
         "operationId": "deleteSessions",
@@ -438,6 +496,11 @@
             }
           }
         },
+        "security": [
+          {
+            "JWT": []
+          }
+        ],
         "summary": "Logout from the current session",
         "tags": [
           "auth"
@@ -798,7 +861,8 @@
     },
     "/features": {
       "post": {
-        "operationId": "FeatureController_createFeature",
+        "description": "Creates a new feature in the system. Admin access required.",
+        "operationId": "createFeature",
         "parameters": [],
         "requestBody": {
           "required": true,
@@ -812,29 +876,60 @@
         },
         "responses": {
           "201": {
-            "description": ""
+            "description": "Creates a new feature in the system. Admin access required.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Feature"
+                }
+              }
+            }
           }
         },
+        "security": [
+          {
+            "JWT": []
+          }
+        ],
+        "summary": "Create a new feature",
         "tags": [
-          "Feature"
+          "Features"
         ]
       },
       "get": {
-        "operationId": "FeatureController_getAllFeatures",
+        "description": "Retrieves all features in the system. Admin access required.",
+        "operationId": "getAllFeatures",
         "parameters": [],
         "responses": {
           "200": {
-            "description": ""
+            "description": "Retrieves all features in the system. Admin access required.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Feature"
+                  }
+                }
+              }
+            }
           }
         },
+        "security": [
+          {
+            "JWT": []
+          }
+        ],
+        "summary": "Get all features",
         "tags": [
-          "Feature"
+          "Features"
         ]
       }
     },
     "/features/{name}": {
       "get": {
-        "operationId": "FeatureController_getFeatureByName",
+        "description": "Retrieves a feature by its name. Admin access required.",
+        "operationId": "getFeatureByName",
         "parameters": [
           {
             "name": "name",
@@ -847,15 +942,29 @@
         ],
         "responses": {
           "200": {
-            "description": ""
+            "description": "Retrieves a feature by its name. Admin access required.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Feature"
+                }
+              }
+            }
           }
         },
+        "security": [
+          {
+            "JWT": []
+          }
+        ],
+        "summary": "Get a feature by name",
         "tags": [
-          "Feature"
+          "Features"
         ]
       },
       "put": {
-        "operationId": "FeatureController_updateFeature",
+        "description": "Updates an existing feature by name. Admin access required.",
+        "operationId": "updateFeature",
         "parameters": [
           {
             "name": "name",
@@ -878,15 +987,29 @@
         },
         "responses": {
           "200": {
-            "description": ""
+            "description": "Updates an existing feature by name. Admin access required.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Feature"
+                }
+              }
+            }
           }
         },
+        "security": [
+          {
+            "JWT": []
+          }
+        ],
+        "summary": "Update a feature",
         "tags": [
-          "Feature"
+          "Features"
         ]
       },
       "delete": {
-        "operationId": "FeatureController_deleteFeature",
+        "description": "Deletes a feature by name. Admin access required.",
+        "operationId": "deleteFeature",
         "parameters": [
           {
             "name": "name",
@@ -898,18 +1021,25 @@
           }
         ],
         "responses": {
-          "200": {
-            "description": ""
+          "204": {
+            "description": "Deletes a feature by name. Admin access required."
           }
         },
+        "security": [
+          {
+            "JWT": []
+          }
+        ],
+        "summary": "Delete a feature",
         "tags": [
-          "Feature"
+          "Features"
         ]
       }
     },
     "/features/website": {
       "post": {
-        "operationId": "FeatureController_enableFeatureForWebsite",
+        "description": "Enables and configures a feature for a specific website. Admin or website owner access required.",
+        "operationId": "enableFeatureForWebsite",
         "parameters": [],
         "requestBody": {
           "required": true,
@@ -923,17 +1053,31 @@
         },
         "responses": {
           "201": {
-            "description": ""
+            "description": "Enables and configures a feature for a specific website. Admin or website owner access required.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WebsiteFeature"
+                }
+              }
+            }
           }
         },
+        "security": [
+          {
+            "JWT": []
+          }
+        ],
+        "summary": "Enable/Configure a feature for a website",
         "tags": [
-          "Feature"
+          "Features"
         ]
       }
     },
     "/features/website/{websiteId}": {
       "get": {
-        "operationId": "FeatureController_getWebsiteFeatures",
+        "description": "Retrieves all features configured for a specific website. Admin or website owner access required.",
+        "operationId": "getWebsiteFeatures",
         "parameters": [
           {
             "name": "websiteId",
@@ -946,17 +1090,34 @@
         ],
         "responses": {
           "200": {
-            "description": ""
+            "description": "Retrieves all features configured for a specific website. Admin or website owner access required.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/WebsiteFeature"
+                  }
+                }
+              }
+            }
           }
         },
+        "security": [
+          {
+            "JWT": []
+          }
+        ],
+        "summary": "Get features for a website",
         "tags": [
-          "Feature"
+          "Features"
         ]
       }
     },
     "/features/access-level": {
       "post": {
-        "operationId": "FeatureController_setFeatureAccessLevel",
+        "description": "Sets permissions for a feature based on access level. Admin or website owner access required.",
+        "operationId": "setFeatureAccessLevel",
         "parameters": [],
         "requestBody": {
           "required": true,
@@ -970,17 +1131,31 @@
         },
         "responses": {
           "201": {
-            "description": ""
+            "description": "Sets permissions for a feature based on access level. Admin or website owner access required.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccessLevelFeature"
+                }
+              }
+            }
           }
         },
+        "security": [
+          {
+            "JWT": []
+          }
+        ],
+        "summary": "Set access level permissions for a feature",
         "tags": [
-          "Feature"
+          "Features"
         ]
       }
     },
     "/features/access-level/{featureName}": {
       "get": {
-        "operationId": "FeatureController_getFeatureAccessLevels",
+        "description": "Retrieves all access level permissions for a specific feature. Admin or website owner access required.",
+        "operationId": "getFeatureAccessLevels",
         "parameters": [
           {
             "name": "featureName",
@@ -993,11 +1168,27 @@
         ],
         "responses": {
           "200": {
-            "description": ""
+            "description": "Retrieves all access level permissions for a specific feature. Admin or website owner access required.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AccessLevelFeature"
+                  }
+                }
+              }
+            }
           }
         },
+        "security": [
+          {
+            "JWT": []
+          }
+        ],
+        "summary": "Get access levels for a feature",
         "tags": [
-          "Feature"
+          "Features"
         ]
       }
     },
@@ -1065,27 +1256,6 @@
         "tags": [
           "Websites"
         ]
-      },
-      "get": {
-        "description": "Return all Websitess",
-        "operationId": "getAllWebsitess",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Return all Websitess",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ResponseDtoArray"
-                }
-              }
-            }
-          }
-        },
-        "summary": "Get all Websitess",
-        "tags": [
-          "Websites"
-        ]
       }
     },
     "/websites/{id}": {
@@ -1118,7 +1288,55 @@
         "tags": [
           "Websites"
         ]
-      },
+      }
+    },
+    "/websites/all": {
+      "get": {
+        "description": "Return all Websitess",
+        "operationId": "getAllWebsitess",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Return all Websitess",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseDtoArray"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Get all Websitess",
+        "tags": [
+          "Websites"
+        ]
+      }
+    },
+    "/websites/query": {
+      "get": {
+        "description": "Return Websitess by query",
+        "operationId": "getByQueryWebsitess",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Return Websitess by query",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseDtoArray"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Get by query Websitess",
+        "tags": [
+          "Websites"
+        ]
+      }
+    },
+    "/websites/update/{id}": {
       "put": {
         "description": "Update the Websites with the specified ID",
         "operationId": "updateWebsites",
@@ -1158,7 +1376,9 @@
         "tags": [
           "Websites"
         ]
-      },
+      }
+    },
+    "/websites/delete/{id}": {
       "delete": {
         "description": "Delete the Websites with the specified ID",
         "operationId": "deleteWebsites",
@@ -1221,27 +1441,6 @@
         "tags": [
           "Website-access"
         ]
-      },
-      "get": {
-        "description": "Return all Website-accesss",
-        "operationId": "getAllWebsite-accesss",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Return all Website-accesss",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ResponseDtoArray"
-                }
-              }
-            }
-          }
-        },
-        "summary": "Get all Website-accesss",
-        "tags": [
-          "Website-access"
-        ]
       }
     },
     "/website-access/{id}": {
@@ -1274,7 +1473,55 @@
         "tags": [
           "Website-access"
         ]
-      },
+      }
+    },
+    "/website-access/all": {
+      "get": {
+        "description": "Return all Website-accesss",
+        "operationId": "getAllWebsite-accesss",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Return all Website-accesss",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseDtoArray"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Get all Website-accesss",
+        "tags": [
+          "Website-access"
+        ]
+      }
+    },
+    "/website-access/query": {
+      "get": {
+        "description": "Return Website-accesss by query",
+        "operationId": "getByQueryWebsite-accesss",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Return Website-accesss by query",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseDtoArray"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Get by query Website-accesss",
+        "tags": [
+          "Website-access"
+        ]
+      }
+    },
+    "/website-access/update/{id}": {
       "put": {
         "description": "Update the Website-access with the specified ID",
         "operationId": "updateWebsite-access",
@@ -1314,7 +1561,9 @@
         "tags": [
           "Website-access"
         ]
-      },
+      }
+    },
+    "/website-access/delete/{id}": {
       "delete": {
         "description": "Delete the Website-access with the specified ID",
         "operationId": "deleteWebsite-access",
@@ -1356,6 +1605,16 @@
   "tags": [],
   "servers": [],
   "components": {
+    "securitySchemes": {
+      "JWT": {
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "type": "http",
+        "name": "Authorization",
+        "description": "Enter JWT token",
+        "in": "header"
+      }
+    },
     "schemas": {
       "CreateUserDto": {
         "type": "object",
@@ -1589,6 +1848,9 @@
       "SignInResponseDto": {
         "type": "object",
         "properties": {
+          "user": {
+            "type": "object"
+          },
           "accessToken": {
             "type": "string"
           },
@@ -1597,6 +1859,7 @@
           }
         },
         "required": [
+          "user",
           "accessToken",
           "refreshToken"
         ]
@@ -1637,19 +1900,308 @@
       },
       "CreateFeatureDto": {
         "type": "object",
-        "properties": {}
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Unique name identifier for the feature",
+            "example": "realtime-analytics"
+          },
+          "description": {
+            "type": "string",
+            "description": "Description of what the feature does",
+            "example": "Provides real-time analytics and visitor tracking"
+          },
+          "category": {
+            "type": "string",
+            "description": "Category the feature belongs to",
+            "example": "analytics",
+            "enum": [
+              "analytics",
+              "reporting",
+              "settings",
+              "user-management"
+            ]
+          },
+          "isGloballyAvailable": {
+            "type": "boolean",
+            "description": "Whether the feature is available to all websites by default",
+            "example": true,
+            "default": true
+          }
+        },
+        "required": [
+          "name",
+          "description",
+          "category"
+        ]
+      },
+      "Feature": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique identifier for the feature",
+            "example": "550e8400-e29b-41d4-a716-446655440000"
+          },
+          "name": {
+            "type": "string",
+            "description": "Unique name identifier for the feature",
+            "example": "realtime-analytics"
+          },
+          "description": {
+            "type": "string",
+            "description": "Description of what the feature does",
+            "example": "Provides real-time analytics and visitor tracking"
+          },
+          "category": {
+            "type": "string",
+            "description": "Category the feature belongs to",
+            "example": "analytics",
+            "enum": [
+              "analytics",
+              "reporting",
+              "settings",
+              "user-management"
+            ]
+          },
+          "isGloballyAvailable": {
+            "type": "boolean",
+            "description": "Whether the feature is available to all websites by default",
+            "example": true
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string",
+            "description": "Date when the feature was created",
+            "example": "2025-03-01T00:00:00Z"
+          },
+          "updatedAt": {
+            "format": "date-time",
+            "type": "string",
+            "description": "Date when the feature was last updated",
+            "example": "2025-03-01T00:00:00Z"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "description",
+          "category",
+          "isGloballyAvailable",
+          "createdAt",
+          "updatedAt"
+        ]
       },
       "UpdateFeatureDto": {
         "type": "object",
-        "properties": {}
+        "properties": {
+          "description": {
+            "type": "string",
+            "description": "Updated description of what the feature does",
+            "example": "Provides enhanced real-time analytics and visitor tracking"
+          },
+          "category": {
+            "type": "string",
+            "description": "Updated category the feature belongs to",
+            "example": "analytics",
+            "enum": [
+              "analytics",
+              "reporting",
+              "settings",
+              "user-management"
+            ]
+          },
+          "isGloballyAvailable": {
+            "type": "boolean",
+            "description": "Whether the feature is available to all websites by default",
+            "example": true
+          }
+        }
       },
       "WebsiteFeatureDto": {
         "type": "object",
+        "properties": {
+          "websiteId": {
+            "type": "string",
+            "description": "UUID of the website to enable the feature for",
+            "example": "550e8400-e29b-41d4-a716-446655440000"
+          },
+          "featureName": {
+            "type": "string",
+            "description": "Name of the feature to enable",
+            "example": "realtime-analytics"
+          },
+          "isEnabled": {
+            "type": "boolean",
+            "description": "Whether the feature is enabled for this website",
+            "example": true
+          },
+          "configuration": {
+            "type": "object",
+            "description": "Website-specific configuration for the feature",
+            "example": {
+              "refreshInterval": 30,
+              "maxDataPoints": 100,
+              "enableNotifications": true
+            }
+          }
+        },
+        "required": [
+          "websiteId",
+          "featureName",
+          "isEnabled"
+        ]
+      },
+      "Website": {
+        "type": "object",
         "properties": {}
+      },
+      "WebsiteFeature": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique identifier for the website feature relationship",
+            "example": "660e8400-e29b-41d4-a716-446655440000"
+          },
+          "website": {
+            "description": "The website this feature is enabled for",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Website"
+              }
+            ]
+          },
+          "feature": {
+            "description": "The feature that is enabled for the website",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Feature"
+              }
+            ]
+          },
+          "isEnabled": {
+            "type": "boolean",
+            "description": "Whether the feature is enabled for this website",
+            "example": true
+          },
+          "configuration": {
+            "type": "object",
+            "description": "Website-specific feature configuration",
+            "example": {
+              "refreshInterval": 30,
+              "maxDataPoints": 100,
+              "enableNotifications": true
+            }
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string",
+            "description": "Date when the feature was enabled for this website",
+            "example": "2025-03-01T00:00:00Z"
+          },
+          "updatedAt": {
+            "format": "date-time",
+            "type": "string",
+            "description": "Date when the website feature configuration was last updated",
+            "example": "2025-03-01T00:00:00Z"
+          }
+        },
+        "required": [
+          "id",
+          "website",
+          "feature",
+          "isEnabled",
+          "configuration",
+          "createdAt",
+          "updatedAt"
+        ]
       },
       "AccessLevelFeatureDto": {
         "type": "object",
-        "properties": {}
+        "properties": {
+          "featureName": {
+            "type": "string",
+            "description": "Name of the feature to set access level for",
+            "example": "realtime-analytics"
+          },
+          "accessLevel": {
+            "type": "string",
+            "description": "Access level to set permissions for",
+            "example": "ADMIN",
+            "enum": [
+              "owner",
+              "admin",
+              "analyst",
+              "viewer"
+            ]
+          },
+          "permissions": {
+            "type": "object",
+            "description": "Permission settings for this feature and access level",
+            "example": {
+              "canView": true,
+              "canEdit": true,
+              "canManage": false
+            }
+          }
+        },
+        "required": [
+          "featureName",
+          "accessLevel",
+          "permissions"
+        ]
+      },
+      "AccessLevelFeature": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique identifier for the access level feature relationship",
+            "example": "880e8400-e29b-41d4-a716-446655440000"
+          },
+          "accessLevel": {
+            "type": "string",
+            "description": "Access level for this feature permission set",
+            "example": "ADMIN",
+            "enum": [
+              "owner",
+              "admin",
+              "analyst",
+              "viewer"
+            ]
+          },
+          "feature": {
+            "description": "The feature these permissions apply to",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Feature"
+              }
+            ]
+          },
+          "permissions": {
+            "type": "object",
+            "description": "Permission settings for this feature and access level",
+            "example": {
+              "canView": true,
+              "canEdit": true,
+              "canManage": false
+            }
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string",
+            "description": "Date when this permission set was created",
+            "example": "2025-03-01T00:00:00Z"
+          }
+        },
+        "required": [
+          "id",
+          "accessLevel",
+          "feature",
+          "permissions",
+          "createdAt"
+        ]
       },
       "CreateEventDto": {
         "type": "object",
@@ -1972,5 +2524,10 @@
         ]
       }
     }
-  }
+  },
+  "security": [
+    {
+      "JWT": []
+    }
+  ]
 }
