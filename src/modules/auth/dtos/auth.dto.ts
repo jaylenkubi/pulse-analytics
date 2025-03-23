@@ -1,5 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsBoolean, IsEmail, IsObject, IsString } from "class-validator";
+import { UserResponseDto } from "@shared/dto/user/user-response.dto";
+import { IsEmail, IsString, ValidateNested } from "class-validator";
 
 export class LoginDto {
     @IsEmail()
@@ -24,13 +25,10 @@ export class RefreshTokenResponseDto {
 }
 
 export class SignInResponseDto {
-    @IsObject()
+    @ValidateNested()
     @ApiProperty()
-    user: {
-        id: string;
-        email: string;
-        roles: string;
-    };
+    user: UserResponseDto;
+
     @IsString()
     @ApiProperty()
     accessToken: string;

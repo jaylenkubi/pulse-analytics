@@ -76,13 +76,10 @@ export function createGenericController<T>(path: string) {
     @SwaggerRoute({
       summary: `Get all ${entityName}s`,
       operationId: `getAll${entityName}s`,
-      responseType: ResponseDtoArray,
+      responseType: [ResponseDtoArray],
       description: `Return all ${entityName}s`
     })
-    findAll(@Query() query?: FindManyOptions<T>): Promise<T[]> {
-      if (query) {
-        return this.service.getByQuery(query);
-      }
+    findAll(): Promise<T[]> {
       return this.service.getAll();
     }
     
@@ -91,10 +88,57 @@ export function createGenericController<T>(path: string) {
     @SwaggerRoute({
       summary: `Get by query ${entityName}s`,
       operationId: `getByQuery${entityName}s`,
-      responseType: ResponseDtoArray,
-      description: `Return ${entityName}s by query`
+      responseType: [ResponseDtoArray],
+      description: `Return ${entityName}s by query`,
+      query: {
+        where: { type: 'object', required: false },
+        order: { type: 'object', required: false },
+        take: { type: 'number', required: false },
+        skip: { type: 'number', required: false },
+        relations: { 
+          type: 'object', 
+          required: false, 
+          description: 'Object with relation names as keys and boolean values' 
+        }
+      }
     })
-    getByQuery(@Query() query?: FindManyOptions<T>): Promise<T[]> {
+    getByQuery(
+      @Query('where') where?: string,
+      @Query('order') order?: string,
+      @Query('take') take?: number,
+      @Query('skip') skip?: number,
+      @Query('relations') relations?: string
+    ): Promise<T[]> {
+      const query: FindManyOptions<T> = {};
+      if (where) {
+        try {
+          query.where = JSON.parse(where);
+        } catch (e) {
+          // Handle parsing error
+        }
+      }
+      if (order) {
+        try {
+          query.order = JSON.parse(order);
+        } catch (e) {
+          // Handle parsing error
+        }
+      }
+      if (take) query.take = take;
+      if (skip) query.skip = skip;
+      if (relations) {
+        try {
+          // Convert relations object with boolean values to array of relation names
+          // Example: { user: true, website: true } -> ['user', 'website']
+          const relationsObj = JSON.parse(relations);
+          query.relations = Object.entries(relationsObj)
+            .filter(([_, include]) => include === true)
+            .map(([relation]) => relation);
+        } catch (e) {
+          // Handle parsing error
+        }
+      }
+      
       return this.service.getByQuery(query);
     }
 

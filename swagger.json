@@ -77,7 +77,10 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ResponseDtoArray"
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ResponseDtoArray"
+                  }
                 }
               }
             }
@@ -93,14 +96,59 @@
       "get": {
         "description": "Return Userss by query",
         "operationId": "getByQueryUserss",
-        "parameters": [],
+        "parameters": [
+          {
+            "name": "where",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "object"
+            }
+          },
+          {
+            "name": "order",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "object"
+            }
+          },
+          {
+            "name": "take",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "skip",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "relations",
+            "required": false,
+            "in": "query",
+            "description": "Object with relation names as keys and boolean values",
+            "schema": {
+              "type": "object"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "Return Userss by query",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ResponseDtoArray"
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ResponseDtoArray"
+                  }
                 }
               }
             }
@@ -262,7 +310,10 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ResponseDtoArray"
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ResponseDtoArray"
+                  }
                 }
               }
             }
@@ -278,14 +329,59 @@
       "get": {
         "description": "Return Sessionss by query",
         "operationId": "getByQuerySessionss",
-        "parameters": [],
+        "parameters": [
+          {
+            "name": "where",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "object"
+            }
+          },
+          {
+            "name": "order",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "object"
+            }
+          },
+          {
+            "name": "take",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "skip",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "relations",
+            "required": false,
+            "in": "query",
+            "description": "Object with relation names as keys and boolean values",
+            "schema": {
+              "type": "object"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "Return Sessionss by query",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ResponseDtoArray"
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ResponseDtoArray"
+                  }
                 }
               }
             }
@@ -1301,7 +1397,10 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ResponseDtoArray"
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ResponseDtoArray"
+                  }
                 }
               }
             }
@@ -1317,14 +1416,59 @@
       "get": {
         "description": "Return Websitess by query",
         "operationId": "getByQueryWebsitess",
-        "parameters": [],
+        "parameters": [
+          {
+            "name": "where",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "object"
+            }
+          },
+          {
+            "name": "order",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "object"
+            }
+          },
+          {
+            "name": "take",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "skip",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "relations",
+            "required": false,
+            "in": "query",
+            "description": "Object with relation names as keys and boolean values",
+            "schema": {
+              "type": "object"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "Return Websitess by query",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ResponseDtoArray"
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ResponseDtoArray"
+                  }
                 }
               }
             }
@@ -1486,7 +1630,10 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ResponseDtoArray"
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ResponseDtoArray"
+                  }
                 }
               }
             }
@@ -1502,14 +1649,59 @@
       "get": {
         "description": "Return Website-accesss by query",
         "operationId": "getByQueryWebsite-accesss",
-        "parameters": [],
+        "parameters": [
+          {
+            "name": "where",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "object"
+            }
+          },
+          {
+            "name": "order",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "object"
+            }
+          },
+          {
+            "name": "take",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "skip",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "relations",
+            "required": false,
+            "in": "query",
+            "description": "Object with relation names as keys and boolean values",
+            "schema": {
+              "type": "object"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "Return Website-accesss by query",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ResponseDtoArray"
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ResponseDtoArray"
+                  }
                 }
               }
             }
@@ -1849,7 +2041,7 @@
         "type": "object",
         "properties": {
           "user": {
-            "type": "object"
+            "$ref": "#/components/schemas/UserResponseDto"
           },
           "accessToken": {
             "type": "string"

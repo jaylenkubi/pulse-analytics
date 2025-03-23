@@ -22,20 +22,29 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
 const REFRESH_TOKEN_KEY = "refreshToken"
 const ACCESS_TOKEN_KEY = "accessToken"
-// Token will be refreshed when less than this amount of time remains (5 minutes)
 const TOKEN_REFRESH_THRESHOLD = 5 * 60 * 1000 
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [accessToken, setAccessToken] = useState<string | null>(null)
-  const storedRefreshToken = localStorage.getItem(REFRESH_TOKEN_KEY)
-  const storedAccessToken = localStorage.getItem(ACCESS_TOKEN_KEY)
+  const [storedRefreshToken, setStoredRefreshToken] = useState<string | null>(null)
+  const [storedAccessToken, setStoredAccessToken] = useState<string | null>(null)
   const router = useRouter()
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      setStoredRefreshToken(localStorage.getItem(REFRESH_TOKEN_KEY))
+      setStoredAccessToken(localStorage.getItem(ACCESS_TOKEN_KEY))
+    }
+  }, [])
 
   const { mutateAsync: refreshToken } = useRefresh({
     mutation: {
       onSuccess: (data) => {
-      setAccessToken(data.accessToken)
-      localStorage.setItem(ACCESS_TOKEN_KEY, data.accessToken)
+        setAccessToken(data.accessToken)
+        setStoredAccessToken(data.accessToken)
+        if (typeof window !== 'undefined') {
+          localStorage.setItem(ACCESS_TOKEN_KEY, data.accessToken)
+        }
       },
       onError: (error) => {
         console.error("Error refreshing token:", error)
@@ -68,19 +77,27 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const setTokens = (access: string, refresh: string) => {
     setAccessToken(access)
-    localStorage.setItem(ACCESS_TOKEN_KEY, access)
-    localStorage.setItem(REFRESH_TOKEN_KEY, refresh)
+    setStoredAccessToken(access)
+    setStoredRefreshToken(refresh)
+    if (typeof window !== 'undefined') {
+      localStorage.setItem(ACCESS_TOKEN_KEY, access)
+      localStorage.setItem(REFRESH_TOKEN_KEY, refresh)
+    }
   }
 
   const logout = () => {
     setAccessToken(null)
-    localStorage.removeItem(ACCESS_TOKEN_KEY)
-    localStorage.removeItem(REFRESH_TOKEN_KEY)
+    setStoredRefreshToken(null)
+    setStoredAccessToken(null)
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem(ACCESS_TOKEN_KEY)
+      localStorage.removeItem(REFRESH_TOKEN_KEY)
+    }
     router.push("/login")
   }
 
   const isTokenExpired = useCallback(() => {
-    const token = accessToken || localStorage.getItem(ACCESS_TOKEN_KEY)
+    const token = accessToken || (typeof window !== 'undefined' ? localStorage.getItem(ACCESS_TOKEN_KEY) : null)
     if (!token) return true
     
     try {

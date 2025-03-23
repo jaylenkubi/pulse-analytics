@@ -19,7 +19,9 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { useGetByQueryWebsiteAccesss } from "@/api/generated/website-access/website-access";
+import { getGetByQueryWebsiteAccesssQueryKey, useGetByQueryWebsiteAccesss } from "@/api/generated/website-access/website-access";
+import { useUserStore } from "@/lib/stores/userStore";
+import { useEffect } from "react";
 
 const loginFormSchema = z.object({
   email: z.string().email({ message: "Please enter a valid email address" }),
@@ -30,10 +32,26 @@ type LoginFormValues = z.infer<typeof loginFormSchema>;
 
 export default function LoginPage() {
   const router = useRouter();
+  const { user, setUser } = useUserStore()
 
   const { setTokens } = useAuth();
   const { mutate: login, isPending } = useLogin();
-  // const { data: websiteAccess } = useGetByQueryUserss();
+  const { data: websiteAccessData, isLoading: websiteAccessLoading } = useGetByQueryWebsiteAccesss({
+    where: {
+      userId: user?.id,
+    },
+    relations: {
+      website: true,
+      user: true
+    }
+  }, {
+    query: {
+      queryKey: getGetByQueryWebsiteAccesssQueryKey(),
+      enabled: !!user?.id
+    }
+  });
+
+  const isLoading = isPending || websiteAccessLoading;
 
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(loginFormSchema),
@@ -43,11 +61,25 @@ export default function LoginPage() {
     },
   });
 
+
+  useEffect(() => {
+    if (websiteAccessData && websiteAccessData.length > 0) {
+      router.push("/");
+    } else {
+      router.push("/setup");
+    }
+  }, [websiteAccessData]);
+
   const onSubmit = (values: LoginFormValues) => {
     login(
       { data: { email: values.email, password: values.password } },
       {
         onSuccess: (data) => {
+          setUser({
+            id: data.user.id,
+            email: data.user.email,
+            role: data.user.roles
+          })
           setTokens(data.accessToken, data.refreshToken);
           router.push("/");
         },
@@ -113,12 +145,12 @@ export default function LoginPage() {
               />
             </CardContent>
             <CardFooter className="flex flex-col space-y-4">
-              <Button 
-                type="submit" 
+              <Button
+                type="submit"
                 className="w-full"
-                disabled={isPending}
+                disabled={isLoading}
               >
-                {isPending ? "Signing in..." : "Sign in"}
+                {isLoading ? "Signing in..." : "Sign in"}
               </Button>
               <p className="text-sm text-muted-foreground text-center">
                 Don't have an account?{" "}

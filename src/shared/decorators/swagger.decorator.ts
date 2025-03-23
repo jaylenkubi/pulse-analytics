@@ -1,14 +1,14 @@
 import { applyDecorators } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiBody, ApiQuery, ApiParam } from '@nestjs/swagger';
-import { Type } from '@nestjs/common';
 
 interface ParamOptions {
-  type: 'string' | 'number' | 'boolean';
+  type: 'string' | 'number' | 'boolean' | 'object' | 'array';
   format?: string;
   minimum?: number;
   maximum?: number;
   default?: any;
   required?: boolean;
+  description?: string;
 }
 
 interface SwaggerRouteOptions {

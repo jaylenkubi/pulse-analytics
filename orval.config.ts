@@ -1,6 +1,7 @@
 import { defineConfig } from 'orval';
 
-export default defineConfig({
+// Orval v6 configuration
+const config = {
   pulse: {
     input: './swagger.json',
     output: {
@@ -8,15 +9,24 @@ export default defineConfig({
       target: './frontend/pulse/src/api/generated/index.ts',
       schemas: './frontend/pulse/src/api/generated/models',
       client: 'react-query',
+      mock: false,
       override: {
+        useDates: true,
         mutator: {
           path: './frontend/pulse/src/api/axios-client.ts',
           name: 'customInstance',
         },
-        query: {
-          useQuery: true,
-        },
+        operations: {
+          GetByQuery: {
+            query: {
+              useQuery: true
+            }
+          }
+        }
       },
     },
   },
-});
+};
+
+// For Orval v6
+export = config;
