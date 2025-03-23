@@ -17,13 +17,13 @@ import type {
 } from '@tanstack/react-query';
 
 import type {
-  AccessLevelFeature,
   AccessLevelFeatureDto,
+  AccessLevelFeatureResponseDto,
   CreateFeatureDto,
-  Feature,
+  FeatureResponseDto,
   UpdateFeatureDto,
-  WebsiteFeature,
   WebsiteFeatureDto,
+  WebsiteFeatureResponseDto,
 } from '.././models';
 
 import { customInstance } from '../../axios-client';
@@ -36,7 +36,7 @@ export const createFeature = (
   createFeatureDto: CreateFeatureDto,
   signal?: AbortSignal,
 ) => {
-  return customInstance<Feature>({
+  return customInstance<FeatureResponseDto>({
     url: `/features`,
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -116,7 +116,11 @@ export const useCreateFeature = <
  * @summary Get all features
  */
 export const getAllFeatures = (signal?: AbortSignal) => {
-  return customInstance<Feature[]>({ url: `/features`, method: 'GET', signal });
+  return customInstance<FeatureResponseDto[]>({
+    url: `/features`,
+    method: 'GET',
+    signal,
+  });
 };
 
 export const getGetAllFeaturesQueryKey = () => {
@@ -186,7 +190,7 @@ export const getAllFeaturesByWebsiteId = (
   websiteId: string,
   signal?: AbortSignal,
 ) => {
-  return customInstance<Feature[]>({
+  return customInstance<FeatureResponseDto[]>({
     url: `/features/website/${websiteId}`,
     method: 'GET',
     signal,
@@ -272,7 +276,7 @@ export function useGetAllFeaturesByWebsiteId<
  * @summary Get a feature by name
  */
 export const getFeatureByName = (name: string, signal?: AbortSignal) => {
-  return customInstance<Feature>({
+  return customInstance<FeatureResponseDto>({
     url: `/features/name/${name}`,
     method: 'GET',
     signal,
@@ -357,7 +361,7 @@ export const updateFeature = (
   name: string,
   updateFeatureDto: UpdateFeatureDto,
 ) => {
-  return customInstance<Feature>({
+  return customInstance<FeatureResponseDto>({
     url: `/features/name/${name}`,
     method: 'PUT',
     headers: { 'Content-Type': 'application/json' },
@@ -516,7 +520,7 @@ export const enableFeatureForWebsite = (
   websiteFeatureDto: WebsiteFeatureDto,
   signal?: AbortSignal,
 ) => {
-  return customInstance<WebsiteFeature>({
+  return customInstance<WebsiteFeatureResponseDto>({
     url: `/features/website`,
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -596,7 +600,7 @@ export const useEnableFeatureForWebsite = <
  * @summary Get features for a website
  */
 export const getWebsiteFeatures = (websiteId: string, signal?: AbortSignal) => {
-  return customInstance<WebsiteFeature[]>({
+  return customInstance<WebsiteFeatureResponseDto[]>({
     url: `/features/website/${websiteId}/features`,
     method: 'GET',
     signal,
@@ -682,7 +686,7 @@ export const setFeatureAccessLevel = (
   accessLevelFeatureDto: AccessLevelFeatureDto,
   signal?: AbortSignal,
 ) => {
-  return customInstance<AccessLevelFeature>({
+  return customInstance<AccessLevelFeatureResponseDto>({
     url: `/features/access-level`,
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -765,7 +769,7 @@ export const getFeatureAccessLevels = (
   featureName: string,
   signal?: AbortSignal,
 ) => {
-  return customInstance<AccessLevelFeature[]>({
+  return customInstance<AccessLevelFeatureResponseDto[]>({
     url: `/features/access-level/${featureName}`,
     method: 'GET',
     signal,

@@ -976,7 +976,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Feature"
+                  "$ref": "#/components/schemas/FeatureResponseDto"
                 }
               }
             }
@@ -1004,7 +1004,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/Feature"
+                    "$ref": "#/components/schemas/FeatureResponseDto"
                   }
                 }
               }
@@ -1044,7 +1044,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/Feature"
+                    "$ref": "#/components/schemas/FeatureResponseDto"
                   }
                 }
               }
@@ -1082,7 +1082,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Feature"
+                  "$ref": "#/components/schemas/FeatureResponseDto"
                 }
               }
             }
@@ -1127,7 +1127,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Feature"
+                  "$ref": "#/components/schemas/FeatureResponseDto"
                 }
               }
             }
@@ -1193,7 +1193,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/WebsiteFeature"
+                  "$ref": "#/components/schemas/WebsiteFeatureResponseDto"
                 }
               }
             }
@@ -1232,7 +1232,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/WebsiteFeature"
+                    "$ref": "#/components/schemas/WebsiteFeatureResponseDto"
                   }
                 }
               }
@@ -1271,7 +1271,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/AccessLevelFeature"
+                  "$ref": "#/components/schemas/AccessLevelFeatureResponseDto"
                 }
               }
             }
@@ -1310,7 +1310,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/AccessLevelFeature"
+                    "$ref": "#/components/schemas/AccessLevelFeatureResponseDto"
                   }
                 }
               }
@@ -2190,25 +2190,13 @@
           "category"
         ]
       },
-      "Feature": {
+      "FeatureResponseDto": {
         "type": "object",
         "properties": {
           "id": {
             "type": "string",
-            "description": "Unique identifier",
-            "example": "660e8400-e29b-41d4-a716-446655440000"
-          },
-          "createdAt": {
-            "format": "date-time",
-            "type": "string",
-            "description": "Creation timestamp",
-            "example": "2025-03-01T00:00:00Z"
-          },
-          "updatedAt": {
-            "format": "date-time",
-            "type": "string",
-            "description": "Last update timestamp",
-            "example": "2025-03-01T00:00:00Z"
+            "description": "Unique identifier of the feature",
+            "example": "550e8400-e29b-41d4-a716-446655440000"
           },
           "name": {
             "type": "string",
@@ -2235,16 +2223,28 @@
             "type": "boolean",
             "description": "Whether the feature is available to all websites by default",
             "example": true
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string",
+            "description": "Creation timestamp",
+            "example": "2023-01-01T00:00:00.000Z"
+          },
+          "updatedAt": {
+            "format": "date-time",
+            "type": "string",
+            "description": "Last update timestamp",
+            "example": "2023-01-02T00:00:00.000Z"
           }
         },
         "required": [
           "id",
-          "createdAt",
-          "updatedAt",
           "name",
           "description",
           "category",
-          "isGloballyAvailable"
+          "isGloballyAvailable",
+          "createdAt",
+          "updatedAt"
         ]
       },
       "UpdateFeatureDto": {
@@ -2307,29 +2307,66 @@
           "isEnabled"
         ]
       },
-      "WebsiteFeature": {
+      "WebsiteFeatureResponseDto": {
         "type": "object",
         "properties": {
           "id": {
             "type": "string",
-            "description": "Unique identifier",
-            "example": "660e8400-e29b-41d4-a716-446655440000"
+            "description": "Unique identifier of the website feature relationship",
+            "example": "550e8400-e29b-41d4-a716-446655440000"
+          },
+          "websiteId": {
+            "type": "string",
+            "description": "UUID of the website",
+            "example": "550e8400-e29b-41d4-a716-446655440000"
+          },
+          "featureId": {
+            "type": "string",
+            "description": "ID of the feature",
+            "example": "550e8400-e29b-41d4-a716-446655440000"
+          },
+          "feature": {
+            "description": "Feature details",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/FeatureResponseDto"
+              }
+            ]
+          },
+          "isEnabled": {
+            "type": "boolean",
+            "description": "Whether the feature is enabled for this website",
+            "example": true
+          },
+          "configuration": {
+            "type": "object",
+            "description": "Website-specific configuration for the feature",
+            "example": {
+              "refreshInterval": 30,
+              "maxDataPoints": 100,
+              "enableNotifications": true
+            }
           },
           "createdAt": {
             "format": "date-time",
             "type": "string",
             "description": "Creation timestamp",
-            "example": "2025-03-01T00:00:00Z"
+            "example": "2023-01-01T00:00:00.000Z"
           },
           "updatedAt": {
             "format": "date-time",
             "type": "string",
             "description": "Last update timestamp",
-            "example": "2025-03-01T00:00:00Z"
+            "example": "2023-01-02T00:00:00.000Z"
           }
         },
         "required": [
           "id",
+          "websiteId",
+          "featureId",
+          "feature",
+          "isEnabled",
+          "configuration",
           "createdAt",
           "updatedAt"
         ]
@@ -2369,25 +2406,37 @@
           "permissions"
         ]
       },
-      "AccessLevelFeature": {
+      "AccessLevelFeatureResponseDto": {
         "type": "object",
         "properties": {
           "id": {
             "type": "string",
-            "description": "Unique identifier",
-            "example": "660e8400-e29b-41d4-a716-446655440000"
+            "description": "Unique identifier of the access level feature relationship",
+            "example": "550e8400-e29b-41d4-a716-446655440000"
           },
-          "createdAt": {
-            "format": "date-time",
+          "accessLevel": {
             "type": "string",
-            "description": "Date when this permission set was created",
-            "example": "2025-03-01T00:00:00Z"
+            "description": "Access level",
+            "example": "admin",
+            "enum": [
+              "owner",
+              "admin",
+              "analyst",
+              "viewer"
+            ]
           },
-          "updatedAt": {
-            "format": "date-time",
+          "featureId": {
             "type": "string",
-            "description": "Last update timestamp",
-            "example": "2025-03-01T00:00:00Z"
+            "description": "ID of the feature",
+            "example": "550e8400-e29b-41d4-a716-446655440000"
+          },
+          "feature": {
+            "description": "Feature details",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/FeatureResponseDto"
+              }
+            ]
           },
           "permissions": {
             "type": "object",
@@ -2397,13 +2446,28 @@
               "canEdit": true,
               "canManage": false
             }
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string",
+            "description": "Creation timestamp",
+            "example": "2023-01-01T00:00:00.000Z"
+          },
+          "updatedAt": {
+            "format": "date-time",
+            "type": "string",
+            "description": "Last update timestamp",
+            "example": "2023-01-02T00:00:00.000Z"
           }
         },
         "required": [
           "id",
+          "accessLevel",
+          "featureId",
+          "feature",
+          "permissions",
           "createdAt",
-          "updatedAt",
-          "permissions"
+          "updatedAt"
         ]
       },
       "CreateEventDto": {
