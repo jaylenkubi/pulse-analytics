@@ -1,9 +1,6 @@
 import { Body, Controller, Delete, Get, Param, Post, Put, UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { FeatureService } from './feature.service';
-import { Feature } from '../../database/entities/feature.entity';
-import { WebsiteFeature } from '../../database/entities/website-feature.entity';
-import { AccessLevelFeature } from '../../database/entities/access-level-feature.entity';
 import { CreateFeatureDto } from '../../shared/dto/feature/create-feature.dto';
 import { UpdateFeatureDto } from '../../shared/dto/feature/update-feature.dto';
 import { WebsiteFeatureDto } from '../../shared/dto/feature/website-feature.dto';
@@ -13,6 +10,9 @@ import { Role } from '@modules/auth/enums/roles.enum';
 import { RolesGuard } from '@modules/auth/guards/roles.guard';
 import { SwaggerRoute } from '../../shared/decorators/swagger.decorator';
 import { ApiTags, ApiBearerAuth } from '@nestjs/swagger';
+import { FeatureResponseDto } from '../../shared/dto/feature/feature-response.dto';
+import { WebsiteFeatureResponseDto } from '../../shared/dto/feature/website-feature-response.dto';
+import { AccessLevelFeatureResponseDto } from '../../shared/dto/feature/access-level-feature-response.dto';
 
 @ApiTags('Features')
 @ApiBearerAuth('JWT')
@@ -21,18 +21,17 @@ import { ApiTags, ApiBearerAuth } from '@nestjs/swagger';
 export class FeatureController {
     constructor(private readonly featureService: FeatureService) {}
 
-    // Global Feature Management (Admin only)
     @Post()
     @Roles(Role.ADMIN)
     @SwaggerRoute({
         summary: 'Create a new feature',
         operationId: 'createFeature',
         bodyType: CreateFeatureDto,
-        responseType: Feature,
+        responseType: FeatureResponseDto,
         status: 201,
         description: 'Creates a new feature in the system. Admin access required.'
     })
-    async createFeature(@Body() createFeatureDto: CreateFeatureDto): Promise<Feature> {
+    async createFeature(@Body() createFeatureDto: CreateFeatureDto): Promise<FeatureResponseDto> {
         return this.featureService.createFeature(createFeatureDto);
     }
 
@@ -41,10 +40,10 @@ export class FeatureController {
     @SwaggerRoute({
         summary: 'Get all features',
         operationId: 'getAllFeatures',
-        responseType: [Feature],
+        responseType: [FeatureResponseDto],
         description: 'Retrieves all features in the system. Admin access required.'
     })
-    async getAllFeatures(): Promise<Feature[]> {
+    async getAllFeatures(): Promise<FeatureResponseDto[]> {
         return this.featureService.getAllFeatures();
     }
     
@@ -53,7 +52,7 @@ export class FeatureController {
     @SwaggerRoute({
         summary: 'Get all features by websiteId',
         operationId: 'getAllFeaturesByWebsiteId',
-        responseType: [Feature],
+        responseType: [FeatureResponseDto],
         description: 'Retrieves all features for a specific website. Admin access required.',
         params: {
             websiteId: {
@@ -62,7 +61,7 @@ export class FeatureController {
             }
         }
     })
-    async getAllFeaturesByWebsiteId(@Param('websiteId') websiteId: string): Promise<Feature[]> {
+    async getAllFeaturesByWebsiteId(@Param('websiteId') websiteId: string): Promise<FeatureResponseDto[]> {
         return this.featureService.getAllFeaturesByWebsiteId(websiteId);
     }
 
@@ -71,7 +70,7 @@ export class FeatureController {
     @SwaggerRoute({
         summary: 'Get a feature by name',
         operationId: 'getFeatureByName',
-        responseType: Feature,
+        responseType: FeatureResponseDto,
         description: 'Retrieves a feature by its name. Admin access required.',
         params: {
             name: {
@@ -80,7 +79,7 @@ export class FeatureController {
             }
         }
     })
-    async getFeatureByName(@Param('name') name: string): Promise<Feature> {
+    async getFeatureByName(@Param('name') name: string): Promise<FeatureResponseDto> {
         return this.featureService.getFeatureByName(name);
     }
 
@@ -90,7 +89,7 @@ export class FeatureController {
         summary: 'Update a feature',
         operationId: 'updateFeature',
         bodyType: UpdateFeatureDto,
-        responseType: Feature,
+        responseType: FeatureResponseDto,
         description: 'Updates an existing feature by name. Admin access required.',
         params: {
             name: {
@@ -102,7 +101,7 @@ export class FeatureController {
     async updateFeature(
         @Param('name') name: string,
         @Body() updateFeatureDto: UpdateFeatureDto
-    ): Promise<Feature> {
+    ): Promise<FeatureResponseDto> {
         return this.featureService.updateFeature(name, updateFeatureDto);
     }
 
@@ -130,11 +129,11 @@ export class FeatureController {
         summary: 'Enable/Configure a feature for a website',
         operationId: 'enableFeatureForWebsite',
         bodyType: WebsiteFeatureDto,
-        responseType: WebsiteFeature,
+        responseType: WebsiteFeatureResponseDto,
         status: 201,
         description: 'Enables and configures a feature for a specific website. Admin or website owner access required.'
     })
-    async enableFeatureForWebsite(@Body() websiteFeatureDto: WebsiteFeatureDto): Promise<WebsiteFeature |number | null> {
+    async enableFeatureForWebsite(@Body() websiteFeatureDto: WebsiteFeatureDto): Promise<WebsiteFeatureResponseDto | number | null> {
         return this.featureService.enableFeatureForWebsite(websiteFeatureDto);
     }
 
@@ -143,7 +142,7 @@ export class FeatureController {
     @SwaggerRoute({
         summary: 'Get features for a website',
         operationId: 'getWebsiteFeatures',
-        responseType: [WebsiteFeature],
+        responseType: [WebsiteFeatureResponseDto],
         description: 'Retrieves all features configured for a specific website. Admin or website owner access required.',
         params: {
             websiteId: {
@@ -152,22 +151,21 @@ export class FeatureController {
             }
         }
     })
-    async getWebsiteFeatures(@Param('websiteId') websiteId: string): Promise<WebsiteFeature[]> {
+    async getWebsiteFeatures(@Param('websiteId') websiteId: string): Promise<WebsiteFeatureResponseDto[]> {
         return this.featureService.getWebsiteFeatures(websiteId);
     }
 
-    // Access Level Feature Management
     @Post('access-level')
-    @Roles(Role.ADMIN, Role.USER) // Website owners can manage access levels
+    @Roles(Role.ADMIN, Role.USER)
     @SwaggerRoute({
         summary: 'Set access level permissions for a feature',
         operationId: 'setFeatureAccessLevel',
         bodyType: AccessLevelFeatureDto,
-        responseType: AccessLevelFeature,
+        responseType: AccessLevelFeatureResponseDto,
         status: 201,
         description: 'Sets permissions for a feature based on access level. Admin or website owner access required.'
     })
-    async setFeatureAccessLevel(@Body() accessLevelFeatureDto: AccessLevelFeatureDto): Promise<AccessLevelFeature> {
+    async setFeatureAccessLevel(@Body() accessLevelFeatureDto: AccessLevelFeatureDto): Promise<AccessLevelFeatureResponseDto> {
         return this.featureService.setFeatureAccessLevel(accessLevelFeatureDto);
     }
 
@@ -176,7 +174,7 @@ export class FeatureController {
     @SwaggerRoute({
         summary: 'Get access levels for a feature',
         operationId: 'getFeatureAccessLevels',
-        responseType: [AccessLevelFeature],
+        responseType: [AccessLevelFeatureResponseDto],
         description: 'Retrieves all access level permissions for a specific feature. Admin or website owner access required.',
         params: {
             featureName: {
@@ -185,7 +183,7 @@ export class FeatureController {
             }
         }
     })
-    async getFeatureAccessLevels(@Param('featureName') featureName: string): Promise<AccessLevelFeature[]> {
+    async getFeatureAccessLevels(@Param('featureName') featureName: string): Promise<AccessLevelFeatureResponseDto[]> {
         return this.featureService.getFeatureAccessLevels(featureName);
     }
 }

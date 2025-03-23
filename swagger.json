@@ -2389,25 +2389,6 @@
             "description": "Last update timestamp",
             "example": "2025-03-01T00:00:00Z"
           },
-          "accessLevel": {
-            "type": "string",
-            "description": "Access level for this feature permission set",
-            "example": "ADMIN",
-            "enum": [
-              "owner",
-              "admin",
-              "analyst",
-              "viewer"
-            ]
-          },
-          "feature": {
-            "description": "The feature these permissions apply to",
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/Feature"
-              }
-            ]
-          },
           "permissions": {
             "type": "object",
             "description": "Permission settings for this feature and access level",
@@ -2422,8 +2403,6 @@
           "id",
           "createdAt",
           "updatedAt",
-          "accessLevel",
-          "feature",
           "permissions"
         ]
       },

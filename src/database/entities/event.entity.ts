@@ -1,4 +1,4 @@
-import { Entity, Column, BeforeInsert, BeforeUpdate, ManyToOne } from 'typeorm';
+import { Entity, Column, BeforeInsert, BeforeUpdate, ManyToOne, JoinColumn } from 'typeorm';
 import { EventInterface, EventName } from '../../types/event.type';
 import { Website } from './website.entity';
 import { BaseEntity } from './base.entity';
@@ -12,6 +12,7 @@ export class Event extends BaseEntity implements Partial<EventInterface> {
   event_name: EventName;
 
   @ManyToOne(() => Website)
+  @JoinColumn({ name: 'website_id' })
   website: Website;
 
   @Column({ type: 'uuid' })

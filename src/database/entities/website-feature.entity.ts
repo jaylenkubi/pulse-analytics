@@ -1,4 +1,4 @@
-import { Column, Entity, ManyToOne } from "typeorm";
+import { Column, Entity, ManyToOne, JoinColumn } from "typeorm";
 import { Website } from "./website.entity";
 import { Feature } from "./feature.entity";
 import { BaseEntity } from "./base.entity";
@@ -12,14 +12,16 @@ export class WebsiteFeature extends BaseEntity {
     featureId: string;
 
     @ManyToOne(() => Website)
+    @JoinColumn({ name: 'websiteId' })
     website: Website;
 
     @ManyToOne(() => Feature)
+    @JoinColumn({ name: 'featureId' })
     feature: Feature;
 
     @Column({ type: 'boolean', default: false })
     isEnabled: boolean;
 
     @Column({ type: 'jsonb', nullable: true })
-    configuration: Record<string, any>; // Website-specific feature configuration
+    configuration: Record<string, any>;
 }

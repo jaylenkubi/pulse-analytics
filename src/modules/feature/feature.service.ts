@@ -35,7 +35,7 @@ export class FeatureService {
 
     async getAllFeaturesByWebsiteId(websiteId: string): Promise<Feature[]> {
         const websiteFeatures = await this.websiteFeatureRepository.findByQuery({
-            where: { website: { id: websiteId } },
+            where: { websiteId },
             relations: ['feature']
         });
         
@@ -69,16 +69,16 @@ export class FeatureService {
         
         const features = await this.websiteFeatureRepository.findByQuery({
             where: {
-                website: { id: websiteId },
-                feature: { id: featureId }
+                websiteId,
+                featureId
             },
             relations: ['website', 'feature']
         });
 
         if (!features || features.length === 0) {
             return this.websiteFeatureRepository.create({
-                website: { id: websiteId },
-                feature: { id: featureId },
+                websiteId,
+                featureId,
                 isEnabled,
                 configuration
             });
@@ -132,13 +132,13 @@ export class FeatureService {
     async canUserAccessFeature(
         userId: string,
         websiteId: string,
-        featureName: string
+        featureId: string
     ): Promise<boolean> {
         // 1. Check if user has access to the website
         const websiteAccesses = await this.websiteAccessRepository.findByQuery({
             where: {
-                user: { id: userId },
-                website: { id: websiteId }
+                userId,
+                websiteId
             }
         });
 
@@ -150,8 +150,8 @@ export class FeatureService {
         // 2. Check if feature is enabled for the website
         const websiteFeatures = await this.websiteFeatureRepository.findByQuery({
             where: {
-                website: { id: websiteId },
-                feature: { name: featureName }
+                websiteId,
+                featureId
             },
             relations: ['feature']
         });
@@ -164,7 +164,7 @@ export class FeatureService {
         const accessLevelFeatures = await this.accessLevelFeatureRepository.findByQuery({
             where: {
                 accessLevel: websiteAccess.access_level,
-                feature: { name: featureName }
+                featureId
             }
         });
 
