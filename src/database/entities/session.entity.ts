@@ -1,11 +1,9 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import { Entity, Column, ManyToOne } from 'typeorm';
 import { User } from './user.entity';
+import { BaseEntity } from './base.entity';
 
 @Entity({ name: 'session' })
-export class Session {
-    @PrimaryGeneratedColumn('uuid')
-    id: string;
-
+export class Session extends BaseEntity {
     @ManyToOne(() => User, { onDelete: 'CASCADE' })
     user: User;
 
@@ -26,10 +24,4 @@ export class Session {
 
     @Column({ type: 'timestamp' })
     expiresAt: Date;
-
-    @CreateDateColumn({ type: 'timestamp with time zone' })
-    createdAt: Date;
-
-    @UpdateDateColumn({ type: 'timestamp with time zone' })
-    updatedAt: Date;
 }

@@ -16,7 +16,7 @@ export class WebsiteFeatureDto {
     })
     @IsString()
     @IsNotEmpty()
-    featureName: string;
+    featureId: string;
 
     @ApiProperty({
         description: 'Whether the feature is enabled for this website',

@@ -10,14 +10,16 @@ import type { Feature } from './feature';
 import type { AccessLevelFeaturePermissions } from './accessLevelFeaturePermissions';
 
 export interface AccessLevelFeature {
-  /** Unique identifier for the access level feature relationship */
+  /** Unique identifier */
   id: string;
+  /** Date when this permission set was created */
+  createdAt: Date;
+  /** Last update timestamp */
+  updatedAt: Date;
   /** Access level for this feature permission set */
   accessLevel: AccessLevelFeatureAccessLevel;
   /** The feature these permissions apply to */
   feature: Feature;
   /** Permission settings for this feature and access level */
   permissions: AccessLevelFeaturePermissions;
-  /** Date when this permission set was created */
-  createdAt: Date;
 }

@@ -63,12 +63,12 @@ export default function LoginPage() {
 
 
   useEffect(() => {
-    if (websiteAccessData && websiteAccessData.length > 0) {
+    if (user && websiteAccessData && websiteAccessData.length > 0) {
       router.push("/");
-    } else {
-      router.push("/setup");
+    } else if (user && !websiteAccessData) {
+      router.push("/settings");
     }
-  }, [websiteAccessData]);
+  }, [websiteAccessData, user]);
 
   const onSubmit = (values: LoginFormValues) => {
     login(
@@ -81,7 +81,6 @@ export default function LoginPage() {
             role: data.user.roles
           })
           setTokens(data.accessToken, data.refreshToken);
-          router.push("/");
         },
         onError: (error) => {
           form.setError("email", {

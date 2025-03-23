@@ -11,7 +11,7 @@ export interface WebsiteFeatureDto {
   /** UUID of the website to enable the feature for */
   websiteId: string;
   /** Name of the feature to enable */
-  featureName: string;
+  featureId: string;
   /** Whether the feature is enabled for this website */
   isEnabled: boolean;
   /** Website-specific configuration for the feature */

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { cn } from "@/lib/utils";
@@ -14,6 +14,8 @@ import {
   ChevronRight,
 } from "lucide-react";
 import { Button } from "./ui/button";
+import { getGetAllFeaturesByWebsiteIdQueryKey, getGetWebsiteFeaturesQueryKey, useGetAllFeaturesByWebsiteId, useGetWebsiteFeatures } from "@/api/generated/features/features";
+import { useUserStore } from "@/lib/stores/userStore";
 
 const sidebarItems = {
   main: [
@@ -64,7 +66,22 @@ interface SidebarProps {
 
 export default function Sidebar({ collapsed, onToggle }: SidebarProps) {
   const router = useRouter();
+  const [webPortalFeatures, setWebPortalFeatures] = useState([]);
   const currentPath = router.asPath;
+  const { websiteAccess } = useUserStore();
+
+  const {data: features} = useGetAllFeaturesByWebsiteId(websiteAccess[0]?.websiteId, {
+    query: {
+      queryKey: getGetAllFeaturesByWebsiteIdQueryKey(websiteAccess[0]?.websiteId),
+      enabled: !!websiteAccess[0]?.websiteId
+    }
+  });
+
+  useEffect(() => {
+    if (features) {
+      setWebPortalFeatures([]);
+    }
+  }, [features]);
 
   return (
     <div className={cn(

@@ -1,15 +1,9 @@
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Column, Entity } from "typeorm";
 import { ApiProperty } from "@nestjs/swagger";
+import { BaseEntity } from "./base.entity";
 
 @Entity({ name: 'feature' })
-export class Feature {
-    @ApiProperty({
-        description: 'Unique identifier for the feature',
-        example: '550e8400-e29b-41d4-a716-446655440000'
-    })
-    @PrimaryGeneratedColumn('uuid')
-    id: string;
-
+export class Feature extends BaseEntity {
     @ApiProperty({
         description: 'Unique name identifier for the feature',
         example: 'realtime-analytics'
@@ -38,18 +32,4 @@ export class Feature {
     })
     @Column({ type: 'boolean', default: true })
     isGloballyAvailable: boolean;
-
-    @ApiProperty({
-        description: 'Date when the feature was created',
-        example: '2025-03-01T00:00:00Z'
-    })
-    @CreateDateColumn({ type: 'timestamp with time zone' })
-    createdAt: Date;
-
-    @ApiProperty({
-        description: 'Date when the feature was last updated',
-        example: '2025-03-01T00:00:00Z'
-    })
-    @UpdateDateColumn({ type: 'timestamp with time zone' })
-    updatedAt: Date;
 }

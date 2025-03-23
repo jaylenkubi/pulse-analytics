@@ -1,6 +1,7 @@
-import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, ManyToOne } from 'typeorm';
 import { Website } from './website.entity';
 import { User } from './user.entity';
+import { BaseEntity } from './base.entity';
 
 export enum WebsiteAccessLevel {
     OWNER = 'owner',
@@ -10,10 +11,7 @@ export enum WebsiteAccessLevel {
 }
 
 @Entity({ name: 'website_access' })
-export class WebsiteAccess {
-    @PrimaryGeneratedColumn('uuid')
-    id: string;
-
+export class WebsiteAccess extends BaseEntity {
     @ManyToOne(() => Website)
     website: Website;
 
@@ -26,7 +24,4 @@ export class WebsiteAccess {
         default: WebsiteAccessLevel.VIEWER
     })
     access_level: WebsiteAccessLevel;
-
-    @CreateDateColumn({ type: 'timestamp with time zone' })
-    created_at: Date;
 }

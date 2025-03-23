@@ -2,16 +2,10 @@ import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn } f
 import { Feature } from "./feature.entity";
 import { WebsiteAccessLevel } from "./website-access.entity";
 import { ApiProperty } from "@nestjs/swagger";
+import { BaseEntity } from "./base.entity";
 
 @Entity({ name: 'access_level_feature' })
-export class AccessLevelFeature {
-    @ApiProperty({
-        description: 'Unique identifier for the access level feature relationship',
-        example: '880e8400-e29b-41d4-a716-446655440000'
-    })
-    @PrimaryGeneratedColumn('uuid')
-    id: string;
-
+export class AccessLevelFeature extends BaseEntity {
     @ApiProperty({
         description: 'Access level for this feature permission set',
         example: 'ADMIN',

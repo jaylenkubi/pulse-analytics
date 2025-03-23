@@ -1,11 +1,9 @@
-import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import { Column, Entity, ManyToOne } from 'typeorm';
 import { User } from './user.entity';
+import { BaseEntity } from './base.entity';
 
 @Entity({ name: 'website' })
-export class Website {
-    @PrimaryGeneratedColumn('uuid')
-    id: string;
-
+export class Website extends BaseEntity {
     @Column({ type: 'varchar' })
     name: string;
 
@@ -24,10 +22,4 @@ export class Website {
 
     @ManyToOne(() => User)
     owner: User;
-
-    @CreateDateColumn({ type: 'timestamp with time zone' })
-    created_at: Date;
-
-    @UpdateDateColumn({ type: 'timestamp with time zone' })
-    updated_at: Date;
 }

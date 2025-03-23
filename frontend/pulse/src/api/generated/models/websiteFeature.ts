@@ -5,23 +5,12 @@
  * Pulse Analytics API
  * OpenAPI spec version: 1.0
  */
-import type { Website } from './website';
-import type { Feature } from './feature';
-import type { WebsiteFeatureConfiguration } from './websiteFeatureConfiguration';
 
 export interface WebsiteFeature {
-  /** Unique identifier for the website feature relationship */
+  /** Unique identifier */
   id: string;
-  /** The website this feature is enabled for */
-  website: Website;
-  /** The feature that is enabled for the website */
-  feature: Feature;
-  /** Whether the feature is enabled for this website */
-  isEnabled: boolean;
-  /** Website-specific feature configuration */
-  configuration: WebsiteFeatureConfiguration;
-  /** Date when the feature was enabled for this website */
+  /** Creation timestamp */
   createdAt: Date;
-  /** Date when the website feature configuration was last updated */
+  /** Last update timestamp */
   updatedAt: Date;
 }

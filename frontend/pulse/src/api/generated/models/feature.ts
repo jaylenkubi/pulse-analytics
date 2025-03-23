@@ -8,8 +8,12 @@
 import type { FeatureCategory } from './featureCategory';
 
 export interface Feature {
-  /** Unique identifier for the feature */
+  /** Unique identifier */
   id: string;
+  /** Creation timestamp */
+  createdAt: Date;
+  /** Last update timestamp */
+  updatedAt: Date;
   /** Unique name identifier for the feature */
   name: string;
   /** Description of what the feature does */
@@ -18,8 +22,4 @@ export interface Feature {
   category: FeatureCategory;
   /** Whether the feature is available to all websites by default */
   isGloballyAvailable: boolean;
-  /** Date when the feature was created */
-  createdAt: Date;
-  /** Date when the feature was last updated */
-  updatedAt: Date;
 }

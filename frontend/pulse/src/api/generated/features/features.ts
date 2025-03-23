@@ -179,19 +179,108 @@ export function useGetAllFeatures<
 }
 
 /**
+ * Retrieves all features for a specific website. Admin access required.
+ * @summary Get all features by websiteId
+ */
+export const getAllFeaturesByWebsiteId = (
+  websiteId: string,
+  signal?: AbortSignal,
+) => {
+  return customInstance<Feature[]>({
+    url: `/features/website/${websiteId}`,
+    method: 'GET',
+    signal,
+  });
+};
+
+export const getGetAllFeaturesByWebsiteIdQueryKey = (websiteId: string) => {
+  return [`/features/website/${websiteId}`] as const;
+};
+
+export const getGetAllFeaturesByWebsiteIdQueryOptions = <
+  TData = Awaited<ReturnType<typeof getAllFeaturesByWebsiteId>>,
+  TError = unknown,
+>(
+  websiteId: string,
+  options?: {
+    query?: UseQueryOptions<
+      Awaited<ReturnType<typeof getAllFeaturesByWebsiteId>>,
+      TError,
+      TData
+    >;
+  },
+) => {
+  const { query: queryOptions } = options ?? {};
+
+  const queryKey =
+    queryOptions?.queryKey ?? getGetAllFeaturesByWebsiteIdQueryKey(websiteId);
+
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof getAllFeaturesByWebsiteId>>
+  > = ({ signal }) => getAllFeaturesByWebsiteId(websiteId, signal);
+
+  return {
+    queryKey,
+    queryFn,
+    enabled: !!websiteId,
+    ...queryOptions,
+  } as UseQueryOptions<
+    Awaited<ReturnType<typeof getAllFeaturesByWebsiteId>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
+
+export type GetAllFeaturesByWebsiteIdQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getAllFeaturesByWebsiteId>>
+>;
+export type GetAllFeaturesByWebsiteIdQueryError = unknown;
+
+/**
+ * @summary Get all features by websiteId
+ */
+
+export function useGetAllFeaturesByWebsiteId<
+  TData = Awaited<ReturnType<typeof getAllFeaturesByWebsiteId>>,
+  TError = unknown,
+>(
+  websiteId: string,
+  options?: {
+    query?: UseQueryOptions<
+      Awaited<ReturnType<typeof getAllFeaturesByWebsiteId>>,
+      TError,
+      TData
+    >;
+  },
+): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getGetAllFeaturesByWebsiteIdQueryOptions(
+    websiteId,
+    options,
+  );
+
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: QueryKey;
+  };
+
+  query.queryKey = queryOptions.queryKey;
+
+  return query;
+}
+
+/**
  * Retrieves a feature by its name. Admin access required.
  * @summary Get a feature by name
  */
 export const getFeatureByName = (name: string, signal?: AbortSignal) => {
   return customInstance<Feature>({
-    url: `/features/${name}`,
+    url: `/features/name/${name}`,
     method: 'GET',
     signal,
   });
 };
 
 export const getGetFeatureByNameQueryKey = (name: string) => {
-  return [`/features/${name}`] as const;
+  return [`/features/name/${name}`] as const;
 };
 
 export const getGetFeatureByNameQueryOptions = <
@@ -269,7 +358,7 @@ export const updateFeature = (
   updateFeatureDto: UpdateFeatureDto,
 ) => {
   return customInstance<Feature>({
-    url: `/features/${name}`,
+    url: `/features/name/${name}`,
     method: 'PUT',
     headers: { 'Content-Type': 'application/json' },
     data: updateFeatureDto,
@@ -347,7 +436,10 @@ export const useUpdateFeature = <
  * @summary Delete a feature
  */
 export const deleteFeature = (name: string) => {
-  return customInstance<void>({ url: `/features/${name}`, method: 'DELETE' });
+  return customInstance<void>({
+    url: `/features/name/${name}`,
+    method: 'DELETE',
+  });
 };
 
 export const getDeleteFeatureMutationOptions = <
@@ -505,14 +597,14 @@ export const useEnableFeatureForWebsite = <
  */
 export const getWebsiteFeatures = (websiteId: string, signal?: AbortSignal) => {
   return customInstance<WebsiteFeature[]>({
-    url: `/features/website/${websiteId}`,
+    url: `/features/website/${websiteId}/features`,
     method: 'GET',
     signal,
   });
 };
 
 export const getGetWebsiteFeaturesQueryKey = (websiteId: string) => {
-  return [`/features/website/${websiteId}`] as const;
+  return [`/features/website/${websiteId}/features`] as const;
 };
 
 export const getGetWebsiteFeaturesQueryOptions = <

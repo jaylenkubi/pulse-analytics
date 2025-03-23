@@ -47,8 +47,26 @@ export class FeatureController {
     async getAllFeatures(): Promise<Feature[]> {
         return this.featureService.getAllFeatures();
     }
+    
+    @Get('website/:websiteId')
+    @Roles(Role.ADMIN)
+    @SwaggerRoute({
+        summary: 'Get all features by websiteId',
+        operationId: 'getAllFeaturesByWebsiteId',
+        responseType: [Feature],
+        description: 'Retrieves all features for a specific website. Admin access required.',
+        params: {
+            websiteId: {
+                type: 'string',
+                required: true
+            }
+        }
+    })
+    async getAllFeaturesByWebsiteId(@Param('websiteId') websiteId: string): Promise<Feature[]> {
+        return this.featureService.getAllFeaturesByWebsiteId(websiteId);
+    }
 
-    @Get(':name')
+    @Get('name/:name')
     @Roles(Role.ADMIN)
     @SwaggerRoute({
         summary: 'Get a feature by name',
@@ -66,7 +84,7 @@ export class FeatureController {
         return this.featureService.getFeatureByName(name);
     }
 
-    @Put(':name')
+    @Put('name/:name')
     @Roles(Role.ADMIN)
     @SwaggerRoute({
         summary: 'Update a feature',
@@ -88,7 +106,7 @@ export class FeatureController {
         return this.featureService.updateFeature(name, updateFeatureDto);
     }
 
-    @Delete(':name')
+    @Delete('name/:name')
     @Roles(Role.ADMIN)
     @SwaggerRoute({
         summary: 'Delete a feature',
@@ -106,9 +124,8 @@ export class FeatureController {
         return this.featureService.deleteFeature(name);
     }
 
-    // Website Feature Management
     @Post('website')
-    @Roles(Role.ADMIN, Role.USER) // Website owners can manage their features
+    @Roles(Role.ADMIN, Role.USER)
     @SwaggerRoute({
         summary: 'Enable/Configure a feature for a website',
         operationId: 'enableFeatureForWebsite',
@@ -117,11 +134,11 @@ export class FeatureController {
         status: 201,
         description: 'Enables and configures a feature for a specific website. Admin or website owner access required.'
     })
-    async enableFeatureForWebsite(@Body() websiteFeatureDto: WebsiteFeatureDto): Promise<WebsiteFeature> {
+    async enableFeatureForWebsite(@Body() websiteFeatureDto: WebsiteFeatureDto): Promise<WebsiteFeature |number | null> {
         return this.featureService.enableFeatureForWebsite(websiteFeatureDto);
     }
 
-    @Get('website/:websiteId')
+    @Get('website/:websiteId/features')
     @Roles(Role.ADMIN, Role.USER)
     @SwaggerRoute({
         summary: 'Get features for a website',

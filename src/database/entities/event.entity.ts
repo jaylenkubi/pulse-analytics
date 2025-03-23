@@ -1,12 +1,10 @@
-import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, BeforeInsert, BeforeUpdate, ManyToOne } from 'typeorm';
+import { Entity, Column, BeforeInsert, BeforeUpdate, ManyToOne } from 'typeorm';
 import { EventInterface, EventName } from '../../types/event.type';
 import { Website } from './website.entity';
+import { BaseEntity } from './base.entity';
 
 @Entity({ name: 'event' })
-export class Event implements Partial<EventInterface> {
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
-
+export class Event extends BaseEntity implements Partial<EventInterface> {
   @Column({ type: 'varchar' })
   message_id: string;
 
@@ -50,9 +48,6 @@ export class Event implements Partial<EventInterface> {
   set timestamp(value: string) {
     this._timestamp = new Date(value);
   }
-
-  @CreateDateColumn({ type: 'timestamp with time zone' })
-  created_at: Date;
 
   @BeforeInsert()
   @BeforeUpdate()

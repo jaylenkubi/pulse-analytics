@@ -73,6 +73,7 @@ export default function SettingsPage() {
             <TabsTrigger value="general">General</TabsTrigger>
             <TabsTrigger value="appearance">Appearance</TabsTrigger>
             <TabsTrigger value="notifications">Notifications</TabsTrigger>
+            <TabsTrigger value="website">Website</TabsTrigger>
           </TabsList>
 
           <TabsContent value="profile" className="space-y-4">
