@@ -19,19 +19,19 @@ export class EventProcessorService extends WorkerHost {
 
   async process(job: any): Promise<any> {
     const eventData = job.data as CreateEventDto;
-    this.logger.log(`Processing event: ${eventData.event_name}`);
+    this.logger.log(`Processing event: ${eventData.eventName}`);
 
     try {
       const event = {
-        message_id: `evt_${uuidv4()}`,
+        messageId: `evt_${uuidv4()}`,
         timestamp: new Date().toISOString(),
-        event_name: eventData.event_name,
+        eventName: eventData.eventName,
         user: eventData.user,
         context: eventData.context,
         traffic: eventData.traffic,
         page: eventData.page,
         metrics: eventData.metrics,
-        pulse_analytics: eventData.pulse_analytics
+        pulseAnalytics: eventData.pulseAnalytics
       };
 
       const createdEvent = await this.eventService.create(event);
@@ -47,7 +47,7 @@ export class EventProcessorService extends WorkerHost {
   private async processEventByType(event: Event): Promise<void> {
     const startTime = Date.now();
     try {
-      switch (event.event_name) {
+      switch (event.eventName) {
         case EventName.PAGE_VIEW:
           await this.processPageViewEvent(event);
           break;
@@ -61,7 +61,7 @@ export class EventProcessorService extends WorkerHost {
 
       // Update metrics based on processing
       if (event.metrics) {
-        event.metrics.load_time_ms = Date.now() - startTime;
+        event.metrics.loadTimeMs = Date.now() - startTime;
         event.metrics.errors = 0;
       }
 
@@ -77,8 +77,8 @@ export class EventProcessorService extends WorkerHost {
 
   private async processPageViewEvent(event: Event): Promise<void> {
     if (event.metrics) {
-      event.metrics.pages_viewed = (event.metrics.pages_viewed || 0) + 1;
-      event.metrics.bounced = event.metrics.pages_viewed <= 1;
+      event.metrics.pagesViewed = (event.metrics.pagesViewed || 0) + 1;
+      event.metrics.bounced = event.metrics.pagesViewed <= 1;
     }
   }
 

@@ -14,6 +14,8 @@ import {
 } from './ui/dropdown-menu';
 import { Settings, LogOut, ChevronDown, Sun, Moon } from 'lucide-react';
 import { useTheme } from './ThemeProvider';
+import { useAuth } from '@/lib/auth';
+import { useUserStore } from '@/lib/stores/userStore';
 
 interface HeaderProps {
   className?: string;
@@ -22,13 +24,12 @@ interface HeaderProps {
 const Header = ({ className }: HeaderProps) => {
   const router = useRouter();
   const { theme, setTheme } = useTheme();
-  const firstName = "John";
-  const lastName = "Doe";
-  const userType = "Admin";
+  const { setTokens } = useAuth();
+  const { user } = useUserStore();
 
   const handleLogout = () => {
-    // Add logout logic here
-    console.log("Logout clicked");
+    setTokens("", "");
+    router.push("/login");
   };
 
   const handleSettings = () => {
@@ -59,12 +60,12 @@ const Header = ({ className }: HeaderProps) => {
               <Button variant="ghost" className="relative flex items-center gap-2 p-1">
                 <Avatar className="h-8 w-8">
                   <AvatarFallback className="bg-primary/10 text-primary">
-                    {firstName[0]}{lastName[0]}
+                    {user?.firstName?.[0] || ''}{user?.lastName?.[0] || ''}
                   </AvatarFallback>
                 </Avatar>
                 <div className="hidden sm:flex flex-col items-start">
-                  <span className="text-sm font-medium">{firstName} {lastName}</span>
-                  <span className="text-xs text-muted-foreground">{userType}</span>
+                  <span className="text-sm font-medium">{user?.firstName} {user?.lastName}</span>
+                  <span className="text-xs text-muted-foreground">{user?.role}</span>
                 </div>
                 <ChevronDown className="h-4 w-4 hidden sm:block" />
               </Button>
@@ -72,8 +73,8 @@ const Header = ({ className }: HeaderProps) => {
             <DropdownMenuContent className="w-56" align="end" forceMount>
               <DropdownMenuLabel className="font-normal">
                 <div className="flex flex-col space-y-1">
-                  <p className="text-sm font-medium leading-none">{firstName} {lastName}</p>
-                  <p className="text-xs leading-none text-muted-foreground">{userType}</p>
+                  <p className="text-sm font-medium leading-none">{user?.firstName} {user?.lastName}</p>
+                  <p className="text-xs leading-none text-muted-foreground">{user?.role}</p>
                 </div>
               </DropdownMenuLabel>
               <DropdownMenuSeparator />

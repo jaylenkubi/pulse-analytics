@@ -1594,6 +1594,44 @@
         ]
       }
     },
+    "/website-execution/setup": {
+      "post": {
+        "description": "Creates a new website with tracking ID and enables selected features",
+        "operationId": "setupWebsite",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SetupWebsiteDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Creates a new website with tracking ID and enables selected features",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Website"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ],
+        "summary": "Set up a new website with tracking ID and features",
+        "tags": [
+          "Website Execution"
+        ]
+      }
+    },
     "/website-access": {
       "post": {
         "description": "The Website-access has been successfully created",
@@ -2491,11 +2529,11 @@
             "type": "string",
             "description": "Last update timestamp"
           },
-          "message_id": {
+          "messageId": {
             "type": "string",
             "description": "Unique message ID"
           },
-          "event_name": {
+          "eventName": {
             "type": "string",
             "description": "Event name",
             "enum": [
@@ -2508,7 +2546,7 @@
             "type": "object",
             "description": "Website information"
           },
-          "tracking_id": {
+          "trackingId": {
             "type": "string",
             "description": "Website tracking ID"
           },
@@ -2537,10 +2575,10 @@
           "id",
           "createdAt",
           "updatedAt",
-          "message_id",
-          "event_name",
+          "messageId",
+          "eventName",
           "website",
-          "tracking_id",
+          "trackingId",
           "user",
           "context",
           "traffic",
@@ -2551,21 +2589,21 @@
       "WebsiteSettings": {
         "type": "object",
         "properties": {
-          "tracking_options": {
+          "trackingOptions": {
             "description": "Tracking options for the website",
             "type": "array",
             "items": {
               "type": "string"
             }
           },
-          "excluded_paths": {
+          "excludedPaths": {
             "description": "Paths to exclude from tracking",
             "type": "array",
             "items": {
               "type": "string"
             }
           },
-          "custom_variables": {
+          "customVariables": {
             "type": "object",
             "description": "Custom variables for tracking"
           }
@@ -2627,7 +2665,7 @@
               "type": "string"
             }
           },
-          "tracking_id": {
+          "trackingId": {
             "type": "string",
             "description": "Unique tracking ID for this website"
           },
@@ -2646,7 +2684,7 @@
           "updatedAt",
           "name",
           "domains",
-          "tracking_id",
+          "trackingId",
           "settings",
           "owner"
         ]
@@ -2654,21 +2692,21 @@
       "UpdateWebsiteSettings": {
         "type": "object",
         "properties": {
-          "tracking_options": {
+          "trackingOptions": {
             "description": "Tracking options for the website",
             "type": "array",
             "items": {
               "type": "string"
             }
           },
-          "excluded_paths": {
+          "excludedPaths": {
             "description": "Paths to exclude from tracking",
             "type": "array",
             "items": {
               "type": "string"
             }
           },
-          "custom_variables": {
+          "customVariables": {
             "type": "object",
             "description": "Custom variables for tracking"
           }
@@ -2697,6 +2735,69 @@
             ]
           }
         }
+      },
+      "SetupWebsiteDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Name of the website"
+          },
+          "domains": {
+            "description": "List of domains associated with this website",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "userId": {
+            "type": "string",
+            "description": "User ID who will be the owner of this website"
+          },
+          "trackingId": {
+            "type": "string",
+            "description": "Tracking ID for the website"
+          },
+          "features": {
+            "description": "List of feature names to enable for this website",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "name",
+          "domains",
+          "userId"
+        ]
+      },
+      "Website": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique identifier",
+            "example": "660e8400-e29b-41d4-a716-446655440000"
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string",
+            "description": "Creation timestamp",
+            "example": "2025-03-01T00:00:00Z"
+          },
+          "updatedAt": {
+            "format": "date-time",
+            "type": "string",
+            "description": "Last update timestamp",
+            "example": "2025-03-01T00:00:00Z"
+          }
+        },
+        "required": [
+          "id",
+          "createdAt",
+          "updatedAt"
+        ]
       },
       "CreateWebsiteAccessDto": {
         "type": "object",

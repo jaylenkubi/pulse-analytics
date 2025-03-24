@@ -17,8 +17,8 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { useAuthControllerSignup } from "@/api/generated/auth/auth";
 import { useToast } from "@/components/ui/use-toast";
+import { useSignup } from "@/api/generated/auth/auth";
 
 // Define the form schema with validation
 const signupFormSchema = z.object({
@@ -36,7 +36,7 @@ type SignupFormValues = z.infer<typeof signupFormSchema>;
 
 export default function SignupPage() {
   const router = useRouter();
-  const { mutate: signup, isPending } = useAuthControllerSignup();
+  const { mutate: signup, isPending } = useSignup();
   const { toast } = useToast();
 
   // Initialize the form with validation

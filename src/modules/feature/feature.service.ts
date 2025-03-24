@@ -13,16 +13,26 @@ import { TypeOrmAdapter } from '@shared/adapters/typeorm.adapter';
 
 @Injectable()
 export class FeatureService {
+    private featureRepository: TypeOrmAdapter<Feature>;
+    private websiteFeatureRepository: TypeOrmAdapter<WebsiteFeature>;
+    private accessLevelFeatureRepository: TypeOrmAdapter<AccessLevelFeature>;
+    private websiteAccessRepository: TypeOrmAdapter<WebsiteAccess>;
+
     constructor(
         @InjectRepository(Feature)
-        private featureRepository: TypeOrmAdapter<Feature>,
+        featureRepo: Repository<Feature>,
         @InjectRepository(WebsiteFeature)
-        private websiteFeatureRepository: TypeOrmAdapter<WebsiteFeature>,
+        websiteFeatureRepo: Repository<WebsiteFeature>,
         @InjectRepository(AccessLevelFeature)
-        private accessLevelFeatureRepository: TypeOrmAdapter<AccessLevelFeature>,
+        accessLevelFeatureRepo: Repository<AccessLevelFeature>,
         @InjectRepository(WebsiteAccess)
-        private websiteAccessRepository: TypeOrmAdapter<WebsiteAccess>,
-    ) {}
+        websiteAccessRepo: Repository<WebsiteAccess>,
+    ) {
+        this.featureRepository = new TypeOrmAdapter<Feature>(featureRepo);
+        this.websiteFeatureRepository = new TypeOrmAdapter<WebsiteFeature>(websiteFeatureRepo);
+        this.accessLevelFeatureRepository = new TypeOrmAdapter<AccessLevelFeature>(accessLevelFeatureRepo);
+        this.websiteAccessRepository = new TypeOrmAdapter<WebsiteAccess>(websiteAccessRepo);
+    }
 
     // Feature Management
     async createFeature(createFeatureDto: CreateFeatureDto): Promise<Feature> {
@@ -30,7 +40,7 @@ export class FeatureService {
     }
 
     async getAllFeatures(): Promise<Feature[]> {
-        return this.featureRepository.findAll();
+        return this.featureRepository.findByQuery({});
     }
 
     async getAllFeaturesByWebsiteId(websiteId: string): Promise<Feature[]> {
@@ -92,7 +102,7 @@ export class FeatureService {
 
     async getWebsiteFeatures(websiteId: string): Promise<WebsiteFeature[]> {
         return this.websiteFeatureRepository.findByQuery({
-            where: { website: { id: websiteId } },
+            where: { websiteId },
             relations: ['feature']
         });
     }
@@ -163,7 +173,7 @@ export class FeatureService {
         // 3. Check if user's access level has permission for this feature
         const accessLevelFeatures = await this.accessLevelFeatureRepository.findByQuery({
             where: {
-                accessLevel: websiteAccess.access_level,
+                accessLevel: websiteAccess.accessLevel,
                 featureId
             }
         });
@@ -194,7 +204,7 @@ export class FeatureService {
 
         const accessLevelFeatures = await this.accessLevelFeatureRepository.findByQuery({
             where: {
-                accessLevel: websiteAccess.access_level,
+                accessLevel: websiteAccess.accessLevel,
                 feature: { name: featureName }
             }
         });
@@ -225,7 +235,7 @@ export class FeatureService {
 
         const accessLevelFeatures = await this.accessLevelFeatureRepository.findByQuery({
             where: {
-                accessLevel: websiteAccess.access_level,
+                accessLevel: websiteAccess.accessLevel,
                 feature: { name: featureName }
             }
         });

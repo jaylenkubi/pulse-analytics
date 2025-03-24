@@ -4,13 +4,13 @@ import { EventInterface, EventName } from '@/types/event.type';
 
 export class EventResponseDto extends BaseResponseDto {
     @ApiProperty({ description: 'Unique message ID' })
-    message_id: string;
+    messageId: string;
 
     @ApiProperty({ 
         description: 'Event name',
         enum: EventName
     })
-    event_name: EventName;
+    eventName: EventName;
 
     @ApiProperty({ description: 'Website information' })
     website: {
@@ -19,7 +19,7 @@ export class EventResponseDto extends BaseResponseDto {
     };
 
     @ApiProperty({ description: 'Website tracking ID' })
-    tracking_id: string;
+    trackingId: string;
 
     @ApiProperty({ description: 'User information' })
     user: EventInterface['user'];

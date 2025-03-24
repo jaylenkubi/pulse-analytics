@@ -11,13 +11,13 @@ export type Theme = 'dark' | 'light';
 export interface UserPreferences {
   theme: Theme;
   timezone: string;
-  notifications_enabled: boolean;
+  notificationsEnabled: boolean;
 }
 
 export interface User {
   id: string;
-  anonymous_id: string;
-  first_visit: boolean;
+  anonymousId: string;
+  firstVisit: boolean;
   preferences: UserPreferences;
 }
 
@@ -25,7 +25,7 @@ export interface Device {
   type: DeviceType;
   browser: string;
   os: string;
-  screen_resolution: string;
+  screenResolution: string;
 }
 
 export interface Geo {
@@ -36,7 +36,7 @@ export interface Geo {
 
 export interface Context {
   ip: string;
-  user_agent: string;
+  userAgent: string;
   locale: string;
   device: Device;
   geo: Geo;
@@ -59,32 +59,32 @@ export interface Page {
 }
 
 export interface Metrics {
-  engagement_time_ms: number;
-  pages_viewed: number;
+  engagementTimeMs: number;
+  pagesViewed: number;
   bounced: boolean;
   converted: boolean;
-  scroll_depth: number;
-  load_time_ms: number;
+  scrollDepth: number;
+  loadTimeMs: number;
   interactions: number;
   errors: number;
 }
 
 export interface PulseAnalytics {
-  dashboard_type: string;
-  chart_interactions: number;
-  filter_usage: Record<string, number>;
-  data_exports: number;
-  custom_reports: number;
+  dashboardType: string;
+  chartInteractions: number;
+  filterUsage: Record<string, number>;
+  dataExports: number;
+  customReports: number;
 }
 
 export interface EventInterface {
-  event_name: EventName;
-  message_id: string;
+  eventName: EventName;
+  messageId: string;
   timestamp: string;
   user: User;
   context: Context;
   traffic: Traffic;
   page: Page;
   metrics: Metrics;
-  pulse_analytics: PulseAnalytics;
+  pulseAnalytics: PulseAnalytics;
 }

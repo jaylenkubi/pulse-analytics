@@ -21,13 +21,13 @@ export interface EventResponseDto {
   /** Last update timestamp */
   updatedAt: Date;
   /** Unique message ID */
-  message_id: string;
+  messageId: string;
   /** Event name */
-  event_name: EventResponseDtoEventName;
+  eventName: EventResponseDtoEventName;
   /** Website information */
   website: EventResponseDtoWebsite;
   /** Website tracking ID */
-  tracking_id: string;
+  trackingId: string;
   /** User information */
   user: EventResponseDtoUser;
   /** Event context */

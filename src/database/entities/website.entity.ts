@@ -11,13 +11,13 @@ export class Website extends BaseEntity {
     domains: string[];
 
     @Column({ type: 'uuid' })
-    tracking_id: string;
+    trackingId: string;
 
     @Column({ type: 'jsonb', nullable: true })
     settings: {
-        tracking_options: string[];
-        excluded_paths: string[];
-        custom_variables: Record<string, string>;
+        trackingOptions: string[];
+        excludedPaths: string[];
+        customVariables: Record<string, string>;
     };
 
     @ManyToOne(() => User)

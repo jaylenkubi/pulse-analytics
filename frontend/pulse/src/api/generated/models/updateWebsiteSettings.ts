@@ -9,9 +9,9 @@ import type { UpdateWebsiteSettingsCustomVariables } from './updateWebsiteSettin
 
 export interface UpdateWebsiteSettings {
   /** Tracking options for the website */
-  tracking_options?: string[];
+  trackingOptions?: string[];
   /** Paths to exclude from tracking */
-  excluded_paths?: string[];
+  excludedPaths?: string[];
   /** Custom variables for tracking */
-  custom_variables?: UpdateWebsiteSettingsCustomVariables;
+  customVariables?: UpdateWebsiteSettingsCustomVariables;
 }

@@ -31,5 +31,5 @@ export class WebsiteAccess extends BaseEntity {
         enum: WebsiteAccessLevel,
         default: WebsiteAccessLevel.VIEWER
     })
-    access_level: WebsiteAccessLevel;
+    accessLevel: WebsiteAccessLevel;
 }

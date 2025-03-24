@@ -7,5 +7,10 @@
  */
 
 export interface Website {
-  [key: string]: unknown;
+  /** Unique identifier */
+  id: string;
+  /** Creation timestamp */
+  createdAt: Date;
+  /** Last update timestamp */
+  updatedAt: Date;
 }

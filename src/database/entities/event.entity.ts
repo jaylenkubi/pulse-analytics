@@ -9,17 +9,17 @@ export class Event extends BaseEntity implements Partial<EventInterface> {
   message_id: string;
 
   @Column({ type: 'varchar' })
-  event_name: EventName;
+  eventName: EventName;
 
   @ManyToOne(() => Website)
-  @JoinColumn({ name: 'website_id' })
+  @JoinColumn({ name: 'websiteId' })
   website: Website;
 
   @Column({ type: 'uuid' })
-  website_id: string;
+  websiteId: string;
 
   @Column({ type: 'varchar' })
-  tracking_id: string;
+  trackingId: string;
 
   @Column('jsonb')
   user: EventInterface['user'];
@@ -37,7 +37,7 @@ export class Event extends BaseEntity implements Partial<EventInterface> {
   metrics: EventInterface['metrics'];
 
   @Column('jsonb')
-  pulse_analytics: EventInterface['pulse_analytics'];
+  pulseAnalytics: EventInterface['pulseAnalytics'];
 
   @Column('timestamp with time zone')
   private _timestamp: Date;

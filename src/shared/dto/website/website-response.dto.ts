@@ -9,13 +9,13 @@ export class WebsiteResponseDto extends BaseResponseDto {
     domains: string[];
 
     @ApiProperty({ description: 'Unique tracking ID for this website' })
-    tracking_id: string;
+    trackingId: string;
 
     @ApiProperty({ description: 'Website settings' })
     settings: {
-        tracking_options: string[];
-        excluded_paths: string[];
-        custom_variables: Record<string, string>;
+        trackingOptions: string[];
+        excludedPaths: string[];
+        customVariables: Record<string, string>;
     };
 
     @ApiProperty({ description: 'Owner ID of the website' })

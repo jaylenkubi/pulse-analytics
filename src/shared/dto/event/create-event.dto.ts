@@ -9,7 +9,7 @@ export class UserDto {
 
   @IsString()
   @IsNotEmpty()
-  anonymous_id: string;
+  anonymousId: string;
 
   @IsObject()
   @IsOptional()
@@ -31,7 +31,7 @@ export class DeviceDto {
 
   @IsString()
   @IsNotEmpty()
-  screen_resolution: string;
+  screenResolution: string;
 }
 
 export class GeoDto {
@@ -55,7 +55,7 @@ export class ContextDto {
 
   @IsString()
   @IsNotEmpty()
-  user_agent: string;
+  userAgent: string;
 
   @IsString()
   @IsNotEmpty()
@@ -120,10 +120,10 @@ export class MetricsDto {
   converted: boolean;
 
   @IsNotEmpty()
-  scroll_depth: number;
+  scrollDepth: number;
 
   @IsNotEmpty()
-  load_time_ms: number;
+  loadTimeMs: number;
 
   @IsNotEmpty()
   interactions: number;
@@ -135,26 +135,26 @@ export class MetricsDto {
 export class PulseAnalyticsDto {
   @IsString()
   @IsNotEmpty()
-  dashboard_type: string;
+  dashboardType: string;
 
   @IsNotEmpty()
-  chart_interactions: number;
+  chartInteractions: number;
 
   @IsObject()
   @IsNotEmpty()
-  filter_usage: Record<string, number>;
+  filterUsage: Record<string, number>;
 
   @IsNotEmpty()
-  data_exports: number;
+  dataExports: number;
 
   @IsNotEmpty()
-  custom_reports: number;
+  customReports: number;
 }
 
 export class CreateEventDto {
   @IsEnum(EventName)
   @IsNotEmpty()
-  event_name: EventName;
+  eventName: EventName;
 
   @ValidateNested()
   @Type(() => UserDto)
@@ -178,5 +178,5 @@ export class CreateEventDto {
 
   @ValidateNested()
   @Type(() => PulseAnalyticsDto)
-  pulse_analytics: PulseAnalyticsDto;
+  pulseAnalytics: PulseAnalyticsDto;
 }

@@ -20,7 +20,7 @@ export interface WebsiteResponseDto {
   /** List of domains associated with this website */
   domains: string[];
   /** Unique tracking ID for this website */
-  tracking_id: string;
+  trackingId: string;
   /** Website settings */
   settings: WebsiteResponseDtoSettings;
   /** Owner ID of the website */

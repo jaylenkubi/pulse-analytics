@@ -13,20 +13,20 @@ export class DataCollectorService {
     try {
       // Ensure we have a properly structured event
       const event = {
-        event_name: eventData.event_name,
+        eventName: eventData.eventName,
         user: eventData.user,
         context: eventData.context,
         traffic: eventData.traffic,
         page: eventData.page,
         metrics: {
           ...eventData.metrics,
-          engagement_time_ms: 0, // Will be updated during processing
-          pages_viewed: 0, // Will be updated during processing
+          engagementTimeMs: 0, // Will be updated during processing
+          pagesViewed: 0, // Will be updated during processing
           bounced: true, // Will be updated during processing
           interactions: 0, // Will be updated during processing
           errors: 0 // Will be updated during processing
         },
-        pulse_analytics: eventData.pulse_analytics
+        pulseAnalytics: eventData.pulseAnalytics
       };
 
       await this.eventQueue.add('process-event', event, {
@@ -37,7 +37,7 @@ export class DataCollectorService {
         },
       });
 
-      this.logger.log(`Event queued for processing: ${event.event_name}`);
+      this.logger.log(`Event queued for processing: ${event.eventName}`);
       return { success: true, message: 'Event queued for processing' };
     } catch (error) {
       this.logger.error(`Error queuing event: ${error.message}`, error.stack);

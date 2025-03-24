@@ -63,12 +63,13 @@ export default function LoginPage() {
 
 
   useEffect(() => {
-    if (user && websiteAccessData && websiteAccessData.length > 0) {
+    const isLoginPage = router.pathname === "/login";
+    if (isLoginPage && user && websiteAccessData && websiteAccessData.length > 0) {
       router.push("/");
-    } else if (user && !websiteAccessData) {
-      router.push("/settings");
+    } else if (isLoginPage && user && !websiteAccessData) {
+      router.push("/setup");
     }
-  }, [websiteAccessData, user]);
+  }, [websiteAccessData, user, router.pathname]);
 
   const onSubmit = (values: LoginFormValues) => {
     login(
@@ -78,7 +79,9 @@ export default function LoginPage() {
           setUser({
             id: data.user.id,
             email: data.user.email,
-            role: data.user.roles
+            role: data.user.roles,
+            firstName: data.user.firstName,
+            lastName: data.user.lastName
           })
           setTokens(data.accessToken, data.refreshToken);
         },

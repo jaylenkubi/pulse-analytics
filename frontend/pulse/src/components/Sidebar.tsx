@@ -12,6 +12,7 @@ import {
   MousePointerClick,
   ChevronLeft,
   ChevronRight,
+  PlusCircle,
 } from "lucide-react";
 import { Button } from "./ui/button";
 import { getGetAllFeaturesByWebsiteIdQueryKey, getGetWebsiteFeaturesQueryKey, useGetAllFeaturesByWebsiteId, useGetWebsiteFeatures } from "@/api/generated/features/features";
@@ -50,6 +51,13 @@ const sidebarItems = {
       icon: BarChart3,
     },
   ],
+  setup: [
+    {
+      title: "Setup Website",
+      href: "/setup",
+      icon: PlusCircle,
+    },
+  ],
   configuration: [
     {
       title: "Settings",
@@ -69,6 +77,7 @@ export default function Sidebar({ collapsed, onToggle }: SidebarProps) {
   const [webPortalFeatures, setWebPortalFeatures] = useState([]);
   const currentPath = router.asPath;
   const { websiteAccess } = useUserStore();
+  const hasWebsiteAccess = websiteAccess && websiteAccess.length > 0;
 
   const {data: features} = useGetAllFeaturesByWebsiteId(websiteAccess[0]?.websiteId, {
     query: {
@@ -104,12 +113,41 @@ export default function Sidebar({ collapsed, onToggle }: SidebarProps) {
         <div className="flex-1">
           <div className="px-3 py-2">
             <div className="space-y-1">
-              {!collapsed && (
+              {!collapsed && hasWebsiteAccess && (
                 <h2 className="mb-2 px-4 text-xs font-medium tracking-wider text-muted-foreground/70 uppercase">
                   Analytics
                 </h2>
               )}
-              {sidebarItems.main.map((item) => (
+              {hasWebsiteAccess && sidebarItems.main.map((item) => (
+                <Link
+                  key={item.title}
+                  href={item.href}
+                  className={cn(
+                    "text-sm group flex p-3 w-full justify-start font-medium cursor-pointer rounded-sm transition-all duration-200",
+                    "hover:text-primary hover:bg-[var(--sidebar-hover)]",
+                    currentPath === item.href
+                      ? "text-primary bg-[var(--sidebar-active)] shadow-sm"
+                      : "text-muted-foreground"
+                  )}
+                >
+                  <div className="flex items-center flex-1">
+                    <item.icon className="h-5 w-5 mr-3" />
+                    <span className={cn(
+                      "transition-opacity duration-300",
+                      collapsed ? "opacity-0 hidden" : "opacity-100"
+                    )}>
+                      {item.title}
+                    </span>
+                  </div>
+                </Link>
+              ))}
+              
+              {!hasWebsiteAccess && !collapsed && (
+                <h2 className="mb-2 px-4 text-xs font-medium tracking-wider text-muted-foreground/70 uppercase">
+                  Setup
+                </h2>
+              )}
+              {!hasWebsiteAccess && sidebarItems.setup.map((item) => (
                 <Link
                   key={item.title}
                   href={item.href}

@@ -69,6 +69,7 @@ export * from './refreshTokenResponseDto';
 export * from './responseDtoArray';
 export * from './sessionResponseDto';
 export * from './sessionResponseDtoUser';
+export * from './setupWebsiteDto';
 export * from './signInResponseDto';
 export * from './signInResponseDtoUser';
 export * from './updateFeatureDto';

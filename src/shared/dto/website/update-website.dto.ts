@@ -7,18 +7,18 @@ class UpdateWebsiteSettings {
     @IsArray()
     @IsOptional()
     @IsString({ each: true })
-    tracking_options?: string[];
+    trackingOptions?: string[];
 
     @ApiProperty({ description: 'Paths to exclude from tracking', required: false })
     @IsArray()
     @IsOptional()
     @IsString({ each: true })
-    excluded_paths?: string[];
+    excludedPaths?: string[];
 
     @ApiProperty({ description: 'Custom variables for tracking', required: false })
     @IsObject()
     @IsOptional()
-    custom_variables?: Record<string, string>;
+    customVariables?: Record<string, string>;
 }
 
 export class UpdateWebsiteDto {

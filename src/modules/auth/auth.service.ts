@@ -18,6 +18,8 @@ interface JwtPayload {
 export interface SignInResponse {
   user: {
     id: string;
+    firstName: string;
+    lastName: string;
     email: string;
     roles: string;
   };
@@ -110,6 +112,8 @@ export class AuthService {
           id: true,
           email: true,
           password: true,
+          firstName: true,
+          lastName: true,
           roles: true
         } 
       });
@@ -119,7 +123,7 @@ export class AuthService {
         throw new UnauthorizedException('Invalid credentials');
       }
 
-      const { password, id, roles } = user;
+      const { password, id, roles, firstName, lastName } = user;
       const isMatch = await bcrypt.compare(pass, password);
 
       if (!isMatch) {
@@ -134,7 +138,7 @@ export class AuthService {
       await this.sessionService.update(session.id, { token: tokens.refreshToken });
 
       this.logger.log(`Successful login for user: ${email} from IP ${req.ip}`);
-      return { ...tokens, user: { id, email, roles } };
+      return { ...tokens, user: { id, email, roles, firstName, lastName } };
     } catch (error) {
       if (error instanceof UnauthorizedException) {
         throw error;
