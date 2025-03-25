@@ -11,16 +11,16 @@ async function bootstrap() {
   const app = await NestFactory.create<NestFastifyApplication>(
     AppModule,
     new FastifyAdapter({
-      logger: false // Disable Fastify's built-in logger
+      logger: false
     }),
     {
-      logger: ['log', 'error', 'warn', 'debug', 'verbose'], // Enable all NestJS log levels
+      logger: ['log', 'error', 'warn', 'debug', 'verbose'],
     }
   );
 
   // Enable CORS for the frontend
-  await app.enableCors({
-    origin: process.env.FRONTEND_URL || 'http://localhost:3001', // Next.js typically runs on 3001
+  app.enableCors({
+    origin: process.env.FRONTEND_URL || 'http://localhost:3001',
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
@@ -44,7 +44,7 @@ async function bootstrap() {
         description: 'Enter JWT token',
         in: 'header',
       },
-      'JWT', // This name is used as a key to reference this security scheme
+      'JWT', 
     )
     .build();
   const document = SwaggerModule.createDocument(app, config);

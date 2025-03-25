@@ -11,7 +11,6 @@ export class DataCollectorService {
 
   async collectEvent(eventData: CreateEventDto) {
     try {
-      // Ensure we have a properly structured event
       const event = {
         eventName: eventData.eventName,
         user: eventData.user,
@@ -20,11 +19,11 @@ export class DataCollectorService {
         page: eventData.page,
         metrics: {
           ...eventData.metrics,
-          engagementTimeMs: 0, // Will be updated during processing
-          pagesViewed: 0, // Will be updated during processing
-          bounced: true, // Will be updated during processing
-          interactions: 0, // Will be updated during processing
-          errors: 0 // Will be updated during processing
+          engagementTimeMs: 0, 
+          pagesViewed: 0, 
+          bounced: true, 
+          interactions: 0, 
+          errors: 0 
         },
         pulseAnalytics: eventData.pulseAnalytics
       };
